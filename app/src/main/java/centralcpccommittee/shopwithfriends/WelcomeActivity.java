@@ -15,24 +15,22 @@ import android.widget.Button;
 
 
 public class WelcomeActivity extends Activity {
-    private Fragment welcomeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        welcomeFragment = new PlaceholderFragment();
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, welcomeFragment)
+                    .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-        PlaceholderFragment.loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
-            }
-        });
+    }
+
+    public void loginPressed(View view) {
+        Intent move = new Intent(this, LoginActivity.class);
+        startActivity(move);
+        finish();
     }
 
 
@@ -63,8 +61,6 @@ public class WelcomeActivity extends Activity {
      */
     public static class PlaceholderFragment extends Fragment {
 
-        public static Button loginButton;
-
         public PlaceholderFragment() {
         }
 
@@ -72,7 +68,6 @@ public class WelcomeActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_welcome, container, false);
-            loginButton = (Button) rootView.findViewById(R.id.login_button);
             return rootView;
         }
     }
