@@ -57,10 +57,73 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
     }
 
     public void registerPressed(View view) {
+
+        attemptRegister();
+    }
+
+    public void attemptRegister() {
+
+        // Reset errors.
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+        mConfirmedView.setError(null);
+
+        // Store values at the time of the login attempt.
         String mEmail = mEmailView.getText().toString();
         String mPassword = mPasswordView.getText().toString();
         String mConfirm = mConfirmedView.getText().toString();
-        System.out.println(mEmail + " " + mPassword + " " + mConfirm);
+
+        boolean cancel = false;
+        View focusView = null;
+        View focusView1 = null;
+
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(mEmail)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(mEmail)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        } else
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(mPassword) && !isPasswordValid(mPassword)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        } else if (!TextUtils.isEmpty(mConfirm) && !isPasswordValid(mConfirm)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mConfirmedView;
+            cancel = true;
+        } else if (mConfirm != mPassword) {
+            mPasswordView.setError(getString(R.string.error_unmatched_passwords));
+            focusView = mPasswordView;
+            focusView1 = mConfirmedView;
+            cancel = true;
+        }
+
+        
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+            focusView1.requestFocus();
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+        }
+    }
+
+    private boolean isEmailValid(String email) {
+        return email.contains("@");
+    }
+
+    private boolean isPasswordValid(String password) {
+        //TODO: Replace this with your own logic
+        return password.length() > 4;
     }
 
 
