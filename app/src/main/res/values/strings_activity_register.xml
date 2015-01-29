@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_register">Register</string>
+    <string name="register_email">Email</string>
+    <string name="register_password">Password ( at least 4 characters)</string>
+    <string name="confirm_password">Confirm the password</string>
+
+</resources>

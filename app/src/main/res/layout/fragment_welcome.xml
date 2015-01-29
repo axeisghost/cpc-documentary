@@ -29,11 +29,21 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login here"
+        android:text="Login"
         android:id="@+id/login_button"
         android:layout_marginTop="35dp"
         android:layout_gravity="center"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:onClick="loginPressed" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:id="@+id/register_button"
+        android:layout_gravity="center"
+        android:onClick="registerPressed"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
