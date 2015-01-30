@@ -33,6 +33,12 @@ public class WelcomeActivity extends Activity {
         finish();
     }
 
+    public void registerPressed(View view) {
+        Intent move = new Intent(this, RegisterActivity.class);
+        startActivity(move);
+        finish();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
