@@ -3,6 +3,7 @@ package centralcpccommittee.shopwithfriends;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
 
 
 public class WelcomeActivity extends Activity {
@@ -23,6 +25,18 @@ public class WelcomeActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+    }
+
+    public void loginPressed(View view) {
+        Intent move = new Intent(this, LoginActivity.class);
+        startActivity(move);
+        finish();
+    }
+
+    public void registerPressed(View view) {
+        Intent move = new Intent(this, RegisterActivity.class);
+        startActivity(move);
+        finish();
     }
 
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_register">Register</string>
+    <string name="register_email">Email</string>
+    <string name="register_password">Password ( at least 4 characters)</string>
+    <string name="confirm_password">Confirm the password</string>
+
+    <!--<string name="error_invalid_email">This email address is invalid</string>-->
+    <!--<string name="error_invalid_password">This password is too short</string>-->
+    <!--<string name="error_incorrect_password">This password is incorrect</string>-->
+    <!--<string name="error_field_required">This field is required</string>-->
+    <string name="error_unmatched_passwords">The passwords do not match.</string>
+</resources>

@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">Shop with friends</string>
-    <string name="hello_world">Please Login</string>
+    <string name="login_button">Please Login</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_register">Register</string>
 
 </resources>
