@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -227,9 +229,27 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     public void cancelPressed(View view) {
+        exitTheAct();
+    }
+
+    public void exitTheAct() {
         Intent move = new Intent(this, WelcomeActivity.class);
         startActivity(move);
         finish();
+    }
+
+    public void backToWelcome() {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this).
+                        setMessage(getString(R.string.Hint_login_successfully)).
+                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                exitTheAct();
+                            }
+                        });
+        builder.create().show();
     }
 
     private interface ProfileQuery {
@@ -260,6 +280,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         private final String mEmail;
         private final String mPassword;
+        private boolean emailIndicator = true;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -282,6 +303,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
+                } else {
+                    emailIndicator = false;
                 }
             }
 
@@ -292,11 +315,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
+            //showProgress(false);
 
-            if (success) {
-                finish();
+            if (success && emailIndicator) {
+                backToWelcome();
+            } else if (!(emailIndicator)) {
+                showProgress(false);
+                mEmailView.setError(getString(R.string.error_email_not_exist));
+                mEmailView.requestFocus();
             } else {
+                showProgress(false);
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }

@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,11 +43,11 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.register_email);
         populateAutoComplete();
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mConfirmedView = (EditText) findViewById(R.id.confirm);
+        mPasswordView = (EditText) findViewById(R.id.register_password);
+        mConfirmedView = (EditText) findViewById(R.id.register_confirm);
 
         registerButton = (Button) findViewById(R.id.register_button);
 
@@ -97,12 +98,15 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mConfirmedView;
             cancel = true;
-        } else if (mConfirm != mPassword) {
+        } else if (!(mConfirm.equals(mPassword))) {
             mPasswordView.setError(getString(R.string.error_unmatched_passwords));
             focusView = mPasswordView;
             focusView1 = mConfirmedView;
             cancel = true;
+            Log.d("abc", "why it comes here");
+            Log.d(mConfirm, " " + mPassword);
         }
+        Log.d("abc", "actually no");
 
         
 
@@ -110,7 +114,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-            focusView1.requestFocus();
+            //focusView1.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
