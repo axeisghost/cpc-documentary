@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,12 +41,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     /**
      * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world",
-            "test@cpc.com:fortestonly"
-    };
+//    private static final String[] DUMMY_CREDENTIALS = new String[]{
+//            "foo@example.com:hello", "bar@example.com:world",
+//            "test@cpc.com:fortestonly"
+//    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -149,12 +149,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -281,15 +279,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         private final String mEmail;
         private final String mPassword;
         private boolean emailIndicator = true;
+        private dataExchanger checker;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+            checker = new dataExchanger("pDatabase", getApplicationContext());
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             try {
                 // Simulate network access.
@@ -297,25 +296,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             } catch (InterruptedException e) {
                 return false;
             }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                } else {
-                    emailIndicator = false;
-                }
+            if (checker.retrieveEmail(mEmail)) {
+                return checker.checkPassword(mEmail, mPassword);
+            } else {
+                emailIndicator = false;
             }
-
-            // TODO: register the new account here.
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            //showProgress(false);
 
             if (success && emailIndicator) {
                 backToWelcome();
@@ -328,12 +319,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+            checker.readerClose();
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+            checker.readerClose();
         }
     }
 }

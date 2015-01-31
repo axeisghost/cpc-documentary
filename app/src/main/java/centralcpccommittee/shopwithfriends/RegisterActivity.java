@@ -5,9 +5,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -29,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,12 +66,27 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         attemptRegister();
     }
 
+    public void backToWelcome() {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this).
+                        setMessage(getString(R.string.Hint_register_successfully)).
+                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                exitTheAct();
+                            }
+                        });
+        builder.create().show();
+    }
+
     public void attemptRegister() {
 
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
         mConfirmedView.setError(null);
+
 
         // Store values at the time of the login attempt.
         String mEmail = mEmailView.getText().toString();
@@ -77,6 +96,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         boolean cancel = false;
         View focusView = null;
         View focusView1 = null;
+        dataExchanger recorder = new dataExchanger("pDatabase", getApplicationContext());
 
 
         // Check for a valid email address.
@@ -103,10 +123,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             focusView = mPasswordView;
             focusView1 = mConfirmedView;
             cancel = true;
-            Log.d("abc", "why it comes here");
-            Log.d(mConfirm, " " + mPassword);
         }
-        Log.d("abc", "actually no");
 
         
 
@@ -116,8 +133,12 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             focusView.requestFocus();
             //focusView1.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            if (recorder.registerUser(mEmail, mPassword)) {
+                backToWelcome();
+            } else {
+                mEmailView.setError(getString(R.string.error_existed_email));
+                focusView.requestFocus();
+            }
         }
     }
 
@@ -130,11 +151,15 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         return password.length() > 4;
     }
 
-
-    public void cancelPressed(View view) {
+    public void exitTheAct() {
         Intent move = new Intent(this, WelcomeActivity.class);
         startActivity(move);
         finish();
+    }
+
+
+    public void cancelPressed(View view) {
+        exitTheAct();
     }
 
     @Override
