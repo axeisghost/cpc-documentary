@@ -137,7 +137,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
                 backToWelcome();
             } else {
                 mEmailView.setError(getString(R.string.error_existed_email));
-                focusView.requestFocus();
+                mEmailView.requestFocus();
             }
         }
     }
