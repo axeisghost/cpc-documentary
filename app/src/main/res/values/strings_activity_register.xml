@@ -4,10 +4,12 @@
     <string name="register_email">Email</string>
     <string name="register_password">Password ( at least 4 characters)</string>
     <string name="confirm_password">Confirm the password</string>
+    <string name="Hint_register_successfully">The information you entered is registered! Please Login.</string>
 
     <!--<string name="error_invalid_email">This email address is invalid</string>-->
     <!--<string name="error_invalid_password">This password is too short</string>-->
     <!--<string name="error_incorrect_password">This password is incorrect</string>-->
     <!--<string name="error_field_required">This field is required</string>-->
     <string name="error_unmatched_passwords">The passwords do not match.</string>
+    <string name="error_existed_email">The email is already existed.</string>
 </resources>
