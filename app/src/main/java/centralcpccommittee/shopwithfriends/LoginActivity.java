@@ -24,6 +24,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -227,27 +228,38 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     public void cancelPressed(View view) {
-        exitTheAct();
-    }
-
-    public void exitTheAct() {
         Intent move = new Intent(this, WelcomeActivity.class);
         startActivity(move);
         finish();
     }
 
-    public void backToWelcome() {
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(this).
-                        setMessage(getString(R.string.Hint_login_successfully)).
-                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                exitTheAct();
-                            }
-                        });
-        builder.create().show();
+
+//    public void exitTheAct(String passIn) {
+//        Intent move = new Intent(this, WelcomeActivity.class);
+//        move.putExtra("userEmail", passIn);
+//        startActivity(move);
+//        finish();
+//    }
+
+    public void loginSuccessfully() {
+//        AlertDialog.Builder builder =
+//                new AlertDialog.Builder(this).
+//                        setMessage(getString(R.string.Hint_login_successfully)).
+//                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                                exitTheAct();
+//                            }
+//                        });
+//        builder.create().show();
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
+        Intent move = new Intent(this, MainActivity.class);
+        move.putExtra("userEmail", mEmailView.getText().toString());
+        startActivity(move);
+        finish();
     }
 
     private interface ProfileQuery {
@@ -309,7 +321,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             mAuthTask = null;
 
             if (success && emailIndicator) {
-                backToWelcome();
+                loginSuccessfully();
             } else if (!(emailIndicator)) {
                 showProgress(false);
                 mEmailView.setError(getString(R.string.error_email_not_exist));

@@ -35,19 +35,19 @@ public class dataExchanger {
                 fos.close();
                 fis = fileContext.openFileInput(name);
             } catch (IOException err) {
-                Log.d("IOException", "Unexcepted");
+                //Log.d("IOException", "Unexcepted");
             }
         }
         try {
             while ((curr = fis.read()) != -1) {
                 text.append((char)curr);
             }
-            if (text.toString() == null) {
-
-                Log.d(text.toString(), "text == null");
-            } else {
-                Log.d("fuckup", "shit");
-            }
+//            if (text.toString() == null) {
+//
+//                Log.d(text.toString(), "text == null");
+//            } else {
+//                Log.d("fuckup", "shit");
+//            }
             if (text.toString().isEmpty()) {
                 data = new JSONObject();
             } else {
