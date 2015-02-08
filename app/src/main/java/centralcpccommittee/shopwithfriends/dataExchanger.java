@@ -24,6 +24,16 @@ public class dataExchanger {
     private Context fileContext;
     private String name;
 
+    /**
+     * Constructor of dataExchanger class, take in the fileName of
+     * primarty database which store the users' information.
+     * The primary database was converted to JSON Object The context
+     * is the context of application which is used to utilize internal
+     * storage.
+     * @param fileName
+     * @param appContext
+     */
+
     public dataExchanger(String fileName, Context appContext) {
         this.fileContext = appContext;
         this.name = fileName;
@@ -60,6 +70,15 @@ public class dataExchanger {
         }
     }
 
+    /**
+     * Take in a pair of email and password, put
+     * the key and value pair into JSONObject that converted
+     * from the primary database;
+     * @param email
+     * @param password
+     * @return
+     */
+
     public boolean registerUser(String email, String password) {
         try {
             if (data.has(email)) {
@@ -73,6 +92,14 @@ public class dataExchanger {
         return true;
     }
 
+    /**
+     * take in users' email and the name and content of addition information,
+     * add as a new key-value pair in the nested JSON obejct.
+     * @param email
+     * @param field
+     * @param content
+     */
+
     public void registerAddition(String email, String field, String content) {
         try {
             data.getJSONObject(email).put(field, content);
@@ -82,9 +109,23 @@ public class dataExchanger {
         }
     }
 
+    /**
+     * take in the email and find whether the email exists in the database
+     * or not.
+     * @param email
+     * @return true or false
+     */
     public boolean retrieveEmail(String email) {
         return data.has(email);
     }
+
+    /**
+     * take in a pair of email and password and check the JSONObject converted
+     * from the database to whether the email correspond to the password.
+     * @param email
+     * @param password
+     * @return
+     */
 
     public boolean checkPassword(String email, String password) {
         try {
@@ -95,6 +136,11 @@ public class dataExchanger {
         return false;
     }
 
+    /**
+     * close the io class of primary database but will be used only the database
+     * was read but not written.
+     */
+
     public void readerClose() {
         try {
             fis.close();
@@ -102,6 +148,11 @@ public class dataExchanger {
             Log.d("IOException", e.getMessage());
         }
     }
+
+    /**
+     * record the change of primary database and close the io class. Should be used
+     * only the database was edited.
+     */
 
     private void record() {
         try {

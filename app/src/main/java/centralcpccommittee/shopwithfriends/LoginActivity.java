@@ -102,6 +102,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
         if (mAuthTask != null) {
             return;
         }
@@ -253,9 +256,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 //                            }
 //                        });
 //        builder.create().show();
-        InputMethodManager imm = (InputMethodManager)getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
         Intent move = new Intent(this, MainActivity.class);
         move.putExtra("userEmail", mEmailView.getText().toString());
         startActivity(move);
