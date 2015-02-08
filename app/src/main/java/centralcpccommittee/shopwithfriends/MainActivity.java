@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
         if (extras != null) {
             userEmail = extras.getString("userEmail");
             TextView view = (TextView) findViewById(R.id.main_userEmail);
-            view.setText(userEmail);
+            view.setText("User: " + userEmail);
         }
     }
 
