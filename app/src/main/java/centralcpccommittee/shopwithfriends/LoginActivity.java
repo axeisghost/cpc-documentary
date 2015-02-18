@@ -4,9 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -21,6 +24,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -38,12 +42,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     /**
      * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world",
-            "test@cpc.com:fortestonly"
-    };
+//    private static final String[] DUMMY_CREDENTIALS = new String[]{
+//            "foo@example.com:hello", "bar@example.com:world",
+//            "test@cpc.com:fortestonly"
+//    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -99,6 +102,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
         if (mAuthTask != null) {
             return;
         }
@@ -147,12 +153,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -232,6 +236,32 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         finish();
     }
 
+
+//    public void exitTheAct(String passIn) {
+//        Intent move = new Intent(this, WelcomeActivity.class);
+//        move.putExtra("userEmail", passIn);
+//        startActivity(move);
+//        finish();
+//    }
+
+    public void loginSuccessfully() {
+//        AlertDialog.Builder builder =
+//                new AlertDialog.Builder(this).
+//                        setMessage(getString(R.string.Hint_login_successfully)).
+//                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                                exitTheAct();
+//                            }
+//                        });
+//        builder.create().show();
+        Intent move = new Intent(this, MainActivity.class);
+        move.putExtra("userEmail", mEmailView.getText().toString());
+        startActivity(move);
+        finish();
+    }
+
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -260,15 +290,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         private final String mEmail;
         private final String mPassword;
+        private boolean emailIndicator = true;
+        private dataExchanger checker;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+            checker = dataExchanger.getInstance();
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             try {
                 // Simulate network access.
@@ -276,36 +308,37 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             } catch (InterruptedException e) {
                 return false;
             }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
+            if (checker.retrieveEmail(mEmail)) {
+                return checker.checkPassword(mEmail, mPassword);
+            } else {
+                emailIndicator = false;
             }
-
-            // TODO: register the new account here.
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
 
-            if (success) {
-                finish();
+            if (success && emailIndicator) {
+                loginSuccessfully();
+            } else if (!(emailIndicator)) {
+                showProgress(false);
+                mEmailView.setError(getString(R.string.error_email_not_exist));
+                mEmailView.requestFocus();
             } else {
+                showProgress(false);
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+            checker.readerClose();
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+            checker.readerClose();
         }
     }
 }
