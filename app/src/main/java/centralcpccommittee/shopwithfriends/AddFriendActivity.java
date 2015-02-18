@@ -23,7 +23,11 @@ public class AddFriendActivity extends Activity {
     private UserProfile user;
     private ArrayList<UserProfile> friendList;
 
-
+    /**
+     * default onCreate method for activity, take in the account passed
+     * from last activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +127,11 @@ public class AddFriendActivity extends Activity {
             }
         }
     }
+
+    /**
+     * return method after added friend
+     * @param message
+     */
 
     private void backToMain(String message) {
         AlertDialog.Builder builder =
