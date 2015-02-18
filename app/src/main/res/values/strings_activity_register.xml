@@ -4,10 +4,7 @@
     <string name="register_email">Email</string>
     <string name="register_password">Password ( at least 4 characters)</string>
     <string name="confirm_password">Confirm the password</string>
-<<<<<<< HEAD
     <string name="register_username">Username</string>
-=======
->>>>>>> master
     <string name="Hint_register_successfully">The information you entered is registered! Please Login.</string>
 
     <!--<string name="error_invalid_email">This email address is invalid</string>-->

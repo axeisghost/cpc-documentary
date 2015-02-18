@@ -3,7 +3,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context="centralcpccommittee.shopwithfriends.MainActivity"
     tools:ignore="MergeRootFrame" >
-<<<<<<< HEAD
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -31,20 +30,4 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="54dp" />
     </RelativeLayout>
-=======
-    <LinearLayout android:id="@+id/main_text_bg" android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/main_userEmail"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="82dp"
-        android:layout_gravity="center_horizontal|top" />
-    </LinearLayout>
-
->>>>>>> master
 </FrameLayout>
