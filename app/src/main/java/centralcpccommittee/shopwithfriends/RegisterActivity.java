@@ -90,6 +90,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         mUsernameView.setError(null);
 
 
+
         // Store values at the time of the login attempt.
         String mEmail = mEmailView.getText().toString();
         String mPassword = mPasswordView.getText().toString();

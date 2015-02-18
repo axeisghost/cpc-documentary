@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
             userEmail = extras.getString("userEmail");
             TextView view = (TextView) findViewById(R.id.main_userEmail);
             view.setText("Welcome!\nUser: " + userEmail);
+            view.setText("User: " + userEmail);
         }
     }
 
