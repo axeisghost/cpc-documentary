@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ public class MainActivity extends Activity {
         if (extras != null) {
             userEmail = extras.getString("userEmail");
             TextView view = (TextView) findViewById(R.id.main_userEmail);
+            view.setText("Welcome!\nUser: " + userEmail);
             view.setText("User: " + userEmail);
         }
     }
@@ -64,6 +66,36 @@ public class MainActivity extends Activity {
         Intent move = new Intent(this,WelcomeActivity.class);
         startActivity(move);
         finish();
+    }
+
+    public void testPressed(View view) {
+        testUser();
+    }
+
+    public void test2Pressed(View view) {
+        test2User();
+    }
+
+    private void test2User() {
+        UserProfile mainuser = new UserProfile(userEmail);
+        mainuser.addFriend("@cpc", "cpc");
+        Log.d("mutual friend1", ""+mainuser.checkFriend("@cpc"));
+        Log.d("mutual friend2", "" + new UserProfile("@cpc").checkFriend(userEmail));
+    }
+
+    private void testUser() {
+        UserProfile mainuser = new UserProfile(userEmail);
+        Log.d("friendaddcondition1",""+ mainuser.addFriend("@xxx", "fuck"));
+        Log.d("friendaddcondition2",""+ mainuser.addFriend("@test", "fuck"));
+        mainuser.addFriend("@test", "tester");
+        Log.d("friendaddcondition4",""+ mainuser.addFriend("@test", "tester"));
+        mainuser.addFriend("@wjx", "wjx");
+        mainuser.rateByOther("@test", 4.5);
+        mainuser.rateByOther("@wjx", 3.1);
+        for (int ii = 0; ii < mainuser.getFriendList().size(); ii++) {
+            Log.d("listOutput" + ii, mainuser.getFriendList().get(ii).getUserEmail());
+        }
+        Log.d("listOutput", "" + mainuser.getRate());
     }
 
     public void logoutPressed(View view) {
@@ -100,4 +132,15 @@ public class MainActivity extends Activity {
             return rootView;
         }
     }
+
+
+    /**
+     * turn to the friend list page
+     */
+    public void friendPage(View view) {
+        Intent move = new Intent(this, FriendListActivity.class);
+        move.putExtra("userEmail", userEmail);
+        startActivity(move);
+    }
+
 }

@@ -38,7 +38,7 @@ import java.util.List;
 
 public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor> {
 
-    private EditText mPasswordView, mConfirmedView;
+    private EditText mPasswordView, mConfirmedView, mUsernameView;
     private AutoCompleteTextView mEmailView;
     private Button registerButton;
 
@@ -52,6 +52,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 
         mPasswordView = (EditText) findViewById(R.id.register_password);
         mConfirmedView = (EditText) findViewById(R.id.register_confirm);
+        mUsernameView = (EditText) findViewById(R.id.register_username);
 
         registerButton = (Button) findViewById(R.id.register_button);
 
@@ -86,17 +87,19 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         mEmailView.setError(null);
         mPasswordView.setError(null);
         mConfirmedView.setError(null);
+        mUsernameView.setError(null);
+
 
 
         // Store values at the time of the login attempt.
         String mEmail = mEmailView.getText().toString();
         String mPassword = mPasswordView.getText().toString();
         String mConfirm = mConfirmedView.getText().toString();
+        String mUsername = mUsernameView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
-        View focusView1 = null;
-        dataExchanger recorder = new dataExchanger("pDatabase", getApplicationContext());
+        dataExchanger recorder = dataExchanger.getInstance();
 
 
         // Check for a valid email address.
@@ -108,9 +111,11 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
-        } else
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(mPassword) && !isPasswordValid(mPassword)) {
+        } else if (TextUtils.isEmpty(mUsername)) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
+            cancel = true;
+        } else if (!TextUtils.isEmpty(mPassword) && !isPasswordValid(mPassword)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -121,7 +126,6 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         } else if (!(mConfirm.equals(mPassword))) {
             mPasswordView.setError(getString(R.string.error_unmatched_passwords));
             focusView = mPasswordView;
-            focusView1 = mConfirmedView;
             cancel = true;
         }
 
@@ -133,7 +137,8 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             focusView.requestFocus();
             //focusView1.requestFocus();
         } else {
-            if (recorder.registerUser(mEmail, mPassword)) {
+            if (recorder.registerUser(mEmail, mPassword, mUsername)) {
+                recorder.readerClose();
                 backToWelcome();
             } else {
                 mEmailView.setError(getString(R.string.error_existed_email));

@@ -3,6 +3,35 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context="centralcpccommittee.shopwithfriends.MainActivity"
     tools:ignore="MergeRootFrame" >
+<<<<<<< HEAD
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/activity_main">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Friends"
+            android:id="@+id/friend_list_button"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="147dp"
+            android:onClick="friendPage"
+            android:nestedScrollingEnabled="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/main_userEmail"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="54dp" />
+    </RelativeLayout>
+=======
     <LinearLayout android:id="@+id/main_text_bg" android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -17,4 +46,5 @@
         android:layout_gravity="center_horizontal|top" />
     </LinearLayout>
 
+>>>>>>> master
 </FrameLayout>

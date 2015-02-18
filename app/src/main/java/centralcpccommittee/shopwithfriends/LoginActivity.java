@@ -296,7 +296,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
-            checker = new dataExchanger("pDatabase", getApplicationContext());
+            checker = dataExchanger.getInstance();
         }
 
         @Override

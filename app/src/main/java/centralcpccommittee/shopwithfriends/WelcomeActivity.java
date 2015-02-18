@@ -25,6 +25,7 @@ public class WelcomeActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+        dataExchanger.initialize("pDatabase", getApplicationContext());
     }
 
     public void loginPressed(View view) {

@@ -6,7 +6,20 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_main">MainActivity</string>
+<<<<<<< HEAD
+    <string name="title_friend_list">Friends</string>
     <string name="hello_world">Hello world!</string>
     <string name="Hint_logout_confirm">Logout and return to Welcome screen?</string>
+    <string name="title_activity_load">LoadActivity</string>
+    <string name="title_activity_add_friend">Add Friend</string>
+    <string name="add_friend_email">Please type in your friend\'s Email</string>
+    <string name="add_friend_username">Please type in your friend\'s username</string>
+    <string name="error_email_not_registered">The email is not registered</string>
+    <string name="error_email_username_not_match">Email and Username do not match</string>
+    <string name="error_add_self_as_friend">You cannot add yourself as a friend</string>
+=======
+    <string name="hello_world">Hello world!</string>
+    <string name="Hint_logout_confirm">Logout and return to Welcome screen?</string>
+>>>>>>> master
 
 </resources>

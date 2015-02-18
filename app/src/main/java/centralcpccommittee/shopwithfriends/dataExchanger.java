@@ -23,6 +23,15 @@ public class dataExchanger {
     private StringBuilder text = new StringBuilder();
     private Context fileContext;
     private String name;
+    private static dataExchanger instance;
+
+    public static void initialize(String filename, Context context) {
+        instance = new dataExchanger(filename, context);
+    }
+
+    public static dataExchanger getInstance() {
+        return instance;
+    }
 
     /**
      * Constructor of dataExchanger class, take in the fileName of
@@ -34,7 +43,7 @@ public class dataExchanger {
      * @param appContext
      */
 
-    public dataExchanger(String fileName, Context appContext) {
+    private dataExchanger(String fileName, Context appContext) {
         this.fileContext = appContext;
         this.name = fileName;
         try {
@@ -52,12 +61,6 @@ public class dataExchanger {
             while ((curr = fis.read()) != -1) {
                 text.append((char)curr);
             }
-//            if (text.toString() == null) {
-//
-//                Log.d(text.toString(), "text == null");
-//            } else {
-//                Log.d("fuckup", "shit");
-//            }
             if (text.toString().isEmpty()) {
                 data = new JSONObject();
             } else {
@@ -79,12 +82,16 @@ public class dataExchanger {
      * @return
      */
 
-    public boolean registerUser(String email, String password) {
+    public boolean registerUser(String email, String password, String username) {
         try {
             if (data.has(email)) {
                 return false;
             }
             data.put(email, new JSONObject().put("Password", password));
+            registerAddition(email, "name", username);
+            registerAddition(email, "rate", new JSONObject().put("sum", Double.MIN_VALUE));
+            registerAddition(email, "friendlist", new JSONObject());
+            //TODO: Posted sales structure;
             record();
         } catch(JSONException e) {
             Log.d("JSONException", e.getMessage());
@@ -100,10 +107,9 @@ public class dataExchanger {
      * @param content
      */
 
-    public void registerAddition(String email, String field, String content) {
+    private void registerAddition(String email, String field, Object content) {
         try {
             data.getJSONObject(email).put(field, content);
-            record();
         } catch (JSONException e) {
             Log.d("JSONException", e.getMessage());
         }
@@ -119,6 +125,55 @@ public class dataExchanger {
         return data.has(email);
     }
 
+    public boolean matchEmailName(String email, String username) {
+        try {
+            return username.equals(data.getJSONObject(email).getString("name"));
+        } catch (JSONException e) {
+            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
+        }
+        return false;
+    }
+
+    public boolean addFriendwithEmail(String selfEmail, String email) {
+        try {
+            JSONObject selfList = data.getJSONObject(selfEmail).getJSONObject("friendlist");
+            JSONObject otherList = data.getJSONObject(email).getJSONObject("friendlist");
+            if (selfList.has(email)) {
+                return false;
+            } else if (otherList.has(selfEmail)){
+                otherList.put(selfEmail, true);
+                selfList.put(email, true);
+                record();
+                return true;
+            } else {
+                selfList.put(email, false);
+                record();
+                return true;
+            }
+        } catch(JSONException e) {
+            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
+        }
+        return false;
+    }
+
+    public void rateUser(String selfEmail, String raterEmail, double rate) {
+        try {
+            JSONObject userRate = data.getJSONObject(selfEmail).getJSONObject("rate");
+            double sum = userRate.getDouble("sum");
+            if (userRate.has(raterEmail)) {
+                double temp = userRate.getDouble(raterEmail);
+                userRate.put("sum", sum + rate - temp);
+            } else if (userRate.get("sum").equals(Double.MIN_VALUE)) {
+                userRate.put("sum", rate);
+            } else {
+                userRate.put("sum", sum + rate);
+            }
+            userRate.put(raterEmail, rate);
+            record();
+        } catch (JSONException e) {
+            Log.d("JSONException", e.getMessage());
+        }
+    }
     /**
      * take in a pair of email and password and check the JSONObject converted
      * from the database to whether the email correspond to the password.
@@ -134,6 +189,15 @@ public class dataExchanger {
             Log.d("JSONException", e.getMessage());
         }
         return false;
+    }
+
+    public JSONObject retrieveProfile(String email) {
+        try {
+            return data.getJSONObject(email);
+        } catch(JSONException e) {
+            Log.d("JSONException", "Unexpected non-existed email");
+        }
+        return null;
     }
 
     /**
@@ -156,11 +220,10 @@ public class dataExchanger {
 
     private void record() {
         try {
-            fos = fileContext.openFileOutput(name, fileContext.MODE_PRIVATE);
+            fos = fileContext.openFileOutput(name, Context.MODE_PRIVATE);
             fos.write(data.toString().getBytes());
-            //Log.d("fuck", data.toString());
             fos.close();
-            readerClose();
+            //readerClose();
         } catch(IOException e) {
             Log.d("IOException", e.getMessage());
         }

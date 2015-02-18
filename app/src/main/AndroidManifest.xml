@@ -37,6 +37,16 @@
             android:label="@string/title_activity_main"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
+        <activity
+            android:name=".FriendListActivity"
+            android:label="@string/title_friend_list"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name=".AddFriendActivity"
+            android:label="@string/title_activity_add_friend"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
     </application>
 
 </manifest>
