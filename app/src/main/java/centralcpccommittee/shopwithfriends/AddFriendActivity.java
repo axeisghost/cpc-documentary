@@ -40,7 +40,6 @@ public class AddFriendActivity extends Activity {
         getMenuInflater().inflate(R.menu.menu_add_friend, menu);
         friendEmailView = (EditText) findViewById(R.id.add_friend_email);
         friendUsernameView = (EditText) findViewById(R.id.add_friend_username);
-        dataExchanger recorder = dataExchanger.getInstance();
 
         return true;
     }

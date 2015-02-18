@@ -38,13 +38,19 @@ public class FriendListActivity extends Activity {
      * process the list view stuff, show the friends' Emails and usernames
      */
     private void populateListView() {
-        int size = friendList.size();
-        String[] friends = new String[size];
-        for (int i = 0; i < size; i++) {
-            friends[i] = friendList.get(i).toString();
+        String[] friends;
+        if (!friendList.isEmpty()) {
+            int size = friendList.size();
+            friends = new String[size];
+            for (int i = 0; i < size; i++) {
+                friends[i] = friendList.get(i).toString();
+            }
+        } else {
+            friends = new String[1];
+            friends[0] = "";
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.friend_item,
-                friends);
+                    friends);
         ListView list = (ListView) findViewById(R.id.friends_list_view);
         list.setAdapter(adapter);
     }
