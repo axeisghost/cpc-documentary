@@ -34,6 +34,7 @@ public class FriendListActivity extends Activity {
         populateListView();
     }
 
+
     /**
      * process the list view stuff, show the friends' Emails and usernames
      */
