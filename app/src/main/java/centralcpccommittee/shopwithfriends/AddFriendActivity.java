@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,7 @@ public class AddFriendActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
         mEmail = extras.getString("userEmail");
         user = new UserProfile(mEmail);
+        Log.d("fuckingshit", mEmail);
     }
 
 
