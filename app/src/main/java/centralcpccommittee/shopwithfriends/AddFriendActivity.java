@@ -16,7 +16,7 @@ import android.widget.EditText;
 import java.util.ArrayList;
 
 
-public class AddFriendActivity extends Activity {
+public class AddFriendActivity extends ActionBarActivity {
 
     private EditText friendEmailView, friendUsernameView;
     private String mEmail;

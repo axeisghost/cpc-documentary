@@ -7,18 +7,19 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/activity_main">
+        android:id="@+id/activity_main"
+        android:layout_gravity="center_horizontal|bottom">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Friends"
             android:id="@+id/friend_list_button"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="147dp"
             android:onClick="friendPage"
-            android:nestedScrollingEnabled="false" />
+            android:nestedScrollingEnabled="false"
+            android:layout_below="@+id/main_userEmail"
+            android:layout_alignStart="@+id/main_userEmail"
+            android:layout_marginTop="63dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,5 +30,14 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="54dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Find and Add Friends"
+            android:id="@+id/button4"
+            android:onClick="addFriendPage"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </FrameLayout>
