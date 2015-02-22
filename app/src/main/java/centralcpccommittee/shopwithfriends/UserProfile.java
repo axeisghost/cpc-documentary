@@ -91,6 +91,10 @@ public class UserProfile {
         }
     }
 
+    public void deleteFriend(String FriendEmail) {
+        database.rmFriend(FriendEmail, userEmail);
+    }
+
     /**
      * return the average rate of user as double
      * @return double, the average rate of user
