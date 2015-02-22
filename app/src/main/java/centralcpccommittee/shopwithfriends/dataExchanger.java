@@ -73,6 +73,14 @@ public class dataExchanger {
         }
     }
 
+    public void rmFriend(String FriendEmail, String selfEmail) {
+        try {
+            data.getJSONObject(selfEmail).getJSONObject("friendlist").remove(FriendEmail);
+        } catch(JSONException e) {
+            Log.d("Unexpected", "Friend not exist");
+        }
+    }
+
     /**
      * Take in a pair of email and password, put
      * the key and value pair into JSONObject that converted
