@@ -103,7 +103,7 @@ public class UserProfile {
     public double getRate() {
         try {
             double re = userinfo.getJSONObject("rate").getDouble("sum");
-            if (JSONObject.NULL.equals(re)) {
+            if (re == Double.MIN_VALUE) {
                 return -1;
             } else {
                 return re/(userinfo.getJSONObject("rate").length() - 1);

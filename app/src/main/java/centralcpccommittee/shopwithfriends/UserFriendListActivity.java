@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class UserFriendListActivity extends ActionBarActivity
             // res/values-sw600dp). If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+            Log.d("take a peek", "right place");
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.

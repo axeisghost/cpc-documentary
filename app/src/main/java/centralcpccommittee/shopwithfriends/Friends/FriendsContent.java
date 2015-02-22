@@ -46,9 +46,16 @@ public class FriendsContent {
                 String id = thisUser.getUserEmail();
                 // The info contains the username, rate and the no. of reports.
                 // Need to be fixed later
-                String info = "Username: " + thisUser.getUserName() + "\n"
-                        + "User's Rate: " + thisUser.getRate() + "\n"
-                        + "Reports to me: 0";
+                String info;
+                if (thisUser.getRate() == -1) {
+                    info = "Username: " + thisUser.getUserName() + "\n"
+                            + "User's Rate: " + "Not Applicable" + "\n"
+                            + "Reports to me: 0";
+                } else {
+                    info = "Username: " + thisUser.getUserName() + "\n"
+                            + "User's Rate: " + thisUser.getRate() + "\n"
+                            + "Reports to me: 0";
+                }
                 addItem(new FriendItem(id, info));
             }
         }
