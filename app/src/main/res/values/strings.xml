@@ -16,5 +16,7 @@
     <string name="error_email_not_registered">The email is not registered</string>
     <string name="error_email_username_not_match">Email and Username do not match</string>
     <string name="error_add_self_as_friend">You cannot add yourself as a friend</string>
+    <string name="title_userfriend_list">UserFriends</string>
+    <string name="title_userfriend_detail">UserFriend Detail</string>
 
 </resources>

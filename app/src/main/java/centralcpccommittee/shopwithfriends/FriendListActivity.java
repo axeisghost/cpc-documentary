@@ -3,6 +3,7 @@ package centralcpccommittee.shopwithfriends;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -12,9 +13,9 @@ import java.util.ArrayList;
 /**
  * Created by TIANCHENG on 2/17/2015.
  */
-public class FriendListActivity extends Activity {
+public class FriendListActivity extends ActionBarActivity {
 
-    private dataExchanger mData = dataExchanger.getInstance();
+//    private dataExchanger mData = dataExchanger.getInstance();
     private String userEmail;
     private UserProfile user;
     private ArrayList<UserProfile> friendList;
