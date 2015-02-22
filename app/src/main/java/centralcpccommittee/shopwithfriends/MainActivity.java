@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.app.Fragment;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
     private String userEmail;
 
     @Override
@@ -35,7 +35,6 @@ public class MainActivity extends Activity {
             userEmail = extras.getString("userEmail");
             TextView view = (TextView) findViewById(R.id.main_userEmail);
             view.setText("Welcome!\nUser: " + userEmail);
-            view.setText("User: " + userEmail);
         }
     }
 
@@ -138,9 +137,18 @@ public class MainActivity extends Activity {
      * turn to the friend list page
      */
     public void friendPage(View view) {
-        Intent move = new Intent(this, FriendListActivity.class);
+        Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
     }
 
+    /**
+     * turn to the add friend page
+     * @param view
+     */
+    public void addFriendPage(View view) {
+        Intent move = new Intent(this, AddFriendActivity.class);
+        move.putExtra("userEmail", userEmail);
+        startActivity(move);
+    }
 }

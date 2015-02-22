@@ -48,5 +48,7 @@
         android:layout_below="@+id/add_friend_username"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="73dp"
-        android:onClick="addFriendPressed" />
+        android:onClick="addFriendPressed"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false" />
 </RelativeLayout>

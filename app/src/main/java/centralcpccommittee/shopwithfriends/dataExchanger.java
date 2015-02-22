@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class dataExchanger {
     private FileOutputStream fos;
     private FileInputStream fis;
-    private JSONObject data;
+    private static JSONObject data;
     private int curr;
     private StringBuilder text = new StringBuilder();
     private Context fileContext;
@@ -66,6 +66,7 @@ public class dataExchanger {
             } else {
                 data = new JSONObject(text.toString());
             }
+            Log.d("gan", ""+data.has("@qwe"));
         } catch(IOException e) {
             Log.d("IOException", e.getMessage());
         } catch(JSONException e) {
@@ -76,6 +77,7 @@ public class dataExchanger {
     public void rmFriend(String FriendEmail, String selfEmail) {
         try {
             data.getJSONObject(selfEmail).getJSONObject("friendlist").remove(FriendEmail);
+            record();
         } catch(JSONException e) {
             Log.d("Unexpected", "Friend not exist");
         }

@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -36,7 +37,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class RegisterActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
 
     private EditText mPasswordView, mConfirmedView, mUsernameView;
     private AutoCompleteTextView mEmailView;
