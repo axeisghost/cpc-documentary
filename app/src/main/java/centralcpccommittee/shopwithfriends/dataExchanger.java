@@ -76,6 +76,7 @@ public class dataExchanger {
     public void rmFriend(String FriendEmail, String selfEmail) {
         try {
             data.getJSONObject(selfEmail).getJSONObject("friendlist").remove(FriendEmail);
+            record();
         } catch(JSONException e) {
             Log.d("Unexpected", "Friend not exist");
         }
