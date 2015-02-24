@@ -1,12 +1,12 @@
 package centralcpccommittee.shopwithfriends;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 
 /**
@@ -21,12 +21,15 @@ import android.view.MenuItem;
 public class UserFriendDetailActivity extends ActionBarActivity {
 
     private String userEmail;
+    private UserProfile thisUser;
+    private String friendEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
+        thisUser = new UserProfile(userEmail);
+        friendEmail = extras.getString(UserFriendDetailFragment.ARG_ITEM_ID);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userfriend_detail);
@@ -73,5 +76,31 @@ public class UserFriendDetailActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void deleteFriendPressed(View view) {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this).
+                        setMessage(getString(R.string.Hint_delete_friend)).
+                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                deleteFriend();
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.create().show();
+    }
+
+    public void deleteFriend() {
+        thisUser.deleteFriend(friendEmail);
+        Intent move = new Intent(this, UserFriendListActivity.class);
+        move.putExtra("userEmail", userEmail);
+        navigateUpTo(move);
     }
 }

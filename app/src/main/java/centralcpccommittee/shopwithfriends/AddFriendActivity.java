@@ -1,18 +1,16 @@
 package centralcpccommittee.shopwithfriends;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-
 
 import java.util.ArrayList;
 
@@ -153,7 +151,7 @@ public class AddFriendActivity extends ActionBarActivity {
      * exit the activity
      */
     public void exitTheAct() {
-        Intent move = new Intent(this, FriendListActivity.class);
+        Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", mEmail);
         startActivity(move);
         finish();
