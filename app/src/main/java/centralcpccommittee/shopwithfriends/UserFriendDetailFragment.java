@@ -59,4 +59,5 @@ public class UserFriendDetailFragment extends Fragment {
 
         return rootView;
     }
+
 }
