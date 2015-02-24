@@ -48,11 +48,13 @@ public class FriendsContent {
                 // Need to be fixed later
                 String info;
                 if (thisUser.getRate() == -1) {
-                    info = "Username: " + thisUser.getUserName() + "\n"
+                    info = "Email:" + id + "\n"
+                            + "Username: " + thisUser.getUserName() + "\n"
                             + "User's Rate: " + "Not Applicable" + "\n"
                             + "Reports to me: 0";
                 } else {
-                    info = "Username: " + thisUser.getUserName() + "\n"
+                    info =  "Email:" + id + "\n"
+                            +"Username: " + thisUser.getUserName() + "\n"
                             + "User's Rate: " + thisUser.getRate() + "\n"
                             + "Reports to me: 0";
                 }
