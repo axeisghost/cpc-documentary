@@ -12,4 +12,6 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_email_not_exist">Email does not exist!</string>
+    <string name="Hint_login_successfully">Login Successfully. Press OK to return Welcome Screen</string>
 </resources>
