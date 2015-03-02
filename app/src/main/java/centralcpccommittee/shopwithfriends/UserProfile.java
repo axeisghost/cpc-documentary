@@ -8,7 +8,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 
 /**
@@ -18,6 +20,7 @@ public class UserProfile {
     private static dataExchanger database = dataExchanger.getInstance();
     private JSONObject userinfo;
     private JSONObject friends;
+    private JSONObject items;
     private String userEmail;
     private String userName;
 
@@ -30,6 +33,7 @@ public class UserProfile {
         userinfo = database.retrieveProfile(email);
         try {
             friends = userinfo.getJSONObject("friendlist");
+            items = userinfo.getJSONObject("itemlist");
             userName = userinfo.getString("name");
         } catch (JSONException e) {
             Log.d("JOSNException", "Unexpected non-existed profile");
@@ -48,6 +52,20 @@ public class UserProfile {
             re.add(new UserProfile(ite.next()));
         }
         return re;
+    }
+
+    public Map<String, Double> getItemList() {
+        Map<String, Double> map = new HashMap<String, Double>();
+        Iterator<String> ite = items.keys();
+        try {
+            while (ite.hasNext()) {
+                String i = ite.next();
+                map.put(i, items.getDouble(i));
+            }
+        }  catch(JSONException e) {
+            Log.d("JOSNException", e.getMessage());
+        }
+        return map;
     }
 
     /**
@@ -88,6 +106,23 @@ public class UserProfile {
             return 2;
         } else {
             return 3;
+        }
+    }
+
+    /**
+     * take in the name and price of an item
+     * return an integer to indicate the different outcome.
+     * @param name
+     * @param price
+     * @return int 0, the item already exists but price is updated
+     *          int 1, the item is a new item and has been added
+     */
+
+    public int addItem(String name, double price) {
+        if (!database.addItemWithName(userEmail, name, price)) {
+            return 0;
+        } else {
+            return 1;
         }
     }
 

@@ -151,4 +151,20 @@ public class MainActivity extends ActionBarActivity {
         move.putExtra("userEmail", userEmail);
         startActivity(move);
     }
+
+    /**
+     * turn to the add item page
+     * @param view
+     */
+    public void addItemPage(View view) {
+        Intent move = new Intent(this, AddItemActivity.class);
+        move.putExtra("userEmail", userEmail);
+        startActivity(move);
+    }
+
+    public void itemListPage(View view) {
+        Intent move = new Intent(this, ItemListActivity.class);
+        move.putExtra("userEmail", userEmail);
+        startActivity(move);
+    }
 }

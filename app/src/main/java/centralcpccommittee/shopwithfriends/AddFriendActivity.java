@@ -34,7 +34,7 @@ public class AddFriendActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
         mEmail = extras.getString("userEmail");
         user = new UserProfile(mEmail);
-        Log.d("fuckingshit", mEmail);
+        Log.d("bug exists", mEmail);
     }
 
 

@@ -39,5 +39,26 @@
             android:onClick="addFriendPage"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add new item"
+            android:id="@+id/button6"
+            android:onClick="addItemPage"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="48dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="my items"
+            android:id="@+id/button7"
+            android:onClick="itemListPage"
+            android:layout_above="@+id/button6"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="44dp" />
     </RelativeLayout>
 </FrameLayout>

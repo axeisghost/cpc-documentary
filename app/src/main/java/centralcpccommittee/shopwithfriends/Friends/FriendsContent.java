@@ -51,12 +51,23 @@ public class FriendsContent {
                     info = "Email:" + id + "\n"
                             + "Username: " + thisUser.getUserName() + "\n"
                             + "User's Rate: " + "Not Applicable" + "\n"
-                            + "Reports to me: 0";
+                            + "Reports to me: 0" + "\n"
+                            + "Posted items:" + "\n";
+                    Map<String, Double> items = thisUser.getItemList();
+                    for (Map.Entry<String, Double> element: items.entrySet()) {
+                        String output = element.getKey().toString() + " : " + element.getValue().toString();
+                        info = info + output + "\n";
+                    }
                 } else {
                     info =  "Email:" + id + "\n"
                             +"Username: " + thisUser.getUserName() + "\n"
                             + "User's Rate: " + thisUser.getRate() + "\n"
-                            + "Reports to me: 0";
+                            + "Posted items:" + "\n";
+                    Map<String, Double> items = thisUser.getItemList();
+                    for (Map.Entry<String, Double> element: items.entrySet()) {
+                        String output = element.getKey().toString() + " : " + element.getValue().toString();
+                        info = info + output + "\n";
+                    }
                 }
                 addItem(new FriendItem(id, info));
             }
