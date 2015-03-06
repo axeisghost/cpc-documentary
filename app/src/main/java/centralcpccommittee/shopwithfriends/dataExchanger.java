@@ -101,6 +101,7 @@ public class dataExchanger {
             registerAddition(email, "name", username);
             registerAddition(email, "rate", new JSONObject().put("sum", Double.MIN_VALUE));
             registerAddition(email, "friendlist", new JSONObject());
+            registerAddition(email, "itemlist", new JSONObject());
             //TODO: Posted sales structure;
             record();
         } catch(JSONException e) {
@@ -160,6 +161,24 @@ public class dataExchanger {
                 record();
                 return true;
             }
+        } catch(JSONException e) {
+            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
+        }
+        return false;
+    }
+
+
+    public boolean addItemWithName(String selfEmail, String name, double price) {
+        try {
+            JSONObject selfList = data.getJSONObject(selfEmail).getJSONObject("itemlist");
+            if (selfList.has(name)) {
+                selfList.put(name, price);
+                record();
+                return false;
+            }
+            selfList.put(name, price);
+            record();
+            return true;
         } catch(JSONException e) {
             Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
         }
