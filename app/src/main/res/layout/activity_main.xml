@@ -17,9 +17,9 @@
             android:id="@+id/friend_list_button"
             android:onClick="friendPage"
             android:nestedScrollingEnabled="false"
+            android:layout_marginTop="45dp"
             android:layout_below="@+id/main_userEmail"
-            android:layout_alignStart="@+id/main_userEmail"
-            android:layout_marginTop="63dp" />
+            android:layout_alignStart="@+id/button4" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,7 +29,8 @@
             android:id="@+id/main_userEmail"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="54dp" />
+            android:layout_marginTop="54dp"
+            android:layout_alignStart="@+id/button4" />
 
         <Button
             android:layout_width="wrap_content"
@@ -37,8 +38,9 @@
             android:text="Find and Add Friends"
             android:id="@+id/button4"
             android:onClick="addFriendPage"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_below="@+id/friend_list_button"
+            android:layout_centerHorizontal="true"
+            android:layout_alignStart="@+id/button4" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -47,9 +49,8 @@
             android:text="Add new item"
             android:id="@+id/button6"
             android:onClick="addItemPage"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="48dp" />
+            android:layout_below="@+id/button7"
+            android:layout_alignStart="@+id/button4" />
 
         <Button
             android:layout_width="wrap_content"
@@ -57,8 +58,29 @@
             android:text="my items"
             android:id="@+id/button7"
             android:onClick="itemListPage"
-            android:layout_above="@+id/button6"
+            android:layout_centerVertical="true"
+            android:layout_below="@+id/button4"
+            android:layout_alignStart="@+id/button4" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sales"
+            android:id="@+id/button8"
+            android:onClick="saleListPage"
+            android:layout_below="@+id/button6"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="44dp" />
+            android:layout_alignStart="@+id/button4" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Report a sale"
+            android:id="@+id/button9"
+            android:onClick="addSalePage"
+            android:layout_below="@+id/button8"
+            android:layout_alignStart="@+id/button4" />
     </RelativeLayout>
 </FrameLayout>

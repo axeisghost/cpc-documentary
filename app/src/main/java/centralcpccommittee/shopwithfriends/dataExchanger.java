@@ -6,9 +6,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -102,6 +106,7 @@ public class dataExchanger {
             registerAddition(email, "rate", new JSONObject().put("sum", Double.MIN_VALUE));
             registerAddition(email, "friendlist", new JSONObject());
             registerAddition(email, "itemlist", new JSONObject());
+            registerAddition(email, "salelist", new JSONObject());
             //TODO: Posted sales structure;
             record();
         } catch(JSONException e) {
@@ -183,6 +188,35 @@ public class dataExchanger {
             Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
         }
         return false;
+    }
+
+    public boolean addANewSale(String selfEmail, String name, double price, String loc) {
+        boolean flag = false;
+        try {
+            UserProfile user = new UserProfile(selfEmail);
+            ArrayList<UserProfile> list = user.getFriendList();
+            for (UserProfile u: list) {
+                if (u != null) {
+                    Map<String, Double> items = u.getItemList();
+                    if (items.containsKey(name) && price <= items.get(name)) {
+                        JSONObject sList = data.getJSONObject(u.getUserEmail()).getJSONObject("salelist");
+                        JSONArray arr = new JSONArray();
+                        arr.put(0, price);
+                        arr.put(1, loc);
+                        /*
+                        saleType s = new saleType(price, loc);
+                        sList.put(name, s);
+                        */
+                        sList.put(name, arr);
+                        record();
+                        flag = true;
+                    }
+                }
+            }
+        } catch(JSONException e) {
+            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
+        }
+        return flag;
     }
 
     public void rateUser(String selfEmail, String raterEmail, double rate) {

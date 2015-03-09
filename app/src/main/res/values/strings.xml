@@ -7,11 +7,13 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_item_list">Items</string>
+    <string name="title_sale_list">Sales</string>
     <string name="hello_world">Hello world!</string>
     <string name="Hint_logout_confirm">Logout and return to Welcome screen?</string>
     <string name="title_activity_load">LoadActivity</string>
     <string name="title_activity_add_friend">Add Friend</string>
     <string name="title_activity_add_item">Add Items</string>
+    <string name="title_activity_add_sale">Add Sales</string>
     <string name="add_friend_email">Please type in your friend\'s Email</string>
     <string name="add_friend_username">Please type in your friend\'s username</string>
     <string name="error_email_not_registered">The email is not registered</string>

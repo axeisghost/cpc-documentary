@@ -21,6 +21,7 @@ public class UserProfile {
     private JSONObject userinfo;
     private JSONObject friends;
     private JSONObject items;
+    private JSONObject sales;
     private String userEmail;
     private String userName;
 
@@ -34,11 +35,14 @@ public class UserProfile {
         try {
             friends = userinfo.getJSONObject("friendlist");
             items = userinfo.getJSONObject("itemlist");
+            sales = userinfo.getJSONObject("salelist");
             userName = userinfo.getString("name");
         } catch (JSONException e) {
             Log.d("JOSNException", "Unexpected non-existed profile");
         }
     }
+
+
 
     /**
      * return the user's friends list as a Arraylist of UserProfile
@@ -61,6 +65,20 @@ public class UserProfile {
             while (ite.hasNext()) {
                 String i = ite.next();
                 map.put(i, items.getDouble(i));
+            }
+        }  catch(JSONException e) {
+            Log.d("JOSNException", e.getMessage());
+        }
+        return map;
+    }
+
+    public Map<String, JSONArray> getSaleList() {
+        Map<String, JSONArray> map = new HashMap<String, JSONArray>();
+        Iterator<String> ite = sales.keys();
+        try {
+            while (ite.hasNext()) {
+                String i = ite.next();
+                map.put(i, sales.getJSONArray(i));
             }
         }  catch(JSONException e) {
             Log.d("JOSNException", e.getMessage());
@@ -126,6 +144,23 @@ public class UserProfile {
         }
     }
 
+    /**
+     * take in the name, price, and the location of a sale
+     * return an integer to indicate the different outcome.
+     * @param name
+     * @param price
+     * @return int 0, no request can be satisfied with this sale
+     *          int 1, the sale is successfully reported and at least one friend gets the message
+     */
+
+    public int addSale(String name, double price, String loc) {
+        if (!database.addANewSale(userEmail, name, price, loc)) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
     public void deleteFriend(String FriendEmail) {
         database.rmFriend(FriendEmail, userEmail);
     }
@@ -183,4 +218,6 @@ public class UserProfile {
     public String toString() {
         return userEmail + " " + userName;
     }
+
+
 }

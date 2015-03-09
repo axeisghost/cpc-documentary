@@ -12,9 +12,9 @@ import android.view.View;
 import android.widget.EditText;
 
 
-public class AddItemActivity extends ActionBarActivity {
+public class AddSaleActivity extends ActionBarActivity {
 
-    private EditText itemNameView, itemPriceView;
+    private EditText saleName, salePrice, saleLoc;
     private String mEmail;
     private UserProfile user;
 
@@ -26,7 +26,7 @@ public class AddItemActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_item);
+        setContentView(R.layout.activity_add_sale);
         Bundle extras = getIntent().getExtras();
         mEmail = extras.getString("userEmail");
         user = new UserProfile(mEmail);
@@ -37,9 +37,10 @@ public class AddItemActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_item, menu);
-        itemNameView = (EditText) findViewById(R.id.add_item_name);
-        itemPriceView = (EditText) findViewById(R.id.add_sale_name);
+        getMenuInflater().inflate(R.menu.menu_add_sale, menu);
+        saleName = (EditText) findViewById(R.id.add_sale_name);
+        salePrice = (EditText) findViewById(R.id.add_sale_price);
+        saleLoc = (EditText) findViewById(R.id.add_sale_loc);
         return true;
     }
 
@@ -62,18 +63,15 @@ public class AddItemActivity extends ActionBarActivity {
     /**
      * attempt to add an item
      */
-    public void attemptAddItem() {
-        itemNameView.setError(null);
-        itemPriceView.setError(null);
-        String itemName = itemNameView.getText().toString();
-        double itemPrice = Double.parseDouble(itemPriceView.getText().toString());
-        int type = user.addItem(itemName, itemPrice);
-        String message = "";
-        if (type == 0) {
-            message = itemName + " already exists and the price has been changed to " + itemPrice;
-        } else {
-            message = itemName + " has been added";
-        }
+    public void attemptAddSale() {
+        saleName.setError(null);
+        salePrice.setError(null);
+        saleLoc.setError(null);
+        String name = saleName.getText().toString();
+        double price = Double.parseDouble(salePrice.getText().toString());
+        String loc = saleLoc.getText().toString();
+        int type = user.addSale(name, price, loc);
+        String message = "Your sale has been successfully reported";
         backToMain(message);
     }
 
@@ -115,7 +113,7 @@ public class AddItemActivity extends ActionBarActivity {
         return email.contains("@");
     }
 
-    public void addItemPressed(View view) {
-        attemptAddItem();
+    public void addSalePressed(View view) {
+        attemptAddSale();
     }
 }
