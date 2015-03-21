@@ -41,6 +41,11 @@ public class WelcomeActivity extends ActionBarActivity {
         finish();
     }
 
+    public void testMapPressed(View view) {
+        Intent move = new Intent(this, MapsActivity.class);
+        startActivity(move);
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
