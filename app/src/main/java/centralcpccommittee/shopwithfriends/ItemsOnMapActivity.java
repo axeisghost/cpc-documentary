@@ -118,7 +118,7 @@ public class ItemsOnMapActivity extends FragmentActivity {
                 if(curLont < minLont) minLont = curLont;
             }
             LatLngBounds curBound = new LatLngBounds(new LatLng(minLat,minLont), new LatLng(maxLat,maxLont));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curBound.getCenter(), 10));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curBound.getCenter(), 17));
         } else {
             mMap.addMarker(new MarkerOptions().position(curLocation).title("Duang!!!!!"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
