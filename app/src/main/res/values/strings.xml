@@ -21,5 +21,6 @@
     <string name="title_userfriend_detail">UserFriend Detail</string>
     <string name="Hint_delete_friend">Are you sure to delete this friend?</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_items_on_map">Map</string>
 
 </resources>

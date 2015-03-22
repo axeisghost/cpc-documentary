@@ -1,12 +1,6 @@
 package centralcpccommittee.shopwithfriends;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,32 +9,34 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.List;
+import org.json.JSONArray;
 
-public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarkerDragListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener {
+import java.util.Map;
+
+public class ItemsOnMapActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private Marker curLocation;
-    private LatLng returnLoc;
     private String userEmail;
+    private UserProfile user;
+    private Map<String, JSONArray> itemMap;
+    private LatLng focusLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_items_on_map);
 
-
+        Bundle extras = getIntent().getExtras();
+        userEmail = extras.getString("userEmail");
+        user = new UserProfile(userEmail);
+        itemMap = user.getItemList();
 
 
 
         setUpMapIfNeeded();
-
-        mMap.setOnMarkerDragListener(this);
-        mMap.setOnMapLongClickListener(this);
-        mMap.setOnMapClickListener(this);
     }
 
     @Override
@@ -84,48 +80,55 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        LatLng curLoc = new LatLng(33.777361,-84.397326);
-        curLocation = mMap.addMarker(new MarkerOptions().position(curLoc).title("The Item is FUCKING here!").draggable(true));
-
-        // Enable MyLocation Layer of Google Map
-        mMap.setMyLocationEnabled(true);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
-    }
-    public void onMapLongClick(LatLng arg0) {
-        curLocation.remove();
-        curLocation = mMap.addMarker(new MarkerOptions().position(arg0).draggable(true).title("The Item is now FUCKING here!"));
-        returnLoc = curLocation.getPosition();
-    }
-
-
-    @Override
-    public void onMarkerDragStart(Marker marker) {
+        try {
+            focusLocation();
+        } catch (Exception e) {
+            System.out.println("Fail to locate");
+        }
 
     }
-
-    @Override
-    public void onMarkerDrag(Marker marker) {
-
+    private void focusLocation(){
+        LatLng curLocation;
+        String name;
+        Double curLat = 33.777361,curLont = -84.397326;
+        Double maxLat=-999.0,minLat=999.0,maxLont=-999.0,minLont=999.0;
+        curLocation = new LatLng(curLat,curLont);
+        if (!itemMap.isEmpty()) {
+            int size = itemMap.size();
+            for (Map.Entry<String,JSONArray> element: itemMap.entrySet()) {
+                name = element.getKey().toString();
+                name = name + " : ";
+                JSONArray jData = element.getValue();
+                try {
+                    name = name + jData.getDouble(0);
+                    name = name + " : ";
+                    curLont = jData.getDouble(1);
+                    name = name + curLont;
+                    curLat = jData.getDouble(2);
+                    name = name + " : ";
+                    name = name + curLat;
+                } catch (Exception e) {
+                    System.out.println("JSON must be kidding !!!");
+                }
+                curLocation = new LatLng(curLat,curLont);
+                mMap.addMarker(new MarkerOptions().position(curLocation).title(name));
+                if(curLat>maxLat) maxLat = curLat;
+                if(curLat<minLat) minLat = curLat;
+                if(curLont > maxLont) maxLont = curLont;
+                if(curLont < minLont) minLont = curLont;
+            }
+            LatLngBounds curBound = new LatLngBounds(new LatLng(minLat,minLont), new LatLng(maxLat,maxLont));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curBound.getCenter(), 10));
+        } else {
+            mMap.addMarker(new MarkerOptions().position(curLocation).title("Duang!!!!!"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+        }
     }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-
-    }
-    public void confirmPressed(View view) {
-        Intent move = new Intent(this, AddItemActivity.class);
+    public void backToItemListActivityPressed(View view) {
+        Intent move = new Intent(this, ItemListActivity.class);
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
-        move.putExtra("longtitude", returnLoc.longitude);
-        move.putExtra("latitude", returnLoc.latitude);
-        AddItemActivity.updateLatLng(returnLoc);
-
         move.putExtra("userEmail",userEmail);
         startActivity(move);
     }

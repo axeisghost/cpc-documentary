@@ -23,8 +23,8 @@ public class AddItemActivity extends ActionBarActivity {
     private String mEmail;
     private UserProfile user;
     private LatLng location;
-    private double longtitude;
-    private double latitude;
+    private static double longtitude;
+    private static double latitude;
     /**
      * default onCreate method for activity, take in the account passed
      * from last activity
@@ -77,13 +77,13 @@ public class AddItemActivity extends ActionBarActivity {
         double itemPrice = Double.parseDouble(itemPriceView.getText().toString());
       //  int type = user.addItem(itemName, itemPrice);
         Bundle extras = getIntent().getExtras();
-        if(extras.getString("longtitude")!=null &&extras.getString("latitude")!=null  ) {
+      /*  if(extras.getString("longtitude")!=null && extras.getString("latitude")!=null  ) {
             longtitude = Double.parseDouble(extras.getString("longtitude"));
             latitude = Double.parseDouble(extras.getString("latitude"));
         } else {
             longtitude = 38;
             latitude = 38;
-        }
+        }*/
         int type = user.addMapItem(itemName, itemPrice, longtitude, latitude);
         String message = "";
         if (type == 0) {
@@ -140,6 +140,10 @@ public class AddItemActivity extends ActionBarActivity {
         return email.contains("@");
     }
 
+    public static void updateLatLng(LatLng loc){
+        longtitude = loc.longitude;
+        latitude = loc.latitude;
+    }
     public void addItemPressed(View view) {
         attemptAddItem();
     }

@@ -54,13 +54,13 @@ public class UserProfile {
         return re;
     }
 
-    public Map<String, Double> getItemList() {
-        Map<String, Double> map = new HashMap<String, Double>();
+    public Map<String, JSONArray> getItemList() {
+        Map<String, JSONArray> map = new HashMap<String, JSONArray>();
         Iterator<String> ite = items.keys();
         try {
             while (ite.hasNext()) {
                 String i = ite.next();
-                map.put(i, items.getDouble(i));
+                map.put(i, items.getJSONArray(i));
             }
         }  catch(JSONException e) {
             Log.d("JOSNException", e.getMessage());

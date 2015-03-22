@@ -1,5 +1,7 @@
 package centralcpccommittee.shopwithfriends.Friends;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,8 +55,8 @@ public class FriendsContent {
                             + "User's Rate: " + "Not Applicable" + "\n"
                             + "Reports to me: 0" + "\n"
                             + "Posted items:" + "\n";
-                    Map<String, Double> items = thisUser.getItemList();
-                    for (Map.Entry<String, Double> element: items.entrySet()) {
+                    Map<String, JSONArray> items = thisUser.getItemList();
+                    for (Map.Entry<String, JSONArray> element: items.entrySet()) {
                         String output = element.getKey().toString() + " : " + element.getValue().toString();
                         info = info + output + "\n";
                     }
@@ -63,8 +65,8 @@ public class FriendsContent {
                             +"Username: " + thisUser.getUserName() + "\n"
                             + "User's Rate: " + thisUser.getRate() + "\n"
                             + "Posted items:" + "\n";
-                    Map<String, Double> items = thisUser.getItemList();
-                    for (Map.Entry<String, Double> element: items.entrySet()) {
+                    Map<String, JSONArray> items = thisUser.getItemList();
+                    for (Map.Entry<String, JSONArray> element: items.entrySet()) {
                         String output = element.getKey().toString() + " : " + element.getValue().toString();
                         info = info + output + "\n";
                     }
