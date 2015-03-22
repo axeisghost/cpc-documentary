@@ -9,6 +9,7 @@ import java.io.IOException;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -184,6 +185,29 @@ public class dataExchanger {
         }
         return false;
     }
+    /**
+        1.price, 2.longtitude, 3.latitude as three value for the item name
+     */
+    public boolean addMapItemWithName(String selfEmail, String name, double price, double longtitude, double latitude) {
+        try {
+            JSONObject selfList = data.getJSONObject(selfEmail).getJSONObject("itemlist");
+            double[] mydata = {price,longtitude,latitude};
+            JSONArray jData = new JSONArray(mydata);
+            if(selfList.has(name)) {
+                selfList.put(name,jData);
+                record();
+                return false;
+            }
+            selfList.put(name,jData);
+            record();
+            return true;
+        } catch (JSONException e) {
+            Log.d("JSONException", "Unexcepted JSON Exception. !!! name should be exsited");
+        }
+        return false;
+    }
+
+
 
     public void rateUser(String selfEmail, String raterEmail, double rate) {
         try {

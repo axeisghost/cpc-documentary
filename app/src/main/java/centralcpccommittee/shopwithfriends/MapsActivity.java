@@ -1,29 +1,46 @@
 package centralcpccommittee.shopwithfriends;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarkerDragListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-
+    private Marker curLocation;
+    private LatLng returnLoc;
+    private String userEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+
+
+
+
         setUpMapIfNeeded();
+
+        mMap.setOnMarkerDragListener(this);
+        mMap.setOnMapLongClickListener(this);
+        mMap.setOnMapClickListener(this);
     }
 
     @Override
@@ -68,13 +85,46 @@ public class MapsActivity extends FragmentActivity {
      */
     private void setUpMap() {
         LatLng curLoc = new LatLng(33.777361,-84.397326);
-        mMap.addMarker(new MarkerOptions().position(curLoc).title("You are FUCKING here!"));
+        curLocation = mMap.addMarker(new MarkerOptions().position(curLoc).title("The Item is FUCKING here!").draggable(true));
+
         // Enable MyLocation Layer of Google Map
         mMap.setMyLocationEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+    }
+    public void onMapLongClick(LatLng arg0) {
+        curLocation.remove();
+        curLocation = mMap.addMarker(new MarkerOptions().position(arg0).draggable(true).title("The Item is now FUCKING here!"));
+        returnLoc = curLocation.getPosition();
+    }
 
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
 
     }
 
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+
+    }
+    public void confirmPressed(View view) {
+        Intent move = new Intent(this, AddItemActivity.class);
+        Bundle extras = getIntent().getExtras();
+        userEmail = extras.getString("userEmail");
+        move.putExtra("longtitude", returnLoc.longitude);
+        move.putExtra("latitude", returnLoc.latitude);
+        move.putExtra("userEmail",userEmail);
+        startActivity(move);
+    }
 }

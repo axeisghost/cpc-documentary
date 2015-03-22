@@ -126,6 +126,16 @@ public class UserProfile {
         }
     }
 
+    public int addMapItem(String name, double price, double longtitude,double latitude) {
+        if (!database.addMapItemWithName(userEmail, name, price, longtitude, latitude)) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+
+
     public void deleteFriend(String FriendEmail) {
         database.rmFriend(FriendEmail, userEmail);
     }

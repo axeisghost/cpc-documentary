@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 
@@ -20,7 +22,9 @@ public class AddItemActivity extends ActionBarActivity {
     private EditText itemNameView, itemPriceView;
     private String mEmail;
     private UserProfile user;
-
+    private LatLng location;
+    private double longtitude;
+    private double latitude;
     /**
      * default onCreate method for activity, take in the account passed
      * from last activity
@@ -32,6 +36,7 @@ public class AddItemActivity extends ActionBarActivity {
         setContentView(R.layout.activity_add_item);
         Bundle extras = getIntent().getExtras();
         mEmail = extras.getString("userEmail");
+
         user = new UserProfile(mEmail);
         Log.d("bug", mEmail);
     }
@@ -70,20 +75,37 @@ public class AddItemActivity extends ActionBarActivity {
         itemPriceView.setError(null);
         String itemName = itemNameView.getText().toString();
         double itemPrice = Double.parseDouble(itemPriceView.getText().toString());
-        int type = user.addItem(itemName, itemPrice);
+      //  int type = user.addItem(itemName, itemPrice);
+        Bundle extras = getIntent().getExtras();
+        if(extras.getString("longtitude")!=null &&extras.getString("latitude")!=null  ) {
+            longtitude = Double.parseDouble(extras.getString("longtitude"));
+            latitude = Double.parseDouble(extras.getString("latitude"));
+        } else {
+            longtitude = 38;
+            latitude = 38;
+        }
+        int type = user.addMapItem(itemName, itemPrice, longtitude, latitude);
         String message = "";
         if (type == 0) {
-            message = itemName + " already exists and the price has been changed to " + itemPrice;
+            message = itemName + " already exists and the price has been changed to " + itemPrice + longtitude + " " + latitude;
         } else {
             message = itemName + "has been added";
         }
         backToMain(message);
     }
-
+    public void mapButtonPressed(View view) {
+        Intent move = new Intent(this, MapsActivity.class);
+        move.putExtra("userEmail", mEmail);
+        startActivity(move);
+        finish();
+    }
     /**
      * return method after added friend
      * @param message
      */
+
+
+
 
     private void backToMain(String message) {
         AlertDialog.Builder builder =
