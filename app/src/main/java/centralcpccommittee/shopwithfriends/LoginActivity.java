@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,8 +33,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -237,26 +244,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         finish();
     }
 
-
-//    public void exitTheAct(String passIn) {
-//        Intent move = new Intent(this, WelcomeActivity.class);
-//        move.putExtra("userEmail", passIn);
-//        startActivity(move);
-//        finish();
-//    }
-
     public void loginSuccessfully() {
-//        AlertDialog.Builder builder =
-//                new AlertDialog.Builder(this).
-//                        setMessage(getString(R.string.Hint_login_successfully)).
-//                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.dismiss();
-//                                exitTheAct();
-//                            }
-//                        });
-//        builder.create().show();
         Intent move = new Intent(this, MainActivity.class);
         move.putExtra("userEmail", mEmailView.getText().toString());
         startActivity(move);
@@ -291,13 +279,38 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-        private boolean emailIndicator = true;
-        private dataExchanger checker;
+        private boolean emailExist = true;
+        private boolean loginSuccessful = false;
+
+        private static final String FIREBASE_URL = "https://shining-heat-1001.firebaseio.com";
+        private Firebase mFirebaseRef = new Firebase(FIREBASE_URL);
+        private Firebase userRef;
 
         UserLoginTask(String email, String password) {
-            mEmail = email;
+            mEmail = RegisterActivity.replaceDot(email);
             mPassword = password;
-            checker = dataExchanger.getInstance();
+            userRef = mFirebaseRef.child(mEmail);
+            this.userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    // if the user email doesn't exist
+                    if (snapshot.getValue() == null) {
+                        emailExist = false;
+                    } else {
+                        Object o = snapshot.getValue();
+                        String pass = (String)(((Map) o).get("password"));
+                        if (pass.equals(mPassword)) {
+                            loginSuccessful = true;
+                        } else {
+                            loginSuccessful = false;
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                    System.out.println("The read failed: " + firebaseError.getMessage());
+                }
+            });
         }
 
         @Override
@@ -305,25 +318,19 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 return false;
             }
-            if (checker.retrieveEmail(mEmail)) {
-                return checker.checkPassword(mEmail, mPassword);
-            } else {
-                emailIndicator = false;
-            }
-            return true;
+            return loginSuccessful;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-
-            if (success && emailIndicator) {
+            if (success && emailExist) {
                 loginSuccessfully();
-            } else if (!(emailIndicator)) {
+            } else if (!(emailExist)) {
                 showProgress(false);
                 mEmailView.setError(getString(R.string.error_email_not_exist));
                 mEmailView.requestFocus();
@@ -332,14 +339,12 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
-            checker.readerClose();
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
-            checker.readerClose();
         }
     }
 }

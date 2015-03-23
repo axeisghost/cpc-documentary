@@ -7,10 +7,19 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.Firebase;
+import com.firebase.client.ValueEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.google.android.gms.games.snapshot.Snapshot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +29,10 @@ import org.json.JSONObject;
  * Created by axeisghost on 15/01/30.
  */
 public class dataExchanger {
+    private static final String FIREBASE_URL = "https://shining-heat-1001.firebaseio.com";
+
+    // private ValueEventListener mConnectedListener;
+
     private FileOutputStream fos;
     private FileInputStream fis;
     private static JSONObject data;
@@ -27,7 +40,16 @@ public class dataExchanger {
     private StringBuilder text = new StringBuilder();
     private Context fileContext;
     private String name;
+
+
     private static dataExchanger instance;
+    private Firebase userRef;
+    private Firebase mFirebaseRef;
+    private String nameBuffer;
+    private String passwordBuffer;
+
+    private volatile boolean registered = false;
+    private User userBuffer;
 
     public static void initialize(String filename, Context context) {
         instance = new dataExchanger(filename, context);
@@ -39,7 +61,7 @@ public class dataExchanger {
 
     /**
      * Constructor of dataExchanger class, take in the fileName of
-     * primarty database which store the users' information.
+     * primary database which store the users' information.
      * The primary database was converted to JSON Object The context
      * is the context of application which is used to utilize internal
      * storage.
@@ -48,34 +70,9 @@ public class dataExchanger {
      */
 
     private dataExchanger(String fileName, Context appContext) {
-        this.fileContext = appContext;
-        this.name = fileName;
-        try {
-            fis = fileContext.openFileInput(name);
-        } catch (IOException e) {
-            try {
-                fos = fileContext.openFileOutput(name, Context.MODE_PRIVATE);
-                fos.close();
-                fis = fileContext.openFileInput(name);
-            } catch (IOException err) {
-                //Log.d("IOException", "Unexcepted");
-            }
-        }
-        try {
-            while ((curr = fis.read()) != -1) {
-                text.append((char)curr);
-            }
-            if (text.toString().isEmpty()) {
-                data = new JSONObject();
-            } else {
-                data = new JSONObject(text.toString());
-            }
-            Log.d("gan", ""+data.has("@qwe"));
-        } catch(IOException e) {
-            Log.d("IOException", e.getMessage());
-        } catch(JSONException e) {
-            Log.d("JSONException", e.getMessage());
-        }
+        //TODO: Check internet connection here
+        //TODO: handle no connection here, somehow
+        mFirebaseRef = new Firebase(FIREBASE_URL);
     }
 
     public void rmFriend(String FriendEmail, String selfEmail) {
@@ -96,23 +93,40 @@ public class dataExchanger {
      * @return
      */
 
-    public boolean registerUser(String email, String password, String username) {
-        try {
-            if (data.has(email)) {
-                return false;
+    public void registerUser(String email, String password, String username) {
+        email = replaceDot(email);
+        passwordBuffer = password;
+        nameBuffer = username;
+        userRef = mFirebaseRef.child(email);
+        registerHelper(userRef);
+    }
+
+    private void registerHelper(Firebase userRef) {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.getValue() == null) {
+                    //dataExchanger.this.userBuffer = new User(dataExchanger.this.nameBuffer, dataExchanger.this.passwordBuffer, );
+                    dataExchanger.this.registered = true;
+                    dataExchanger.this.userRef.setValue(userBuffer);
+                    Log.d("register", "new user registered");
+                }
             }
-            data.put(email, new JSONObject().put("Password", password));
-            registerAddition(email, "name", username);
-            registerAddition(email, "rate", new JSONObject().put("sum", Double.MIN_VALUE));
-            registerAddition(email, "friendlist", new JSONObject());
-            registerAddition(email, "itemlist", new JSONObject());
-            registerAddition(email, "salelist", new JSONObject());
-            //TODO: Posted sales structure;
-            record();
-        } catch(JSONException e) {
-            Log.d("JSONException", e.getMessage());
-        }
-        return true;
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+    }
+
+    public boolean getRegisterStatus() {
+        return registered;
+    }
+
+
+
+    private String replaceDot(String email) {
+        return email.replaceAll("\\.", "<dot>");
     }
 
     /**
@@ -124,6 +138,15 @@ public class dataExchanger {
      */
 
     private void registerAddition(String email, String field, Object content) {
+        try {
+            email = replaceDot(email);
+            //Test if the dir exist. Expect to have exception here to register user
+            Firebase userRef = mFirebaseRef.child(email);
+            (new Firebase(userRef + "/" + field)).setValue(content);
+        } catch (Exception e) {
+            Log.d("FirebaseException","email doesn't exist");
+        }
+
         try {
             data.getJSONObject(email).put(field, content);
         } catch (JSONException e) {
@@ -138,16 +161,31 @@ public class dataExchanger {
      * @return true or false
      */
     public boolean retrieveEmail(String email) {
-        return data.has(email);
+        try {
+            email = replaceDot(email);
+            //Test if the dir exist. Expect to have exception here to register user
+            mFirebaseRef.child(email);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean matchEmailName(String email, String username) {
         try {
+            mFirebaseRef.child(email);
+            //TODO: retrieve data
+            return true;
+        } catch(Exception e) {
+            Log.d("fireBase exception","email doesn't exist");
+            return false;
+        }
+        /*try {
             return username.equals(data.getJSONObject(email).getString("name"));
         } catch (JSONException e) {
-            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
+            Log.d("JSONException", "Unexcepted JSON Exception. name should exist");
         }
-        return false;
+        return false;*/
     }
 
     public boolean addFriendwithEmail(String selfEmail, String email) {
@@ -189,7 +227,7 @@ public class dataExchanger {
         }
         return false;
     }
-
+/*
     public boolean addANewSale(String selfEmail, String name, double price, String loc) {
         boolean flag = false;
         try {
@@ -203,10 +241,10 @@ public class dataExchanger {
                         JSONArray arr = new JSONArray();
                         arr.put(0, price);
                         arr.put(1, loc);
-                        /*
-                        saleType s = new saleType(price, loc);
-                        sList.put(name, s);
-                        */
+
+                        // saleType s = new saleType(price, loc);
+                        // sList.put(name, s);
+
                         sList.put(name, arr);
                         record();
                         flag = true;
@@ -218,6 +256,7 @@ public class dataExchanger {
         }
         return flag;
     }
+*/
 
     public void rateUser(String selfEmail, String raterEmail, double rate) {
         try {

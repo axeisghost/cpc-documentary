@@ -26,7 +26,7 @@ public class UserFriendDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private FriendsContent.FriendItem mItem;
+    private Friend mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the

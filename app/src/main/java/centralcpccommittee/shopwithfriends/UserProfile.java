@@ -3,6 +3,11 @@ package centralcpccommittee.shopwithfriends;
 import android.content.Context;
 import android.util.Log;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,12 +23,21 @@ import java.util.Map;
  */
 public class UserProfile {
     private static dataExchanger database = dataExchanger.getInstance();
-    private JSONObject userinfo;
-    private JSONObject friends;
-    private JSONObject items;
-    private JSONObject sales;
+
     private String userEmail;
     private String userName;
+
+    private static final String FIREBASE_URL = "https://shining-heat-1001.firebaseio.com";
+    private Firebase mFirebaseRef = new Firebase(FIREBASE_URL);
+    private Firebase userRef;
+
+    private Map info;
+    private Map friends;
+    private Map items;
+    private Map sales;
+    private Map allUserList;
+    private Map rates;
+
 
     /**
      * take in the user's email and load the profile from database
@@ -31,15 +45,38 @@ public class UserProfile {
      */
     public UserProfile(String email) {
         userEmail = email;
-        userinfo = database.retrieveProfile(email);
-        try {
-            friends = userinfo.getJSONObject("friendlist");
-            items = userinfo.getJSONObject("itemlist");
-            sales = userinfo.getJSONObject("salelist");
-            userName = userinfo.getString("name");
-        } catch (JSONException e) {
-            Log.d("JOSNException", "Unexpected non-existed profile");
-        }
+        userEmail = RegisterActivity.replaceDot(userEmail);
+        this.mFirebaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                allUserList =(Map) snapshot.getValue();
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+        userRef = mFirebaseRef.child(userEmail);
+        this.userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Object o = snapshot.getValue();
+                // is the user email doesn't exist
+                if (o == null) {
+                   Log.d("Unexpected Erro", "User doesn't exist which doesn't make sense at all!");
+                } else {
+                    info = (Map) (((Map) o).get("info"));
+                    friends = (Map) (((Map) o).get("friends"));
+                    items = (Map) (((Map) o).get("items"));
+                    sales = (Map) (((Map) o).get("sales"));
+                    rates = (Map)(((Map) o).get("rates"));
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
     }
 
 
@@ -49,41 +86,19 @@ public class UserProfile {
      * @return arraylist of UserProfile instances
      */
 
-    public ArrayList<UserProfile> getFriendList() {
-        ArrayList<UserProfile> re = new ArrayList<UserProfile>();
-        Iterator<String> ite = friends.keys();
-        while (ite.hasNext()) {
-            re.add(new UserProfile(ite.next()));
-        }
-        return re;
+    public Map<String, Long> getFriendList() {
+        return friends;
     }
 
-    public Map<String, Double> getItemList() {
-        Map<String, Double> map = new HashMap<String, Double>();
-        Iterator<String> ite = items.keys();
-        try {
-            while (ite.hasNext()) {
-                String i = ite.next();
-                map.put(i, items.getDouble(i));
-            }
-        }  catch(JSONException e) {
-            Log.d("JOSNException", e.getMessage());
-        }
-        return map;
+    public Map<String, Map> getItemList() {
+        return items;
     }
 
-    public Map<String, JSONArray> getSaleList() {
-        Map<String, JSONArray> map = new HashMap<String, JSONArray>();
-        Iterator<String> ite = sales.keys();
-        try {
-            while (ite.hasNext()) {
-                String i = ite.next();
-                map.put(i, sales.getJSONArray(i));
-            }
-        }  catch(JSONException e) {
-            Log.d("JOSNException", e.getMessage());
-        }
-        return map;
+    public Map<String, Map> getSaleList() {
+        return sales;
+    }
+    public Map<String, Map> getRateList() {
+        return rates;
     }
 
     /**
@@ -93,13 +108,8 @@ public class UserProfile {
      * @return true if mutual friends
      *          false if not.
      */
-
+    // TODO: move this method to where it is used
     public boolean checkFriend(String email) {
-        try {
-            return friends.getBoolean(email);
-        } catch(JSONException e) {
-            Log.d("JSONException", e.getMessage());
-        }
         return false;
     }
 
@@ -114,7 +124,8 @@ public class UserProfile {
      *          int 3, the email requested is added as friend, if the opposite
      *          has added user, they both will change to mutual friends.
      */
-
+    // TODO: move this method to where it is used
+    //TODO: fix addFriend
     public int addFriend(String email, String username) {
         if (!database.retrieveEmail(email)) {
             return 0;
@@ -135,7 +146,7 @@ public class UserProfile {
      * @return int 0, the item already exists but price is updated
      *          int 1, the item is a new item and has been added
      */
-
+    // TODO: move this method to where it is used
     public int addItem(String name, double price) {
         if (!database.addItemWithName(userEmail, name, price)) {
             return 0;
@@ -152,25 +163,33 @@ public class UserProfile {
      * @return int 0, no request can be satisfied with this sale
      *          int 1, the sale is successfully reported and at least one friend gets the message
      */
+    // TODO: move this method to where it is used
+    // TODO: Fix this!
 
     public int addSale(String name, double price, String loc) {
+        /*
         if (!database.addANewSale(userEmail, name, price, loc)) {
             return 0;
         } else {
             return 1;
         }
+        */
+        return 0;
     }
 
     public void deleteFriend(String FriendEmail) {
         database.rmFriend(FriendEmail, userEmail);
     }
-
+    // TODO: move this method to where it is used
+    // TODO: Fix deleteFriend
     /**
      * return the average rate of user as double
      * @return double, the average rate of user
      */
 
     public double getRate() {
+        // TODO: move this method to where it is used
+        /*
         try {
             double re = userinfo.getJSONObject("rate").getDouble("sum");
             if (re == Double.MIN_VALUE) {
@@ -181,6 +200,7 @@ public class UserProfile {
         } catch(JSONException e) {
             Log.d("JOSNException", e.getMessage());
         }
+        */
         return -1;
     }
 
@@ -192,6 +212,8 @@ public class UserProfile {
      */
 
     public void rateByOther(String raterEmail, double rate) {
+        // TODO: Fix this
+        // TODO: move this method to where it is used
         database.rateUser(userEmail, raterEmail, rate);
     }
 
@@ -217,6 +239,10 @@ public class UserProfile {
      */
     public String toString() {
         return userEmail + " " + userName;
+    }
+
+    public Firebase getUserRef() {
+        return userRef;
     }
 
 

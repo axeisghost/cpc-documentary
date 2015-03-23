@@ -14,12 +14,15 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
 
+import com.firebase.client.Firebase;
+
 
 public class WelcomeActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_welcome);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()

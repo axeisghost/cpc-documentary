@@ -14,7 +14,7 @@ public class ItemListActivity extends ActionBarActivity {
 //    private dataExchanger mData = dataExchanger.getInstance();
     private String userEmail;
     private UserProfile user;
-    private Map<String, Double> itemMap;
+    private Map<String, Map> itemMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +34,10 @@ public class ItemListActivity extends ActionBarActivity {
             int size = itemMap.size();
             items = new String[size];
             int i = 0;
-            for (Map.Entry<String, Double> element: itemMap.entrySet()) {
+            for (Map.Entry<String, Map> element: itemMap.entrySet()) {
                 items[i] = element.getKey().toString();
                 items[i] = items[i] + " : ";
-                items[i] = items[i] + element.getValue().toString();
+                items[i] = items[i] + element.getValue().get("price").toString();
                 i = i + 1;
             }
         } else {

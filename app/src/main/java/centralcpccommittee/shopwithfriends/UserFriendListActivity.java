@@ -10,7 +10,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
 
@@ -42,16 +50,22 @@ public class UserFriendListActivity extends ActionBarActivity
 
     private String userEmail;
     private UserProfile user;
-    private ArrayList<UserProfile> friendList;
     private String friendEmail;
+    private Map items;
+
+    private static final String FIREBASE_URL = "https://shining-heat-1001.firebaseio.com";
+    private Firebase mFirebaseRef = new Firebase(FIREBASE_URL);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
+        userEmail = RegisterActivity.replaceDot(userEmail);
         user = new UserProfile(userEmail);
-        friendList = user.getFriendList();
-        FriendsContent.update(friendList);
+        Map friendListMap = user.getFriendList();
+        Set<String> friendSet = (Set<String>) friendListMap.keySet();
+        //TODO: fix update firendList
+        update(friendSet);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userfriend_list);
 
@@ -71,6 +85,40 @@ public class UserFriendListActivity extends ActionBarActivity
         }
 
         // TODO: If exposing deep links into your app, handle intents here.
+    }
+
+    private void update(Set<String> friendSet) {
+
+        for (String thisUserEmail: friendSet) {
+            if(thisUserEmail != null) {
+                String id = RegisterActivity.replaceBack(thisUserEmail);
+                String info;
+                UserProfile thisUser = new UserProfile(thisUserEmail);
+                if (thisUser.getRateList() == null) {
+                    info = "Email:" + id + "\n"
+                            + "Username: " + thisUser.getUserName() + "\n"
+                            + "User's Rate: " + "Not Applicable" + "\n"
+                            + "Reports to me: 0" + "\n"
+                            + "Posted items:" + "\n";
+                Map<String, Map> items = (Map<String, Map>) thisUser.getItemList();
+                for (Map.Entry<String, Map> element: items.entrySet()) {
+                        String output = element.getKey().toString() + " : " + element.getValue().toString();
+                        info = info + output + "\n";
+                    }
+                } else {
+                    info =  "Email:" + id + "\n"
+                            +"Username: " + thisUser.getUserName() + "\n"
+                            + "User's Rate: " + thisUser.getRateList().get("rate") + "\n"
+                            + "Posted items:" + "\n";
+                    Map<String, Map> items = thisUser.getItemList();
+                    for (Map.Entry<String, Map> element: items.entrySet()) {
+                        String output = element.getKey().toString() + " : " + element.getValue().toString();
+                        info = info + output + "\n";
+                    }
+                }
+                FriendsContent.addItem(new Friend(id, info));
+            }
+        }
     }
 
     /**
