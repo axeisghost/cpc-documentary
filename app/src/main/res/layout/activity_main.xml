@@ -9,7 +9,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/activity_main"
         android:layout_gravity="center_horizontal|bottom">
-
+        android:background="@drawable/lx"
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
