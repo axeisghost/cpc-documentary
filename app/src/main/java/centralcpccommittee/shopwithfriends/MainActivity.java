@@ -167,4 +167,16 @@ public class MainActivity extends ActionBarActivity {
         move.putExtra("userEmail", userEmail);
         startActivity(move);
     }
+
+    public void addSalePage(View view) {
+        Intent move = new Intent(this, AddSaleActivity.class);
+        move.putExtra("userEmail", userEmail);
+        startActivity(move);
+    }
+
+    public void saleListPage(View view) {
+        Intent move = new Intent(this, SaleListActivity.class);
+        move.putExtra("userEmail", userEmail);
+        startActivity(move);
+    }
 }

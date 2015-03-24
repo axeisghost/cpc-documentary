@@ -59,6 +59,11 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
+            android:name=".SaleListActivity"
+            android:label="@string/title_sale_list"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
             android:name=".AddFriendActivity"
             android:label="@string/title_activity_add_friend"
             android:windowSoftInputMode="adjustResize|stateVisible" >
@@ -66,6 +71,11 @@
         <activity
             android:name=".AddItemActivity"
             android:label="@string/title_activity_add_item"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name=".AddSaleActivity"
+            android:label="@string/title_activity_add_sale"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
