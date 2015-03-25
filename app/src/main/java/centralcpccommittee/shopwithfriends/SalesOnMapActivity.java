@@ -1,21 +1,41 @@
 package centralcpccommittee.shopwithfriends;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+
+import java.util.Map;
 
 public class SalesOnMapActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private String userEmail;
+    private UserProfile user;
+    private Map<String, JSONArray> SalesMap;
+    private LatLng focusLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sales_on_map);
+        setContentView(R.layout.activity_items_on_map);
+
+        Bundle extras = getIntent().getExtras();
+        userEmail = extras.getString("userEmail");
+        user = new UserProfile(userEmail);
+        SalesMap = user.getSaleList();
+
+
+
         setUpMapIfNeeded();
     }
 
@@ -60,6 +80,56 @@ public class SalesOnMapActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        try {
+            focusLocation();
+        } catch (Exception e) {
+            System.out.println("Fail to locate");
+        }
+
+    }
+    private void focusLocation(){
+        LatLng curLocation;
+        String name;
+        Double curLat = 33.777361,curLont = -84.397326;
+        Double maxLat=-999.0,minLat=999.0,maxLont=-999.0,minLont=999.0;
+        curLocation = new LatLng(curLat,curLont);
+        if (!SalesMap.isEmpty()) {
+            int size = SalesMap.size();
+            for (Map.Entry<String,JSONArray> element: SalesMap.entrySet()) {
+                name = element.getKey().toString();
+                name = name + " : ";
+                JSONArray jData = element.getValue();
+                try {
+                    name = name + jData.getDouble(0);
+                    name = name + " : ";
+                    curLont = jData.getDouble(1);
+                    name = name + curLont;
+                    curLat = jData.getDouble(2);
+                    name = name + " : ";
+                    name = name + curLat;
+                } catch (Exception e) {
+                    System.out.println("JSON must be kidding !!!");
+                }
+                curLocation = new LatLng(curLat,curLont);
+                mMap.addMarker(new MarkerOptions().position(curLocation).title(name));
+                if(curLat>maxLat) maxLat = curLat;
+                if(curLat<minLat) minLat = curLat;
+                if(curLont > maxLont) maxLont = curLont;
+                if(curLont < minLont) minLont = curLont;
+            }
+            LatLngBounds curBound = new LatLngBounds(new LatLng(minLat,minLont), new LatLng(maxLat,maxLont));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curBound.getCenter(), 17));
+        } else {
+            mMap.addMarker(new MarkerOptions().position(curLocation).title("Duang!!!!!"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+        }
+    }
+    public void backToItemListActivityPressed(View view) {
+        Intent move = new Intent(this, saleListActivity.class);
+        Bundle extras = getIntent().getExtras();
+        userEmail = extras.getString("userEmail");
+        move.putExtra("userEmail",userEmail);
+        startActivity(move);
     }
 }

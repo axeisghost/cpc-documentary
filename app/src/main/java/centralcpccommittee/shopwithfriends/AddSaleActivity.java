@@ -11,13 +11,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.maps.model.LatLng;
+
 
 public class AddSaleActivity extends ActionBarActivity {
 
     private EditText saleName, salePrice, saleLoc;
     private String mEmail;
     private UserProfile user;
-
+    private static double latitude,longtitude;
+    private boolean locationChosen;
     /**
      * default onCreate method for activity, take in the account passed
      * from last activity
@@ -31,6 +34,7 @@ public class AddSaleActivity extends ActionBarActivity {
         mEmail = extras.getString("userEmail");
         user = new UserProfile(mEmail);
         Log.d("bug", mEmail);
+        locationChosen = false;
     }
 
 
@@ -38,9 +42,8 @@ public class AddSaleActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_add_sale, menu);
-        saleName = (EditText) findViewById(R.id.add_sale_name);
+        saleName = (EditText) findViewById(R.id.add_item_price);
         salePrice = (EditText) findViewById(R.id.add_sale_price);
-        saleLoc = (EditText) findViewById(R.id.add_sale_loc);
         return true;
     }
 
@@ -66,11 +69,11 @@ public class AddSaleActivity extends ActionBarActivity {
     public void attemptAddSale() {
         saleName.setError(null);
         salePrice.setError(null);
-        saleLoc.setError(null);
         String name = saleName.getText().toString();
         double price = Double.parseDouble(salePrice.getText().toString());
-        String loc = saleLoc.getText().toString();
-        int type = user.addSale(name, price, loc);
+    //    String loc = saleLoc.getText().toString();
+
+        int type = user.addSaleOnMap(name, price, latitude, longtitude);
         String message = "Your sale has been successfully reported";
         backToMain(message);
     }
@@ -112,7 +115,21 @@ public class AddSaleActivity extends ActionBarActivity {
     private boolean isEmailValid(String email) {
         return email.contains("@");
     }
+    public static void updateLatLng(LatLng loc){
+        longtitude = loc.longitude;
+        latitude = loc.latitude;
+    }
 
+    /**
+     * go to Google map to select a valid location
+     * @param view
+     */
+    public void reportOnMapPressed(View view) {
+        Intent move = new Intent(this, AddSaleOnMapActivity.class);
+        move.putExtra("userEmail", mEmail);
+        startActivity(move);
+        finish();
+    }
     public void addSalePressed(View view) {
         attemptAddSale();
     }

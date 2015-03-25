@@ -59,7 +59,7 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
-            android:name=".SaleListActivity"
+            android:name=".saleListActivity"
             android:label="@string/title_sale_list"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
@@ -105,6 +105,14 @@
         <activity
             android:name=".ItemsOnMapActivity"
             android:label="@string/title_activity_items_on_map" >
+        </activity>
+        <activity
+            android:name=".AddSaleOnMapActivity"
+            android:label="@string/title_activity_add_sale_on_map" >
+        </activity>
+        <activity
+            android:name=".SalesOnMapActivity"
+            android:label="@string/title_activity_sales_on_map" >
         </activity>
     </application>
 

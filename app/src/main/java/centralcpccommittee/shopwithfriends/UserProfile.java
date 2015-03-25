@@ -21,6 +21,7 @@ public class UserProfile {
     private JSONObject userinfo;
     private JSONObject friends;
     private JSONObject items;
+    private JSONObject sales;
     private String userEmail;
     private String userName;
 
@@ -34,6 +35,7 @@ public class UserProfile {
         try {
             friends = userinfo.getJSONObject("friendlist");
             items = userinfo.getJSONObject("itemlist");
+            sales = userinfo.getJSONObject("salelist");
             userName = userinfo.getString("name");
         } catch (JSONException e) {
             Log.d("JOSNException", "Unexpected non-existed profile");
@@ -67,7 +69,19 @@ public class UserProfile {
         }
         return map;
     }
-
+    public Map<String, JSONArray> getSaleList() {
+        Map<String, JSONArray> map = new HashMap<String, JSONArray>();
+        Iterator<String> ite = sales.keys();
+        try {
+            while (ite.hasNext()) {
+                String i = ite.next();
+                map.put(i, sales.getJSONArray(i));
+            }
+        }  catch(JSONException e) {
+            Log.d("JOSNException", e.getMessage());
+        }
+        return map;
+    }
     /**
      * take in the email of user's friend and check whether the friend is mutual or not.
      * DO NOT take in the email that is not in the friend list.
@@ -133,7 +147,13 @@ public class UserProfile {
             return 1;
         }
     }
-
+    public int addSaleOnMap(String name, double price, double latitude,double longtitude) {
+        if (!database.addANewSaleOnMap(userEmail, name, price, latitude, longtitude) ) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
 
 
     public void deleteFriend(String FriendEmail) {

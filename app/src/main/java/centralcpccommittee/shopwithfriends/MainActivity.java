@@ -175,7 +175,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void saleListPage(View view) {
-        Intent move = new Intent(this, SaleListActivity.class);
+        Intent move = new Intent(this, saleListActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
     }

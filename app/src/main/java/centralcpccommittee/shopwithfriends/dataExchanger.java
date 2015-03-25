@@ -12,6 +12,8 @@ import java.util.Map;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -192,10 +194,10 @@ public class dataExchanger {
     /**
         1.price, 2.longtitude, 3.latitude as three value for the item name
      */
-    public boolean addMapItemWithName(String selfEmail, String name, double price, double longtitude, double latitude) {
+    public boolean addMapItemWithName(String selfEmail, String name, double price, double latitude, double longtitude) {
         try {
             JSONObject selfList = data.getJSONObject(selfEmail).getJSONObject("itemlist");
-            double[] mydata = {price,longtitude,latitude};
+            double[] mydata = {price,latitude,longtitude};
             JSONArray jData = new JSONArray(mydata);
             if(selfList.has(name)) {
                 selfList.put(name,jData);
@@ -213,19 +215,57 @@ public class dataExchanger {
 
 
 
-    public boolean addANewSale(String selfEmail, String name, double price, String loc) {
+   /* public boolean addANewSale(String selfEmail, String name, double price, String loc) {
         boolean flag = false;
         try {
             UserProfile user = new UserProfile(selfEmail);
             ArrayList<UserProfile> list = user.getFriendList();
             for (UserProfile u: list) {
                 if (u != null) {
-                    Map<String, Double> items = u.getItemList();
+                    Map<String, JSONArray> items = u.getItemList();
                     if (items.containsKey(name) && price <= items.get(name)) {
                         JSONObject sList = data.getJSONObject(u.getUserEmail()).getJSONObject("salelist");
                         JSONArray arr = new JSONArray();
                         arr.put(0, price);
                         arr.put(1, loc);
+                       /////
+                    /// saleType s = new saleType(price, loc);
+                    /// sList.put(name, s);
+                        /////
+                        sList.put(name, arr);
+                        record();
+                        flag = true;
+                    }
+                }
+            }
+        } catch(JSONException e) {
+            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
+        }
+        return flag;
+    }*/
+    public boolean addANewSaleOnMap(String selfEmail, String name, double price, double latitude, double longtitude) {
+        boolean flag = false;
+        try {
+            UserProfile user = new UserProfile(selfEmail);
+            ArrayList<UserProfile> list = user.getFriendList();
+            for (UserProfile u: list) {
+                if (u != null) {
+                    Map<String, JSONArray> items = u.getItemList();
+                    JSONArray jData = items.get(name);
+                    Double curLatitude,curLontitude,curPrice = 99999.0;
+                    try {
+                        curPrice = jData.getDouble(0);
+                        curLatitude = jData.getDouble(1);
+                        curLontitude = jData.getDouble(2);
+                    } catch (Exception e) {
+
+                    }
+                    if (items.containsKey(name) && price <= curPrice) {
+                        JSONObject sList = data.getJSONObject(u.getUserEmail()).getJSONObject("salelist");
+                        JSONArray arr = new JSONArray();
+                        arr.put(0, price);
+                        arr.put(1, latitude);
+                        arr.put(2, longtitude);
                         /*
                         saleType s = new saleType(price, loc);
                         sList.put(name, s);

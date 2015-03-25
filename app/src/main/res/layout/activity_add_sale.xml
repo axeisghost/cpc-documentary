@@ -9,7 +9,7 @@
 
 
     <EditText
-        android:id="@+id/add_sale_name"
+        android:id="@+id/add_item_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:imeOptions="actionUnspecified"
@@ -28,7 +28,7 @@
         android:maxLines="1"
         android:singleLine="true"
         android:hint="Please type in the price of the item"
-        android:layout_below="@+id/add_sale_name"
+        android:layout_below="@+id/add_item_price"
         android:layout_alignParentStart="true"
         android:layout_marginTop="62dp" />
 
@@ -45,21 +45,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Report this sale"
-        android:id="@+id/add_item_button"
+        android:id="@+id/report_sale"
         android:onClick="addSalePressed"
-        android:layout_marginTop="98dp"
-        android:layout_below="@+id/add_sale_loc"
+        android:layout_marginTop="47dp"
+        android:layout_below="@+id/open_map"
         android:layout_alignEnd="@+id/add_sale_text" />
 
-    <EditText
-        android:id="@+id/add_sale_loc"
-        android:layout_width="match_parent"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:imeOptions="actionUnspecified"
-        android:inputType="textEmailAddress"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:hint="Please type in the location of the item"
-        android:layout_centerVertical="true"
+        android:text="Choose Location On Map"
+        android:id="@+id/open_map"
+        android:onClick="reportOnMapPressed"
+        android:layout_marginTop="55dp"
+        android:layout_below="@+id/add_sale_price"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

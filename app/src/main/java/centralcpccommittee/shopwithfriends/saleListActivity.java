@@ -12,7 +12,7 @@ import org.json.JSONException;
 
 import java.util.Map;
 
-public class SaleListActivity extends ActionBarActivity {
+public class saleListActivity extends ActionBarActivity {
 
 //    private dataExchanger mData = dataExchanger.getInstance();
     private String userEmail;
@@ -40,20 +40,19 @@ public class SaleListActivity extends ActionBarActivity {
             for (Map.Entry<String, JSONArray> element: itemMap.entrySet()) {
                 JSONArray arr = element.getValue();
                 double p = 0;
-                String l = "";
+                //String l = "";
                 try {
                     p = arr.getDouble(0);
                 } catch(JSONException e) {
                     Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
                 }
-                try {
+              /*  try {
                     l = arr.getString(1);
                 } catch(JSONException e) {
                     Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
-                }
+                }*/
                 items[i] = "Name: " + element.getKey().toString()
-                            + "  Price: " + Double.toString(p)
-                            + "  Location: " + l;
+                            + "  Price: " + Double.toString(p);
                 i = i + 1;
             }
         } else {
@@ -68,6 +67,12 @@ public class SaleListActivity extends ActionBarActivity {
 
     public void MainActivityPage(View view) {
         Intent move = new Intent(this, MainActivity.class);
+        move.putExtra("userEmail", userEmail);
+        startActivity(move);
+        finish();
+    }
+    public void itemOnMapPressed(View view) {
+        Intent move = new Intent(this, SalesOnMapActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
         finish();
