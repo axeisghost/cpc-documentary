@@ -104,6 +104,11 @@ public class AddSaleOnMapActivity extends FragmentActivity implements GoogleMap.
     public void onMapClick(LatLng latLng) {
 
     }
+
+    /**
+     * Confirm and uptate the location for the item
+     * @param view
+     */
     public void confirmPressed(View view) {
         Intent move = new Intent(this, AddSaleActivity.class);
         Bundle extras = getIntent().getExtras();

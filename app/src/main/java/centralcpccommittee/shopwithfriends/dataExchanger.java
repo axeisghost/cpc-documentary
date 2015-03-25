@@ -262,10 +262,11 @@ public class dataExchanger {
                     }
                     if (items.containsKey(name) && price <= curPrice) {
                         JSONObject sList = data.getJSONObject(u.getUserEmail()).getJSONObject("salelist");
-                        JSONArray arr = new JSONArray();
-                        arr.put(0, price);
-                        arr.put(1, latitude);
-                        arr.put(2, longtitude);
+                        Double[] mydata = {price,latitude,longtitude};
+                        JSONArray arr = new JSONArray(mydata);
+               //         arr.put(0, price);
+                 //       arr.put(1, latitude);
+                   //     arr.put(2, longtitude);
                         /*
                         saleType s = new saleType(price, loc);
                         sList.put(name, s);

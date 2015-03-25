@@ -87,6 +87,10 @@ public class SalesOnMapActivity extends FragmentActivity {
         }
 
     }
+
+    /**
+     * Show sale items on map and locate at the Geometric center of the markers
+     */
     private void focusLocation(){
         LatLng curLocation;
         String name;
@@ -102,9 +106,9 @@ public class SalesOnMapActivity extends FragmentActivity {
                 try {
                     name = name + jData.getDouble(0);
                     name = name + " : ";
-                    curLont = jData.getDouble(1);
+                    curLat = jData.getDouble(1);
                     name = name + curLont;
-                    curLat = jData.getDouble(2);
+                    curLont = jData.getDouble(2);
                     name = name + " : ";
                     name = name + curLat;
                 } catch (Exception e) {
@@ -118,13 +122,20 @@ public class SalesOnMapActivity extends FragmentActivity {
                 if(curLont < minLont) minLont = curLont;
             }
             LatLngBounds curBound = new LatLngBounds(new LatLng(minLat,minLont), new LatLng(maxLat,maxLont));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curBound.getCenter(), 17));
+        //    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(curBound, 0));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
         } else {
             mMap.addMarker(new MarkerOptions().position(curLocation).title("Duang!!!!!"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
         }
     }
+
+    /**
+     * Go to back sale list action for the button
+     * @param view
+     */
     public void backToItemListActivityPressed(View view) {
         Intent move = new Intent(this, saleListActivity.class);
         Bundle extras = getIntent().getExtras();

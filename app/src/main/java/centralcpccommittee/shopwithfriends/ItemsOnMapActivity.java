@@ -3,6 +3,7 @@ package centralcpccommittee.shopwithfriends;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -93,38 +94,56 @@ public class ItemsOnMapActivity extends FragmentActivity {
         Double curLat = 33.777361,curLont = -84.397326;
         Double maxLat=-999.0,minLat=999.0,maxLont=-999.0,minLont=999.0;
         curLocation = new LatLng(curLat,curLont);
+        mMap.setMyLocationEnabled(true);
         if (!itemMap.isEmpty()) {
             int size = itemMap.size();
+            Log.d("try", "here1");
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (Map.Entry<String,JSONArray> element: itemMap.entrySet()) {
+                Log.d("try", "here2");
                 name = element.getKey().toString();
                 name = name + " : ";
                 JSONArray jData = element.getValue();
                 try {
                     name = name + jData.getDouble(0);
                     name = name + " : ";
-                    curLont = jData.getDouble(1);
+                    curLat = jData.getDouble(1);
                     name = name + curLont;
-                    curLat = jData.getDouble(2);
+                    curLont = jData.getDouble(2);
+
                     name = name + " : ";
                     name = name + curLat;
                 } catch (Exception e) {
                     System.out.println("JSON must be kidding !!!");
                 }
                 curLocation = new LatLng(curLat,curLont);
+                Log.d("tryMap", curLocation.toString());
                 mMap.addMarker(new MarkerOptions().position(curLocation).title(name));
                 if(curLat>maxLat) maxLat = curLat;
                 if(curLat<minLat) minLat = curLat;
                 if(curLont > maxLont) maxLont = curLont;
                 if(curLont < minLont) minLont = curLont;
+
+                builder.include(curLocation);
             }
-            LatLngBounds curBound = new LatLngBounds(new LatLng(minLat,minLont), new LatLng(maxLat,maxLont));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curBound.getCenter(), 17));
+            //LatLngBounds curBound = new LatLngBounds(new LatLng(minLat,minLont), new LatLng(maxLat,maxLont));
+            LatLngBounds curBound = builder.build();
+            Log.d("tryMap", curBound.toString());
+    //        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(curBound, 1));
+      //      mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(curBound, 1));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
         } else {
             mMap.addMarker(new MarkerOptions().position(curLocation).title("Duang!!!!!"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
         }
     }
+
+    /**
+     * Button action for BacktoItem, go back to item list
+     * @param view
+     */
     public void backToItemListActivityPressed(View view) {
         Intent move = new Intent(this, ItemListActivity.class);
         Bundle extras = getIntent().getExtras();

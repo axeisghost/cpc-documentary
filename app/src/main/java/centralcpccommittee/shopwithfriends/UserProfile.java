@@ -140,8 +140,8 @@ public class UserProfile {
         }
     }
 
-    public int addMapItem(String name, double price, double longtitude,double latitude) {
-        if (!database.addMapItemWithName(userEmail, name, price, longtitude, latitude)) {
+    public int addMapItem(String name, double price, double latitude,double longtitude) {
+        if (!database.addMapItemWithName(userEmail, name, price, latitude, longtitude)) {
             return 0;
         } else {
             return 1;

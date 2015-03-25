@@ -68,7 +68,7 @@ public class AddItemActivity extends ActionBarActivity {
     }
 
     /**
-     * attempt to add an item
+     * attempt to add an item on map
      */
     public void attemptAddItem() {
         itemNameView.setError(null);
@@ -84,10 +84,10 @@ public class AddItemActivity extends ActionBarActivity {
             longtitude = 38;
             latitude = 38;
         }*/
-        int type = user.addMapItem(itemName, itemPrice, longtitude, latitude);
+        int type = user.addMapItem(itemName, itemPrice, latitude,longtitude);
         String message = "";
         if (type == 0) {
-            message = itemName + " already exists and the price has been changed to " + itemPrice + longtitude + " " + latitude;
+            message = itemName + " already exists and the price has been changed to " + itemPrice  + " " + latitude + " " + longtitude;
         } else {
             message = itemName + "has been added";
         }
