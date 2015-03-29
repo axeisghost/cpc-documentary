@@ -21,6 +21,7 @@ public class TestAddMapItem extends ActivityInstrumentationTestCase2<WelcomeActi
         super(WelcomeActivity.class);
     }
 
+    // Set up all the variables
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -48,10 +49,12 @@ public class TestAddMapItem extends ActivityInstrumentationTestCase2<WelcomeActi
     public void runTest() {
     }
 
+    // dummy test before all the tests
     public void testSet() {
         Assert.assertTrue(testUser.getItemList().isEmpty());
     }
 
+    // add the first new item
     public void testNewItem() {
         Assert.assertEquals(1, testUser.addMapItem(NEW_ITEM_NAME1, price1, latitude1, longitude1));
         Assert.assertEquals(1, testUser.getItemList().size());
@@ -63,6 +66,7 @@ public class TestAddMapItem extends ActivityInstrumentationTestCase2<WelcomeActi
         } ;
     }
 
+    // add the item with the same name as the first one but with different price and position
     public void testExistedItem() {
         Assert.assertEquals(0, testUser.addMapItem(EXISTED_ITEM_NAME, updatedPrice1,
                 updatedLat, updatedLong));
@@ -75,6 +79,7 @@ public class TestAddMapItem extends ActivityInstrumentationTestCase2<WelcomeActi
         } ;
     }
 
+    // add a new item not existed
     public void testNewItem2() {
         Assert.assertEquals(1, testUser.addMapItem(NEW_ITEM_NAME2, price2, latitude2, longitude2));
         Assert.assertEquals(2, testUser.getItemList().size());
