@@ -23,7 +23,7 @@ public class ItemsOnMapActivity extends FragmentActivity {
     private String userEmail;
     private UserProfile user;
     private Map<String, JSONArray> itemMap;
-    private LatLng focusLocation;
+    // --Commented out by Inspection (3/29/2015 12:54 AM):private LatLng focusLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,9 +142,9 @@ public class ItemsOnMapActivity extends FragmentActivity {
 
     /**
      * Button action for BacktoItem, go back to item list
-     * @param view
+     * @param view view from UI
      */
-    public void backToItemListActivityPressed(View view) {
+    public void backToItemListActivityPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, ItemListActivity.class);
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");

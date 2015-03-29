@@ -328,6 +328,7 @@ public class XML {
                     return value;
                 }
             }  catch (Exception ignoreAlso) {
+                System.out.println("unexpected");
             }
         }
         return string;

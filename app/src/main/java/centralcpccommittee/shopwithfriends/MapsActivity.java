@@ -1,12 +1,6 @@
 package centralcpccommittee.shopwithfriends;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,8 +11,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarkerDragListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener {
 
@@ -118,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
     public void onMapClick(LatLng latLng) {
 
     }
-    public void confirmPressed(View view) {
+    public void confirmPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, AddItemActivity.class);
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,21 +13,19 @@ import android.widget.EditText;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
-
 
 public class AddItemActivity extends ActionBarActivity {
 
     private EditText itemNameView, itemPriceView;
     private String mEmail;
     private UserProfile user;
-    private LatLng location;
+    // --Commented out by Inspection (3/29/2015 12:52 AM):private LatLng location;
     private static double longtitude;
     private static double latitude;
     /**
      * default onCreate method for activity, take in the account passed
      * from last activity
-     * @param savedInstanceState
+     * @param savedInstanceState Info from last activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +67,7 @@ public class AddItemActivity extends ActionBarActivity {
     /**
      * attempt to add an item on map
      */
-    public void attemptAddItem() {
+    void attemptAddItem() {
         itemNameView.setError(null);
         itemPriceView.setError(null);
         String itemName = itemNameView.getText().toString();
@@ -93,7 +90,7 @@ public class AddItemActivity extends ActionBarActivity {
         }
         backToMain(message);
     }
-    public void mapButtonPressed(View view) {
+    public void mapButtonPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, MapsActivity.class);
         move.putExtra("userEmail", mEmail);
         startActivity(move);
@@ -101,7 +98,7 @@ public class AddItemActivity extends ActionBarActivity {
     }
     /**
      * return method after added friend
-     * @param message
+     * @param message message that will be shown to user
      */
 
 
@@ -124,27 +121,29 @@ public class AddItemActivity extends ActionBarActivity {
     /**
      * exit the activity
      */
-    public void exitTheAct() {
+    void exitTheAct() {
         Intent move = new Intent(this, MainActivity.class);
         move.putExtra("userEmail", mEmail);
         startActivity(move);
         finish();
     }
 
-    /**
-     * check the validity if the email typed in
-     * @param email
-     * @return true if the email is valid
-     */
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
+// --Commented out by Inspection START (3/29/2015 12:52 AM):
+//    /**
+//     * check the validity if the email typed in
+//     * @param email
+//     * @return true if the email is valid
+//     */
+//    private boolean isEmailValid(String email) {
+//        return email.contains("@");
+//    }
+// --Commented out by Inspection STOP (3/29/2015 12:52 AM)
 
     public static void updateLatLng(LatLng loc){
         longtitude = loc.longitude;
         latitude = loc.latitude;
     }
-    public void addItemPressed(View view) {
+    public void addItemPressed(@SuppressWarnings("UnusedParameters") View view) {
         attemptAddItem();
     }
 }

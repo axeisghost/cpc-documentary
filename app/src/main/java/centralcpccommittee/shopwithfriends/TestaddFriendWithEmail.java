@@ -2,11 +2,9 @@ package centralcpccommittee.shopwithfriends;
 
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.SingleLaunchActivityTestCase;
 
 /**
  * Created by Axeisghost on 3/26/2015.

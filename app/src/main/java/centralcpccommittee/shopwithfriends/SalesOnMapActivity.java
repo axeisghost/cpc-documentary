@@ -22,7 +22,7 @@ public class SalesOnMapActivity extends FragmentActivity {
     private String userEmail;
     private UserProfile user;
     private Map<String, JSONArray> SalesMap;
-    private LatLng focusLocation;
+    // --Commented out by Inspection (3/29/2015 12:55 AM):private LatLng focusLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,9 +134,9 @@ public class SalesOnMapActivity extends FragmentActivity {
 
     /**
      * Go to back sale list action for the button
-     * @param view
+     * @param view view that connect to UI
      */
-    public void backToItemListActivityPressed(View view) {
+    public void backToItemListActivityPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, saleListActivity.class);
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");

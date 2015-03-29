@@ -78,7 +78,7 @@ public class UserFriendDetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void deleteFriendPressed(View view) {
+    public void deleteFriendPressed(@SuppressWarnings("UnusedParameters") View view) {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).
                         setMessage(getString(R.string.Hint_delete_friend)).
@@ -97,7 +97,7 @@ public class UserFriendDetailActivity extends ActionBarActivity {
         builder.create().show();
     }
 
-    public void deleteFriend() {
+    void deleteFriend() {
         thisUser.deleteFriend(friendEmail);
         Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", userEmail);

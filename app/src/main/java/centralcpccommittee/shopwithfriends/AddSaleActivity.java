@@ -16,15 +16,15 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class AddSaleActivity extends ActionBarActivity {
 
-    private EditText saleName, salePrice, saleLoc;
+    private EditText saleName, salePrice;// --Commented out by Inspection (3/29/2015 12:52 AM):saleLoc;
     private String mEmail;
     private UserProfile user;
     private static double latitude,longtitude;
-    private boolean locationChosen;
+    // --Commented out by Inspection (3/29/2015 12:59 AM):private boolean locationChosen;
     /**
      * default onCreate method for activity, take in the account passed
      * from last activity
-     * @param savedInstanceState
+     * @param savedInstanceState Info from last activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class AddSaleActivity extends ActionBarActivity {
         mEmail = extras.getString("userEmail");
         user = new UserProfile(mEmail);
         Log.d("bug", mEmail);
-        locationChosen = false;
+//        locationChosen = false;
     }
 
 
@@ -66,7 +66,7 @@ public class AddSaleActivity extends ActionBarActivity {
     /**
      * attempt to add an item
      */
-    public void attemptAddSale() {
+    void attemptAddSale() {
         saleName.setError(null);
         salePrice.setError(null);
         String name = saleName.getText().toString();
@@ -80,7 +80,7 @@ public class AddSaleActivity extends ActionBarActivity {
 
     /**
      * return method after added friend
-     * @param message
+     * @param message message that will be shown to user
      */
 
     private void backToMain(String message) {
@@ -100,7 +100,7 @@ public class AddSaleActivity extends ActionBarActivity {
     /**
      * exit the activity
      */
-    public void exitTheAct() {
+    void exitTheAct() {
         Intent move = new Intent(this, MainActivity.class);
         move.putExtra("userEmail", mEmail);
         startActivity(move);
@@ -109,7 +109,7 @@ public class AddSaleActivity extends ActionBarActivity {
 
     /**
      * check the validity if the email typed in
-     * @param email
+     * @param email the email that will be checked
      * @return true if the email is valid
      */
     private boolean isEmailValid(String email) {
@@ -122,15 +122,15 @@ public class AddSaleActivity extends ActionBarActivity {
 
     /**
      * go to Google map to select a valid location
-     * @param view
+     * @param view view form the UI
      */
-    public void reportOnMapPressed(View view) {
+    public void reportOnMapPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, AddSaleOnMapActivity.class);
         move.putExtra("userEmail", mEmail);
         startActivity(move);
         finish();
     }
-    public void addSalePressed(View view) {
+    public void addSalePressed(@SuppressWarnings("UnusedParameters") View view) {
         attemptAddSale();
     }
 }

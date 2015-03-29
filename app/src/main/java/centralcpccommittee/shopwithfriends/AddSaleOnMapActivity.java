@@ -107,9 +107,9 @@ public class AddSaleOnMapActivity extends FragmentActivity implements GoogleMap.
 
     /**
      * Confirm and uptate the location for the item
-     * @param view
+     * @param view view Connected to UI
      */
-    public void confirmPressed(View view) {
+    public void confirmPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, AddSaleActivity.class);
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");

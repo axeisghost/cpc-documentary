@@ -39,7 +39,7 @@ public class FriendsContent {
 
     /**
      * Update the items according to the friend list
-     * @param friendList
+     * @param friendList friend list of the user
      */
     public static void update(ArrayList<UserProfile> friendList) {
         clear();
@@ -85,8 +85,8 @@ public class FriendsContent {
      * A dummy item representing a piece of content.
      */
     public static class FriendItem {
-        public String id;
-        public String content;
+        public final String id;
+        public final String content;
 
         public FriendItem(String id, String content) {
             this.id = id;

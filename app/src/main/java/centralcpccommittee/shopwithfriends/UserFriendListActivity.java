@@ -1,11 +1,9 @@
 package centralcpccommittee.shopwithfriends;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -101,7 +99,7 @@ public class UserFriendListActivity extends ActionBarActivity
         }
     }
 
-    public void deleteFriendPressed(View view) {
+    public void deleteFriendPressed(@SuppressWarnings("UnusedParameters") View view) {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).
                         setMessage(getString(R.string.Hint_delete_friend)).
@@ -121,7 +119,7 @@ public class UserFriendListActivity extends ActionBarActivity
         //onCreate(new Bundle());
     }
 
-    public void deleteFriend() {
+    void deleteFriend() {
         user.deleteFriend(friendEmail);
         Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", userEmail);
