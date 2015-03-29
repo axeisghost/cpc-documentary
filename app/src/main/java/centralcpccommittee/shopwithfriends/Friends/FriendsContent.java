@@ -1,5 +1,7 @@
 package centralcpccommittee.shopwithfriends.Friends;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +39,7 @@ public class FriendsContent {
 
     /**
      * Update the items according to the friend list
-     * @param friendList
+     * @param friendList friend list of the user
      */
     public static void update(ArrayList<UserProfile> friendList) {
         clear();
@@ -46,9 +48,29 @@ public class FriendsContent {
                 String id = thisUser.getUserEmail();
                 // The info contains the username, rate and the no. of reports.
                 // Need to be fixed later
-                String info = "Username: " + thisUser.getUserName() + "\n"
-                        + "User's Rate: " + thisUser.getRate() + "\n"
-                        + "Reports to me: 0";
+                String info;
+                if (thisUser.getRate() == -1) {
+                    info = "Email:" + id + "\n"
+                            + "Username: " + thisUser.getUserName() + "\n"
+                            + "User's Rate: " + "Not Applicable" + "\n"
+                            + "Reports to me: 0" + "\n"
+                            + "Posted items:" + "\n";
+                    Map<String, JSONArray> items = thisUser.getItemList();
+                    for (Map.Entry<String, JSONArray> element: items.entrySet()) {
+                        String output = element.getKey().toString() + " : " + element.getValue().toString();
+                        info = info + output + "\n";
+                    }
+                } else {
+                    info =  "Email:" + id + "\n"
+                            +"Username: " + thisUser.getUserName() + "\n"
+                            + "User's Rate: " + thisUser.getRate() + "\n"
+                            + "Posted items:" + "\n";
+                    Map<String, JSONArray> items = thisUser.getItemList();
+                    for (Map.Entry<String, JSONArray> element: items.entrySet()) {
+                        String output = element.getKey().toString() + " : " + element.getValue().toString();
+                        info = info + output + "\n";
+                    }
+                }
                 addItem(new FriendItem(id, info));
             }
         }
@@ -63,8 +85,8 @@ public class FriendsContent {
      * A dummy item representing a piece of content.
      */
     public static class FriendItem {
-        public String id;
-        public String content;
+        public final String id;
+        public final String content;
 
         public FriendItem(String id, String content) {
             this.id = id;

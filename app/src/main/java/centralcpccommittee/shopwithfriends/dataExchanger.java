@@ -1,16 +1,17 @@
 package centralcpccommittee.shopwithfriends;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by axeisghost on 15/01/30.
@@ -20,13 +21,13 @@ public class dataExchanger {
     private FileInputStream fis;
     private static JSONObject data;
     private int curr;
-    private StringBuilder text = new StringBuilder();
-    private Context fileContext;
-    private String name;
+    private final StringBuilder text = new StringBuilder();
+    private final Context fileContext;
+    private final String name;
     private static dataExchanger instance;
 
-    public static void initialize(String filename, Context context) {
-        instance = new dataExchanger(filename, context);
+    public static void initialize(Context context) {
+        instance = new dataExchanger(context);
     }
 
     public static dataExchanger getInstance() {
@@ -39,13 +40,12 @@ public class dataExchanger {
      * The primary database was converted to JSON Object The context
      * is the context of application which is used to utilize internal
      * storage.
-     * @param fileName
-     * @param appContext
+     * @param appContext context of app, used to open internal data
      */
 
-    private dataExchanger(String fileName, Context appContext) {
+    private dataExchanger(Context appContext) {
         this.fileContext = appContext;
-        this.name = fileName;
+        this.name = "pDatabase";
         try {
             fis = fileContext.openFileInput(name);
         } catch (IOException e) {
@@ -77,6 +77,7 @@ public class dataExchanger {
     public void rmFriend(String FriendEmail, String selfEmail) {
         try {
             data.getJSONObject(selfEmail).getJSONObject("friendlist").remove(FriendEmail);
+            record();
         } catch(JSONException e) {
             Log.d("Unexpected", "Friend not exist");
         }
@@ -86,9 +87,9 @@ public class dataExchanger {
      * Take in a pair of email and password, put
      * the key and value pair into JSONObject that converted
      * from the primary database;
-     * @param email
-     * @param password
-     * @return
+     * @param email email that will be registered into database
+     * @param password the password of corresponding registered email
+     * @return success or not
      */
 
     public boolean registerUser(String email, String password, String username) {
@@ -100,6 +101,8 @@ public class dataExchanger {
             registerAddition(email, "name", username);
             registerAddition(email, "rate", new JSONObject().put("sum", Double.MIN_VALUE));
             registerAddition(email, "friendlist", new JSONObject());
+            registerAddition(email, "itemlist", new JSONObject());
+            registerAddition(email, "salelist", new JSONObject());
             //TODO: Posted sales structure;
             record();
         } catch(JSONException e) {
@@ -111,9 +114,9 @@ public class dataExchanger {
     /**
      * take in users' email and the name and content of addition information,
      * add as a new key-value pair in the nested JSON obejct.
-     * @param email
-     * @param field
-     * @param content
+     * @param email the target user
+     * @param field the key of addition info
+     * @param content the value of key
      */
 
     private void registerAddition(String email, String field, Object content) {
@@ -127,7 +130,7 @@ public class dataExchanger {
     /**
      * take in the email and find whether the email exists in the database
      * or not.
-     * @param email
+     * @param email the email that will be retrieved in database
      * @return true or false
      */
     public boolean retrieveEmail(String email) {
@@ -165,6 +168,115 @@ public class dataExchanger {
         return false;
     }
 
+
+//    public boolean addItemWithName(String selfEmail, String name, double price) {
+//        try {
+//            JSONObject selfList = data.getJSONObject(selfEmail).getJSONObject("itemlist");
+//            if (selfList.has(name)) {
+//                selfList.put(name, price);
+//                record();
+//                return false;
+//            }
+//            selfList.put(name, price);
+//            record();
+//            return true;
+//        } catch(JSONException e) {
+//            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
+//        }
+//        return false;
+//    }
+    /**
+        1.price, 2.longtitude, 3.latitude as three value for the item name
+     */
+    public boolean addMapItemWithName(String selfEmail, String name, double price, double latitude, double longtitude) {
+        try {
+            JSONObject selfList = data.getJSONObject(selfEmail).getJSONObject("itemlist");
+            double[] mydata = {price,latitude,longtitude};
+            JSONArray jData = new JSONArray(mydata);
+            if(selfList.has(name)) {
+                selfList.put(name,jData);
+                record();
+                return false;
+            }
+            selfList.put(name,jData);
+            record();
+            return true;
+        } catch (JSONException e) {
+            Log.d("JSONException", "Unexcepted JSON Exception. !!! name should be exsited");
+        }
+        return false;
+    }
+
+
+
+   /* public boolean addANewSale(String selfEmail, String name, double price, String loc) {
+        boolean flag = false;
+        try {
+            UserProfile user = new UserProfile(selfEmail);
+            ArrayList<UserProfile> list = user.getFriendList();
+            for (UserProfile u: list) {
+                if (u != null) {
+                    Map<String, JSONArray> items = u.getItemList();
+                    if (items.containsKey(name) && price <= items.get(name)) {
+                        JSONObject sList = data.getJSONObject(u.getUserEmail()).getJSONObject("salelist");
+                        JSONArray arr = new JSONArray();
+                        arr.put(0, price);
+                        arr.put(1, loc);
+                       /////
+                    /// saleType s = new saleType(price, loc);
+                    /// sList.put(name, s);
+                        /////
+                        sList.put(name, arr);
+                        record();
+                        flag = true;
+                    }
+                }
+            }
+        } catch(JSONException e) {
+            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
+        }
+        return flag;
+    }*/
+    public boolean addANewSaleOnMap(String selfEmail, String name, double price, double latitude, double longtitude) {
+        boolean flag = false;
+        try {
+            UserProfile user = new UserProfile(selfEmail);
+            ArrayList<UserProfile> list = user.getFriendList();
+            for (UserProfile u: list) {
+                if (u != null) {
+                    Map<String, JSONArray> items = u.getItemList();
+                    JSONArray jData = items.get(name);
+                    Double curLatitude,curLontitude,curPrice = 99999.0;
+                    try {
+                        curPrice = jData.getDouble(0);
+                        curLatitude = jData.getDouble(1);
+                        curLontitude = jData.getDouble(2);
+                    } catch (Exception e) {
+                        Log.d("unexpected", "should not happen");
+                    }
+                    if (items.containsKey(name) && price <= curPrice) {
+                        JSONObject sList = data.getJSONObject(u.getUserEmail()).getJSONObject("salelist");
+                        Double[] mydata = {price,latitude,longtitude};
+                        JSONArray arr = new JSONArray(mydata);
+               //         arr.put(0, price);
+                 //       arr.put(1, latitude);
+                   //     arr.put(2, longtitude);
+                        /*
+                        saleType s = new saleType(price, loc);
+                        sList.put(name, s);
+                        */
+                        sList.put(name, arr);
+                        record();
+                        flag = true;
+                    }
+                }
+            }
+        } catch(JSONException e) {
+            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
+        }
+        return flag;
+    }
+
     public void rateUser(String selfEmail, String raterEmail, double rate) {
         try {
             JSONObject userRate = data.getJSONObject(selfEmail).getJSONObject("rate");
@@ -186,9 +298,9 @@ public class dataExchanger {
     /**
      * take in a pair of email and password and check the JSONObject converted
      * from the database to whether the email correspond to the password.
-     * @param email
-     * @param password
-     * @return
+     * @param email the email that will be checked
+     * @param password the password that will be checked
+     * @return true if if pair
      */
 
     public boolean checkPassword(String email, String password) {

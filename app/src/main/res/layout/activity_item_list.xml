@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/item_page_view"
+    android:focusableInTouchMode="false">
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="434dp"
+        android:id="@+id/item_list_view" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Main Page"
+        android:id="@+id/mainActivity_button"
+        android:onClick="MainActivityPage"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="52dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Items On Map"
+        android:id="@+id/mapButtion"
+        android:layout_alignParentBottom="true"
+        android:onClick="itemOnMapPressed"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>
