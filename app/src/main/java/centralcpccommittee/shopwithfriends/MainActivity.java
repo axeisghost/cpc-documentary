@@ -1,19 +1,15 @@
 package centralcpccommittee.shopwithfriends;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.TextView;
 import android.app.Fragment;
 
@@ -61,43 +57,35 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void logOut() {
+    void logOut() {
         Intent move = new Intent(this,WelcomeActivity.class);
         startActivity(move);
         finish();
     }
 
-    public void testPressed(View view) {
-        testUser();
-    }
+//    private void test2User() {
+//        UserProfile mainuser = new UserProfile(userEmail);
+//        mainuser.addFriend("@cpc", "cpc");
+//        Log.d("mutual friend1", ""+mainuser.checkFriend("@cpc"));
+//        Log.d("mutual friend2", "" + new UserProfile("@cpc").checkFriend(userEmail));
+//    }
+//
+//    private void testUser() {
+//        UserProfile mainuser = new UserProfile(userEmail);
+//        Log.d("friendaddcondition1",""+ mainuser.addFriend("@xxx", "fuck"));
+//        Log.d("friendaddcondition2",""+ mainuser.addFriend("@test", "fuck"));
+//        mainuser.addFriend("@test", "tester");
+//        Log.d("friendaddcondition4",""+ mainuser.addFriend("@test", "tester"));
+//        mainuser.addFriend("@wjx", "wjx");
+//        mainuser.rateByOther("@test", 4.5);
+//        mainuser.rateByOther("@wjx", 3.1);
+//        for (int ii = 0; ii < mainuser.getFriendList().size(); ii++) {
+//            Log.d("listOutput" + ii, mainuser.getFriendList().get(ii).getUserEmail());
+//        }
+//        Log.d("listOutput", "" + mainuser.getRate());
+//    }
 
-    public void test2Pressed(View view) {
-        test2User();
-    }
-
-    private void test2User() {
-        UserProfile mainuser = new UserProfile(userEmail);
-        mainuser.addFriend("@cpc", "cpc");
-        Log.d("mutual friend1", ""+mainuser.checkFriend("@cpc"));
-        Log.d("mutual friend2", "" + new UserProfile("@cpc").checkFriend(userEmail));
-    }
-
-    private void testUser() {
-        UserProfile mainuser = new UserProfile(userEmail);
-        Log.d("friendaddcondition1",""+ mainuser.addFriend("@xxx", "fuck"));
-        Log.d("friendaddcondition2",""+ mainuser.addFriend("@test", "fuck"));
-        mainuser.addFriend("@test", "tester");
-        Log.d("friendaddcondition4",""+ mainuser.addFriend("@test", "tester"));
-        mainuser.addFriend("@wjx", "wjx");
-        mainuser.rateByOther("@test", 4.5);
-        mainuser.rateByOther("@wjx", 3.1);
-        for (int ii = 0; ii < mainuser.getFriendList().size(); ii++) {
-            Log.d("listOutput" + ii, mainuser.getFriendList().get(ii).getUserEmail());
-        }
-        Log.d("listOutput", "" + mainuser.getRate());
-    }
-
-    public void logoutPressed(View view) {
+    public void logoutPressed(@SuppressWarnings("UnusedParameters") View view) {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).
                         setMessage(getString(R.string.Hint_logout_confirm)).
@@ -136,7 +124,7 @@ public class MainActivity extends ActionBarActivity {
     /**
      * turn to the friend list page
      */
-    public void friendPage(View view) {
+    public void friendPage(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
@@ -144,9 +132,9 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      * turn to the add friend page
-     * @param view
+     * @param view view that connect to UI
      */
-    public void addFriendPage(View view) {
+    public void addFriendPage(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, AddFriendActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
@@ -154,27 +142,27 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      * turn to the add item page
-     * @param view
+     * @param view view that connect to UI
      */
-    public void addItemPage(View view) {
+    public void addItemPage(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, AddItemActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
     }
 
-    public void itemListPage(View view) {
+    public void itemListPage(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, ItemListActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
     }
 
-    public void addSalePage(View view) {
+    public void addSalePage(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, AddSaleActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
     }
 
-    public void saleListPage(View view) {
+    public void saleListPage(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, saleListActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);

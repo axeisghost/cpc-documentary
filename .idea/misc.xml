@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <entry_points version="2.0" />
+    <entry_points version="2.0">
+      <entry_point TYPE="method" FQNAME="centralcpccommittee.shopwithfriends.AddSaleActivity boolean isEmailValid(java.lang.String email)" />
+      <entry_point TYPE="field" FQNAME="centralcpccommittee.shopwithfriends.LoginActivity.ProfileQuery IS_PRIMARY" />
+      <entry_point TYPE="field" FQNAME="centralcpccommittee.shopwithfriends.RegisterActivity.ProfileQuery IS_PRIMARY" />
+      <entry_point TYPE="method" FQNAME="centralcpccommittee.shopwithfriends.UserProfile void rateByOther(java.lang.String raterEmail, double rate)" />
+    </entry_points>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="Android API 21 Platform" project-jdk-type="Android SDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

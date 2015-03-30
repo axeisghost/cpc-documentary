@@ -3,13 +3,9 @@ package centralcpccommittee.shopwithfriends;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -102,7 +98,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    public void attemptLogin() {
+    void attemptLogin() {
         InputMethodManager imm = (InputMethodManager)getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
@@ -165,7 +161,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showProgress(final boolean show) {
+    void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -231,7 +227,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
     }
 
-    public void cancelPressed(View view) {
+    public void cancelPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, WelcomeActivity.class);
         startActivity(move);
         finish();
@@ -245,7 +241,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 //        finish();
 //    }
 
-    public void loginSuccessfully() {
+    void loginSuccessfully() {
 //        AlertDialog.Builder builder =
 //                new AlertDialog.Builder(this).
 //                        setMessage(getString(R.string.Hint_login_successfully)).
@@ -292,7 +288,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         private final String mEmail;
         private final String mPassword;
         private boolean emailIndicator = true;
-        private dataExchanger checker;
+        private final dataExchanger checker;
 
         UserLoginTask(String email, String password) {
             mEmail = email;

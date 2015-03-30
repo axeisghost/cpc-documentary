@@ -1,39 +1,24 @@
 package centralcpccommittee.shopwithfriends;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +26,6 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
 
     private EditText mPasswordView, mConfirmedView, mUsernameView;
     private AutoCompleteTextView mEmailView;
-    private Button registerButton;
 
 
 
@@ -55,20 +39,18 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         mConfirmedView = (EditText) findViewById(R.id.register_confirm);
         mUsernameView = (EditText) findViewById(R.id.register_username);
 
-        registerButton = (Button) findViewById(R.id.register_button);
-
     }
 
     private void populateAutoComplete() {
         getLoaderManager().initLoader(0, null, this);
     }
 
-    public void registerPressed(View view) {
+    public void registerPressed(@SuppressWarnings("UnusedParameters") View view) {
 
         attemptRegister();
     }
 
-    public void backToWelcome() {
+    void backToWelcome() {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).
                         setMessage(getString(R.string.Hint_register_successfully)).
@@ -82,7 +64,7 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         builder.create().show();
     }
 
-    public void attemptRegister() {
+    void attemptRegister() {
 
         // Reset errors.
         mEmailView.setError(null);
@@ -157,14 +139,14 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         return password.length() > 4;
     }
 
-    public void exitTheAct() {
+    void exitTheAct() {
         Intent move = new Intent(this, WelcomeActivity.class);
         startActivity(move);
         finish();
     }
 
 
-    public void cancelPressed(View view) {
+    public void cancelPressed(@SuppressWarnings("UnusedParameters") View view) {
         exitTheAct();
     }
 

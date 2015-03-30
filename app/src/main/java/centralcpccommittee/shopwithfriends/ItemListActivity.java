@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.Map;
 
@@ -59,13 +58,13 @@ public class ItemListActivity extends ActionBarActivity {
         list.setAdapter(adapter);
     }
 
-    public void MainActivityPage(View view) {
+    public void MainActivityPage(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, MainActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
         finish();
     }
-    public void itemOnMapPressed(View view) {
+    public void itemOnMapPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, ItemsOnMapActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);

@@ -1,6 +1,5 @@
 package centralcpccommittee.shopwithfriends;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -17,17 +16,17 @@ import java.util.Map;
  * Created by Kappa on 15/02/08.
  */
 public class UserProfile {
-    private static dataExchanger database = dataExchanger.getInstance();
-    private JSONObject userinfo;
+    private static final dataExchanger database = dataExchanger.getInstance();
+    private final JSONObject userinfo;
     private JSONObject friends;
     private JSONObject items;
     private JSONObject sales;
-    private String userEmail;
+    private final String userEmail;
     private String userName;
 
     /**
      * take in the user's email and load the profile from database
-     * @param email
+     * @param email the email of the user we want to inspect
      */
     public UserProfile(String email) {
         userEmail = email;
@@ -85,7 +84,7 @@ public class UserProfile {
     /**
      * take in the email of user's friend and check whether the friend is mutual or not.
      * DO NOT take in the email that is not in the friend list.
-     * @param email
+     * @param email the email of user's friend
      * @return true if mutual friends
      *          false if not.
      */
@@ -102,8 +101,8 @@ public class UserProfile {
     /**
      * take in the email and username pair that user request to add as a friend,
      * return an integer to indicate the different outcome.
-     * @param email
-     * @param username
+     * @param email the email that will be added as a friend
+     * @param username the user of the user that will be added as friend
      * @return int 0, the email requested does not exist in database;
      *          int 1, the email and username requested does not match;
      *          int 2, the email requested is already in the friend list;
@@ -126,19 +125,19 @@ public class UserProfile {
     /**
      * take in the name and price of an item
      * return an integer to indicate the different outcome.
-     * @param name
-     * @param price
+     * @param name the name of the item
+     * @param price the price requirement of the item
      * @return int 0, the item already exists but price is updated
      *          int 1, the item is a new item and has been added
      */
 
-    public int addItem(String name, double price) {
-        if (!database.addItemWithName(userEmail, name, price)) {
-            return 0;
-        } else {
-            return 1;
-        }
-    }
+//    public int addItem(String name, double price) {
+//        if (!database.addItemWithName(userEmail, name, price)) {
+//            return 0;
+//        } else {
+//            return 1;
+//        }
+//    }
 
     public int addMapItem(String name, double price, double latitude,double longtitude) {
         if (!database.addMapItemWithName(userEmail, name, price, latitude, longtitude)) {
@@ -182,8 +181,8 @@ public class UserProfile {
     /**
      * take in the rater's email and his rate, update the user's profile
      * with the input.
-     * @param raterEmail
-     * @param rate
+     * @param raterEmail the email of the rater
+     * @param rate the rate rater input
      */
 
     public void rateByOther(String raterEmail, double rate) {
@@ -192,7 +191,7 @@ public class UserProfile {
 
     /**
      * return user's email as a string.
-     * @return
+     * @return email of the User profile
      */
 
     public String getUserEmail() {

@@ -12,20 +12,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import java.util.ArrayList;
-
 
 public class AddFriendActivity extends ActionBarActivity {
 
     private EditText friendEmailView, friendUsernameView;
     private String mEmail;
     private UserProfile user;
-    private ArrayList<UserProfile> friendList;
 
     /**
      * default onCreate method for activity, take in the account passed
      * from last activity
-     * @param savedInstanceState
+     * @param savedInstanceState from last activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +64,13 @@ public class AddFriendActivity extends ActionBarActivity {
     /**
      * attempt to find friend
      */
-    public void attemptFindAndAdd() {
+    void attemptFindAndAdd() {
 
         // Reset errors.
         friendEmailView.setError(null);
         friendUsernameView.setError(null);
         String friendEmail = friendEmailView.getText().toString();
         String friendUsername = friendUsernameView.getText().toString();
-        friendList = user.getFriendList();
 
         boolean cancel = false;
         View focusView = null;
@@ -130,7 +126,7 @@ public class AddFriendActivity extends ActionBarActivity {
 
     /**
      * return method after added friend
-     * @param message
+     * @param message message that will be shown to user
      */
 
     private void backToMain(String message) {
@@ -150,7 +146,7 @@ public class AddFriendActivity extends ActionBarActivity {
     /**
      * exit the activity
      */
-    public void exitTheAct() {
+    void exitTheAct() {
         Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", mEmail);
         startActivity(move);
@@ -159,14 +155,14 @@ public class AddFriendActivity extends ActionBarActivity {
 
     /**
      * check the validity if the email typed in
-     * @param email
+     * @param email the email that is taken in from UI
      * @return true if the email is valid
      */
     private boolean isEmailValid(String email) {
         return email.contains("@");
     }
 
-    public void addFriendPressed(View view) {
+    public void addFriendPressed(@SuppressWarnings("UnusedParameters") View view) {
         attemptFindAndAdd();
     }
 }

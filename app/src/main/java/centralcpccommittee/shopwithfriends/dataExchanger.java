@@ -1,18 +1,13 @@
 package centralcpccommittee.shopwithfriends;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
 import android.content.Context;
 import android.util.Log;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,13 +21,13 @@ public class dataExchanger {
     private FileInputStream fis;
     private static JSONObject data;
     private int curr;
-    private StringBuilder text = new StringBuilder();
-    private Context fileContext;
-    private String name;
+    private final StringBuilder text = new StringBuilder();
+    private final Context fileContext;
+    private final String name;
     private static dataExchanger instance;
 
-    public static void initialize(String filename, Context context) {
-        instance = new dataExchanger(filename, context);
+    public static void initialize(Context context) {
+        instance = new dataExchanger(context);
     }
 
     public static dataExchanger getInstance() {
@@ -45,13 +40,12 @@ public class dataExchanger {
      * The primary database was converted to JSON Object The context
      * is the context of application which is used to utilize internal
      * storage.
-     * @param fileName
-     * @param appContext
+     * @param appContext context of app, used to open internal data
      */
 
-    private dataExchanger(String fileName, Context appContext) {
+    private dataExchanger(Context appContext) {
         this.fileContext = appContext;
-        this.name = fileName;
+        this.name = "pDatabase";
         try {
             fis = fileContext.openFileInput(name);
         } catch (IOException e) {
@@ -93,9 +87,9 @@ public class dataExchanger {
      * Take in a pair of email and password, put
      * the key and value pair into JSONObject that converted
      * from the primary database;
-     * @param email
-     * @param password
-     * @return
+     * @param email email that will be registered into database
+     * @param password the password of corresponding registered email
+     * @return success or not
      */
 
     public boolean registerUser(String email, String password, String username) {
@@ -120,9 +114,9 @@ public class dataExchanger {
     /**
      * take in users' email and the name and content of addition information,
      * add as a new key-value pair in the nested JSON obejct.
-     * @param email
-     * @param field
-     * @param content
+     * @param email the target user
+     * @param field the key of addition info
+     * @param content the value of key
      */
 
     private void registerAddition(String email, String field, Object content) {
@@ -136,7 +130,7 @@ public class dataExchanger {
     /**
      * take in the email and find whether the email exists in the database
      * or not.
-     * @param email
+     * @param email the email that will be retrieved in database
      * @return true or false
      */
     public boolean retrieveEmail(String email) {
@@ -175,22 +169,22 @@ public class dataExchanger {
     }
 
 
-    public boolean addItemWithName(String selfEmail, String name, double price) {
-        try {
-            JSONObject selfList = data.getJSONObject(selfEmail).getJSONObject("itemlist");
-            if (selfList.has(name)) {
-                selfList.put(name, price);
-                record();
-                return false;
-            }
-            selfList.put(name, price);
-            record();
-            return true;
-        } catch(JSONException e) {
-            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
-        }
-        return false;
-    }
+//    public boolean addItemWithName(String selfEmail, String name, double price) {
+//        try {
+//            JSONObject selfList = data.getJSONObject(selfEmail).getJSONObject("itemlist");
+//            if (selfList.has(name)) {
+//                selfList.put(name, price);
+//                record();
+//                return false;
+//            }
+//            selfList.put(name, price);
+//            record();
+//            return true;
+//        } catch(JSONException e) {
+//            Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
+//        }
+//        return false;
+//    }
     /**
         1.price, 2.longtitude, 3.latitude as three value for the item name
      */
@@ -258,7 +252,7 @@ public class dataExchanger {
                         curLatitude = jData.getDouble(1);
                         curLontitude = jData.getDouble(2);
                     } catch (Exception e) {
-
+                        Log.d("unexpected", "should not happen");
                     }
                     if (items.containsKey(name) && price <= curPrice) {
                         JSONObject sList = data.getJSONObject(u.getUserEmail()).getJSONObject("salelist");
@@ -304,9 +298,9 @@ public class dataExchanger {
     /**
      * take in a pair of email and password and check the JSONObject converted
      * from the database to whether the email correspond to the password.
-     * @param email
-     * @param password
-     * @return
+     * @param email the email that will be checked
+     * @param password the password that will be checked
+     * @return true if if pair
      */
 
     public boolean checkPassword(String email, String password) {
