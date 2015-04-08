@@ -10,12 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.client.Firebase;
+
 
 public class WelcomeActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_welcome);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -36,12 +39,6 @@ public class WelcomeActivity extends ActionBarActivity {
         startActivity(move);
         finish();
     }
-
-//    public void testMapPressed(View view) {
-//        Intent move = new Intent(this, MapsActivity.class);
-//        startActivity(move);
-//        finish();
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

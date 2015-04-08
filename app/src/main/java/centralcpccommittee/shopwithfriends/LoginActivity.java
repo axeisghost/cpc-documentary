@@ -37,16 +37,6 @@ import java.util.List;
  */
 public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     */
-//    private static final String[] DUMMY_CREDENTIALS = new String[]{
-//            "foo@example.com:hello", "bar@example.com:world",
-//            "test@cpc.com:fortestonly"
-//    };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -54,6 +44,14 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
+    public AutoCompleteTextView getmEmailView() {
+        return mEmailView;
+    }
+
+    public EditText getmPasswordView() {
+        return mPasswordView;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,26 +231,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         finish();
     }
 
-
-//    public void exitTheAct(String passIn) {
-//        Intent move = new Intent(this, WelcomeActivity.class);
-//        move.putExtra("userEmail", passIn);
-//        startActivity(move);
-//        finish();
-//    }
-
     void loginSuccessfully() {
-//        AlertDialog.Builder builder =
-//                new AlertDialog.Builder(this).
-//                        setMessage(getString(R.string.Hint_login_successfully)).
-//                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.dismiss();
-//                                exitTheAct();
-//                            }
-//                        });
-//        builder.create().show();
         Intent move = new Intent(this, MainActivity.class);
         move.putExtra("userEmail", mEmailView.getText().toString());
         startActivity(move);
