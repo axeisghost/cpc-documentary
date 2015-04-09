@@ -38,7 +38,7 @@ public class LoginPresenterImpl implements LoginPresenter{
         if (! proceed) {
             loginView.loginCanceled();
         } else {
-            dataProcessor.setState(new LoginState(loginView, mEmail, mPassword));
+            dataProcessor.setState(new LoginState(this, mEmail, mPassword));
             loginView.proceedToLogin();
         }
         return proceed;
@@ -46,6 +46,21 @@ public class LoginPresenterImpl implements LoginPresenter{
 
     public void login() {
         dataProcessor.process();
+    }
+
+    @Override
+    public void emailNotExist() {
+        loginView.emailNotExist();
+    }
+
+    @Override
+    public void loginSuccessfully() {
+        loginView.loginSuccessfully();
+    }
+
+    @Override
+    public void incorrectPassword() {
+        loginView.incorrectPassword();
     }
 
     private boolean isEmailValid(String email) {

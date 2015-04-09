@@ -13,20 +13,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import centralcpccommittee.shopwithfriends.LoginView;
+import centralcpccommittee.shopwithfriends.Presenter.LoginPresenter;
 
 /**
  * Created by Yuhui on 4/8/2015.
  */
 public class LoginState extends DPState {
-    private LoginView curView;
+    private LoginPresenter presenter;
     private String mEmail;
     private String mPassword;
 
-    public LoginState(LoginView curView, String mEmail, String mPassword) {
+    public LoginState(LoginPresenter presenter, String mEmail, String mPassword) {
         super();
         this.mEmail = mEmail;
         this.mPassword = mPassword;
-        this.curView = curView;
+        this.presenter = presenter;
     }
 
     @Override
@@ -37,11 +38,11 @@ public class LoginState extends DPState {
             public void onDataChange(DataSnapshot snapshot) {
                 Map dummy = (HashMap)snapshot.getValue();
                 if (snapshot.getValue() == null) {
-                    curView.emailNotExist();
+                    presenter.emailNotExist();
                 } else if (mPassword.equals(dummy.get("password"))) {
-                    curView.loginSuccessfully();
+                    presenter.loginSuccessfully();
                 } else {
-                    curView.incorrectPassword();
+                    presenter.incorrectPassword();
                 }
             }
 

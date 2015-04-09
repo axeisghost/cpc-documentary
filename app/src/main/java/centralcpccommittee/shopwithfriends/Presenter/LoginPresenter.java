@@ -6,4 +6,7 @@ package centralcpccommittee.shopwithfriends.Presenter;
 public interface LoginPresenter {
     public boolean loginUser();
     public void login();
+    public void emailNotExist();
+    public void loginSuccessfully();
+    public void incorrectPassword();
 }
