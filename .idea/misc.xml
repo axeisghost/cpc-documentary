@@ -8,7 +8,7 @@
       <entry_point TYPE="method" FQNAME="centralcpccommittee.shopwithfriends.UserProfile void rateByOther(java.lang.String raterEmail, double rate)" />
     </entry_points>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="Android API 21 Platform" project-jdk-type="Android SDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
 </project>

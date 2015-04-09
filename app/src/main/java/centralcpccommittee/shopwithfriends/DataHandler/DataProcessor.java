@@ -4,30 +4,31 @@ import android.app.Activity;
 
 import com.firebase.client.Firebase;
 
+import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.DPState;
+
 /**
  * Created by Yuhui on 4/7/2015.
  */
 public class DataProcessor {
-    private static final String FIREBASE_URL = "https://shining-heat-1001.firebaseio.com";
-    private Firebase curFBRef;
-    private Activity curActivity;
 
-    public DataProcessor(Activity curActivity) {
-        curFBRef = new Firebase(FIREBASE_URL);
-        this.curActivity = curActivity;
+    private DPState state;
+
+    public DataProcessor() {
+        state = null;
+    }
+    public DataProcessor( DPState state) {
+        this.state = state;
     }
 
-    public Firebase cd(String url) {
-        curFBRef = curFBRef.child(url);
-        return curFBRef;
+    public boolean process() {
+        return state.process();
     }
 
-    public Firebase resetCurFBRef() {
-        curFBRef = new Firebase(FIREBASE_URL);
-        return curFBRef;
+    public void setState(DPState state) {
+        this.state = state;
     }
 
-    public Firebase getmFirebaseRef() {
-        return curFBRef;
+    public DPState getState() {
+        return state;
     }
 }

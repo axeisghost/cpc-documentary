@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,42 +30,41 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import centralcpccommittee.shopwithfriends.Presenter.LoginPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.LoginPresenterImpl;
+
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor>, LoginView {
 
     private UserLoginTask mAuthTask = null;
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
-    public AutoCompleteTextView getmEmailView() {
-        return mEmailView;
-    }
-
-    public EditText getmPasswordView() {
-        return mPasswordView;
-    }
+    private View focusView;
+    private LoginPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-
         mPasswordView = (EditText) findViewById(R.id.password);
+        presenter = new LoginPresenterImpl(mEmailView.getText().toString()
+                , mPasswordView.getText().toString(), LoginActivity.this);
+        focusView = null;
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
+
                     attemptLogin();
                     return true;
                 }
@@ -78,12 +76,15 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                presenter = new LoginPresenterImpl(mEmailView.getText().toString()
+                        , mPasswordView.getText().toString(), LoginActivity.this);
                 attemptLogin();
             }
         });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
     }
 
     private void populateAutoComplete() {
@@ -96,6 +97,35 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
+
+    public void initializeError() {
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+    }
+
+    public void invalidPassword() {
+        mPasswordView.setError(getString(R.string.error_invalid_password));
+        focusView = mPasswordView;
+    }
+
+    public void emailRequired() {
+        mEmailView.setError(getString(R.string.error_field_required));
+        focusView = mEmailView;
+    }
+    public void invalidEmail() {
+        mEmailView.setError(getString(R.string.error_invalid_email));
+        focusView = mEmailView;
+    }
+    public void loginCanceled() {
+        focusView.requestFocus();
+    }
+
+    public void proceedToLogin() {
+        showProgress(true);
+    }
+
+
+    //TODO fix from here
     void attemptLogin() {
         InputMethodManager imm = (InputMethodManager)getSystemService(
                 Context.INPUT_METHOD_SERVICE);
@@ -103,46 +133,9 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         if (mAuthTask != null) {
             return;
         }
-
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+        boolean proceed = presenter.loginUser();
+        if (proceed) {
+            mAuthTask = new UserLoginTask(presenter);
             mAuthTask.execute((Void) null);
         }
     }
@@ -231,7 +224,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         finish();
     }
 
-    void loginSuccessfully() {
+    public void loginSuccessfully() {
         Intent move = new Intent(this, MainActivity.class);
         move.putExtra("userEmail", mEmailView.getText().toString());
         startActivity(move);
@@ -262,17 +255,17 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
+
+
+
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
-        private final String mPassword;
-        private boolean emailIndicator = true;
-        private final dataExchanger checker;
+        private String mEmail;
+        private String mPassword;
+        private LoginPresenter presenter;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-            checker = dataExchanger.getInstance();
+        UserLoginTask(LoginPresenter presenter) {
+            this.presenter = presenter;
         }
 
         @Override
@@ -280,44 +273,35 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 return false;
             }
-            if (checker.retrieveEmail(mEmail)) {
-                return checker.checkPassword(mEmail, mPassword);
-            } else {
-                emailIndicator = false;
-            }
+            presenter.login();
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-
-            if (success && emailIndicator) {
-                loginSuccessfully();
-            } else if (!(emailIndicator)) {
-                showProgress(false);
-                mEmailView.setError(getString(R.string.error_email_not_exist));
-                mEmailView.requestFocus();
-            } else {
-                showProgress(false);
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-            checker.readerClose();
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
-            checker.readerClose();
         }
     }
+
+    public void emailNotExist() {
+        showProgress(false);
+        mEmailView.setError(getString(R.string.error_email_not_exist));
+        mEmailView.requestFocus();
+    }
+
+    public void incorrectPassword() {
+        showProgress(false);
+        mPasswordView.setError(getString(R.string.error_incorrect_password));
+        mPasswordView.requestFocus();
+    }
 }
-
-
-
