@@ -56,8 +56,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         mPasswordView = (EditText) findViewById(R.id.password);
-        presenter = new LoginPresenterImpl(mEmailView.getText().toString()
-                , mPasswordView.getText().toString(), LoginActivity.this);
         focusView = null;
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {

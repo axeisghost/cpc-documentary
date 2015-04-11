@@ -22,10 +22,17 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
+import centralcpccommittee.shopwithfriends.Presenter.RegisterPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.RegisterPresenterImpl;
 
-    private EditText mPasswordView, mConfirmedView, mUsernameView;
+public class RegisterActivity extends ActionBarActivity implements LoaderCallbacks<Cursor>, RegisterView {
+
+    private EditText mPasswordView;
+    private EditText mConfirmedView;
+    private EditText mUsernameView;
     private AutoCompleteTextView mEmailView;
+    private RegisterPresenter presenter;
+    private View focusView;
 
 
 
@@ -34,11 +41,10 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         setContentView(R.layout.activity_register);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.register_email);
         populateAutoComplete();
-
         mPasswordView = (EditText) findViewById(R.id.register_password);
         mConfirmedView = (EditText) findViewById(R.id.register_confirm);
         mUsernameView = (EditText) findViewById(R.id.register_username);
-
+        focusView = null;
     }
 
     private void populateAutoComplete() {
@@ -46,7 +52,9 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
     }
 
     public void registerPressed(@SuppressWarnings("UnusedParameters") View view) {
-
+        presenter = new RegisterPresenterImpl(mPasswordView.getText().toString(),
+                mConfirmedView.getText().toString(), mUsernameView.getText().toString(),
+                mEmailView.getText().toString(), this);
         attemptRegister();
     }
 
@@ -63,6 +71,48 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
                         });
         builder.create().show();
     }
+    @Override
+    public void initializeError() {
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+        mConfirmedView.setError(null);
+        mUsernameView.setError(null);
+    }
+
+    @Override
+    public void invalidPassword() {
+        mPasswordView.setError(getString(R.string.error_invalid_password));
+        focusView = mPasswordView;
+    }
+
+    public void emailRequired() {
+        mEmailView.setError(getString(R.string.error_field_required));
+        focusView = mEmailView;
+    }
+
+    @Override
+    public void invalidEmail() {
+        mEmailView.setError(getString(R.string.error_invalid_email));
+        focusView = mEmailView;
+    }
+
+    @Override
+    public void userNameRequired() {
+        mUsernameView.setError(getString(R.string.error_field_required));
+        focusView = mUsernameView;
+    }
+
+    @Override
+    public void loginCanceled() {
+        focusView.requestFocus();
+    }
+
+    @Override
+    public void unmatchedPassword() {
+        mPasswordView.setError(getString(R.string.error_unmatched_passwords));
+        focusView = mPasswordView;
+    }
+
 
     void attemptRegister() {
 
@@ -71,8 +121,6 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         mPasswordView.setError(null);
         mConfirmedView.setError(null);
         mUsernameView.setError(null);
-
-
 
         // Store values at the time of the login attempt.
         String mEmail = mEmailView.getText().toString();
@@ -83,7 +131,6 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         boolean cancel = false;
         View focusView = null;
         dataExchanger recorder = dataExchanger.getInstance();
-
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(mEmail)) {
@@ -101,10 +148,6 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         } else if (!TextUtils.isEmpty(mPassword) && !isPasswordValid(mPassword)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
-            cancel = true;
-        } else if (!TextUtils.isEmpty(mConfirm) && !isPasswordValid(mConfirm)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mConfirmedView;
             cancel = true;
         } else if (!(mConfirm.equals(mPassword))) {
             mPasswordView.setError(getString(R.string.error_unmatched_passwords));
@@ -139,7 +182,7 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         return password.length() > 4;
     }
 
-    void exitTheAct() {
+    public void exitTheAct() {
         Intent move = new Intent(this, WelcomeActivity.class);
         startActivity(move);
         finish();
@@ -192,6 +235,8 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
+
 
     private interface ProfileQuery {
         String[] PROJECTION = {
