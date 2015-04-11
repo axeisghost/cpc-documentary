@@ -37,7 +37,7 @@ public class LoginState extends DPState {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map dummy = (HashMap)snapshot.getValue();
-                if (snapshot.getValue() == null) {
+                if (dummy == null) {
                     presenter.emailNotExist();
                 } else if (mPassword.equals(dummy.get("password"))) {
                     presenter.loginSuccessfully();

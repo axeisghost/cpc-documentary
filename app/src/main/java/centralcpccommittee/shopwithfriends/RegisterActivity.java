@@ -58,7 +58,7 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         attemptRegister();
     }
 
-    void backToWelcome() {
+    public void backToWelcome() {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).
                         setMessage(getString(R.string.Hint_register_successfully)).
@@ -113,73 +113,16 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         focusView = mPasswordView;
     }
 
+    @Override
+    public void existedEmail() {
+        mEmailView.setError(getString(R.string.error_existed_email));
+        mEmailView.requestFocus();
+    }
+
 
     void attemptRegister() {
-
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-        mConfirmedView.setError(null);
-        mUsernameView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String mEmail = mEmailView.getText().toString();
-        String mPassword = mPasswordView.getText().toString();
-        String mConfirm = mConfirmedView.getText().toString();
-        String mUsername = mUsernameView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-        dataExchanger recorder = dataExchanger.getInstance();
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(mEmail)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(mEmail)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (TextUtils.isEmpty(mUsername)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
-            cancel = true;
-        } else if (!TextUtils.isEmpty(mPassword) && !isPasswordValid(mPassword)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        } else if (!(mConfirm.equals(mPassword))) {
-            mPasswordView.setError(getString(R.string.error_unmatched_passwords));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-            //focusView1.requestFocus();
-        } else {
-            if (recorder.registerUser(mEmail, mPassword, mUsername)) {
-                recorder.readerClose();
-                backToWelcome();
-            } else {
-                mEmailView.setError(getString(R.string.error_existed_email));
-                mEmailView.requestFocus();
-            }
-        }
-    }
-
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        presenter.initializeError();
+        presenter.attemptRegister();
     }
 
     public void exitTheAct() {
@@ -227,7 +170,6 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(RegisterActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
         mEmailView.setAdapter(adapter);
     }
 

@@ -6,10 +6,12 @@ package centralcpccommittee.shopwithfriends.DataHandler;
 public class User {
     private String email;
     private String name;
+    private String password;
 
-    public User(String email, String name) {
+    public User(String email, String name, String password) {
         this.email = email;
         this.name = name;
+        this.password = password;
     }
 
     public String getEmail() {
@@ -26,5 +28,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

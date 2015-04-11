@@ -52,6 +52,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
 
     private void register() {
         dataProcessor.setState(new RegisterState(this, email, userName, password));
+        dataProcessor.process();
     }
 
     private boolean isEmailValid(String email) {
@@ -59,7 +60,20 @@ public class RegisterPresenterImpl implements RegisterPresenter {
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
+    }
+
+    public void backToWelcome() {
+        view.backToWelcome();
+    }
+
+    @Override
+    public void existedEmail() {
+        view.existedEmail();
+    }
+
+    @Override
+    public void initializeError() {
+        view.initializeError();
     }
 }

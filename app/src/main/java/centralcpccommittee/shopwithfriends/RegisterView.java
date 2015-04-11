@@ -11,5 +11,7 @@ public interface RegisterView {
     public void loginCanceled();
     public void userNameRequired();
     public void unmatchedPassword();
+    public void existedEmail();
     public void exitTheAct();
+    public void backToWelcome();
 }

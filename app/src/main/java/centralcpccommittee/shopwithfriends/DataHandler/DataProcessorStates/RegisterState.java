@@ -4,7 +4,11 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.DPState;
+import centralcpccommittee.shopwithfriends.DataHandler.User;
 import centralcpccommittee.shopwithfriends.Presenter.RegisterPresenter;
 
 /**
@@ -17,6 +21,9 @@ public class RegisterState extends DPState {
     private String password;
     public RegisterState (RegisterPresenter presenter, String email, String username, String password) {
         this.presenter = presenter;
+        this.email = email;
+        this.username = username;
+        this.password = password;
 
     }
     public boolean process() {
@@ -24,7 +31,14 @@ public class RegisterState extends DPState {
         curFBRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-
+                Map dummy = (HashMap)snapshot.getValue();
+                if (dummy == null) {
+                    User newUser = new User(email, username, password);
+                    curFBRef.setValue(newUser);
+                    presenter.backToWelcome();
+                } else {
+                    presenter.existedEmail();
+                }
             }
 
             @Override
