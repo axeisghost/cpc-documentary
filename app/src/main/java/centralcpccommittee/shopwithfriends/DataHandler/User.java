@@ -7,11 +7,17 @@ public class User {
     private String email;
     private String name;
     private String password;
+    private double rating;
+
+
+
+    public static final int DEFAULT_RATING = -1;
 
     public User(String email, String name, String password) {
         this.email = email;
         this.name = name;
         this.password = password;
+        rating = DEFAULT_RATING;
     }
 
     public String getEmail() {
@@ -36,5 +42,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

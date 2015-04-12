@@ -120,6 +120,7 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
     }
 
 
+
     void attemptRegister() {
         presenter.initializeError();
         presenter.attemptRegister();

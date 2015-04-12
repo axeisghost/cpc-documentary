@@ -6,40 +6,36 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.DPState;
-import centralcpccommittee.shopwithfriends.DataHandler.User;
-import centralcpccommittee.shopwithfriends.Presenter.RegisterPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.UserFriendListPresenter;
 
 /**
  * Created by Yuhui on 4/11/2015.
  */
-public class RegisterState extends DPState {
-    private RegisterPresenter presenter;
+public class UserFriendListState extends DPState {
+    private UserFriendListPresenter presenter;
     private String email;
-    private String username;
-    private String password;
-    public RegisterState (RegisterPresenter presenter, String email, String username, String password) {
-        this.presenter = presenter;
-        this.email = email;
-        this.username = username;
-        this.password = password;
+    private Set<String> friendList;
 
+    public UserFriendListState(String email, UserFriendListPresenter presenter) {
+        this.email = email;
+        this.presenter = presenter;
     }
-    public boolean process() {
+    public Set<String> getFriendList() {
         cd(point2Dot(email));
+        cd("friend");
         curFBRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Map dummy = (HashMap)snapshot.getValue();
                 if (dummy == null) {
-                    User newUser = new User(email, username, password);
-                    curFBRef.setValue(newUser);
-                    presenter.backToWelcome();
+
                 } else {
-                    presenter.existedEmail();
+                    friendList = dummy.keySet();
                 }
             }
 
@@ -48,7 +44,11 @@ public class RegisterState extends DPState {
                 Log.d("firebase Error: ", firebaseError.getMessage());
             }
         });
-        return true;
+        return friendList;
+    }
+    public void deleteFriend(String friendEmail) {
+        resetFBRef2Home();
+        curFBRef.child(email).child(point2Dot(friendEmail)).removeValue();
     }
 
 }

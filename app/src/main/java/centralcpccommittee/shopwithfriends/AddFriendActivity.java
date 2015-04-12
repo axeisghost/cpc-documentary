@@ -12,12 +12,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.DPState;
+import centralcpccommittee.shopwithfriends.Presenter.AddFriendPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.AddFriendPresenterImpl;
 
-public class AddFriendActivity extends ActionBarActivity {
 
-    private EditText friendEmailView, friendUsernameView;
+public class AddFriendActivity extends ActionBarActivity implements AddFriendView {
+
+    private EditText friendEmailView;
+    private EditText friendUsernameView;
+    private View focusView;
     private String mEmail;
-    private UserProfile user;
+    private AddFriendPresenter presenter;
 
     /**
      * default onCreate method for activity, take in the account passed
@@ -30,7 +36,6 @@ public class AddFriendActivity extends ActionBarActivity {
         setContentView(R.layout.activity_add_friend);
         Bundle extras = getIntent().getExtras();
         mEmail = extras.getString("userEmail");
-        user = new UserProfile(mEmail);
         Log.d("bug exists", mEmail);
     }
 
@@ -62,74 +67,11 @@ public class AddFriendActivity extends ActionBarActivity {
     }
 
     /**
-     * attempt to find friend
-     */
-    void attemptFindAndAdd() {
-
-        // Reset errors.
-        friendEmailView.setError(null);
-        friendUsernameView.setError(null);
-        String friendEmail = friendEmailView.getText().toString();
-        String friendUsername = friendUsernameView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        if (TextUtils.isEmpty(friendEmail)) {
-            friendEmailView.setError(getString(R.string.error_field_required));
-            focusView = friendEmailView;
-            cancel = true;
-        } else if (!isEmailValid(friendEmail)) {
-            friendEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = friendEmailView;
-            cancel = true;
-        } else if (TextUtils.isEmpty(friendUsername)) {
-            friendUsernameView.setError(getString(R.string.error_field_required));
-            focusView = friendUsernameView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            focusView.requestFocus();
-        } else {
-            dataExchanger database = dataExchanger.getInstance();
-            if (!database.retrieveEmail(friendEmail)) {
-                friendEmailView.setError(getString(R.string.error_email_not_registered));
-                focusView = friendEmailView;
-                focusView.requestFocus();
-            } else {
-                UserProfile friendUser = new UserProfile(friendEmail);
-                if (!friendUser.getUserName().equals(friendUsername)) {
-                    friendUsernameView.setError(getString(R.string.error_email_username_not_match));
-                    focusView = friendUsernameView;
-                    focusView.requestFocus();
-                } else {
-                    if (friendEmail.equals(mEmail)) {
-                        friendEmailView.setError(getString(R.string.error_add_self_as_friend));
-                        focusView = friendEmailView;
-                        focusView.requestFocus();
-                    } else {
-                        int i = user.addFriend(friendEmail, friendUsername);
-                       String message = "";
-                        if (i == 3) {
-                            message = friendUsername +
-                                    " is successfully added as your friend!";
-                        } else if (i == 2) {
-                            message = friendUsername + " is already your friend!";
-                        }
-                        backToMain(message);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * return method after added friend
      * @param message message that will be shown to user
      */
 
-    private void backToMain(String message) {
+    public void backToMain(String message) {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).
                         setMessage(message).
@@ -163,6 +105,60 @@ public class AddFriendActivity extends ActionBarActivity {
     }
 
     public void addFriendPressed(@SuppressWarnings("UnusedParameters") View view) {
-        attemptFindAndAdd();
+        presenter = new AddFriendPresenterImpl(mEmail, friendEmailView.getText().toString(),
+                friendUsernameView.getText().toString(), this);
+        presenter.attemptFindAndAdd();
+    }
+
+
+    @Override
+    public void initializeError() {
+        friendEmailView.setError(null);
+        friendUsernameView.setError(null);
+    }
+
+    @Override
+    public void friendEmailRequired() {
+        friendEmailView.setError(getString(R.string.error_field_required));
+        focusView = friendEmailView;
+        focusView.requestFocus();
+    }
+
+    public void friendEmailInvalid() {
+        friendEmailView.setError(getString(R.string.error_invalid_email));
+        focusView = friendEmailView;
+        focusView.requestFocus();
+    }
+    @Override
+    public void friendUserNameRequired() {
+        friendEmailView.setError(getString(R.string.error_invalid_email));
+        focusView = friendEmailView;
+        focusView.requestFocus();
+    }
+
+    @Override
+    public void emailNotRegistered() {
+        friendEmailView.setError(getString(R.string.error_email_not_registered));
+        focusView = friendEmailView;
+        focusView.requestFocus();
+    }
+
+    @Override
+    public void emailUserNameNoMatch() {
+        friendUsernameView.setError(getString(R.string.error_email_username_not_match));
+        focusView = friendUsernameView;
+        focusView.requestFocus();
+    }
+
+    @Override
+    public void addYourself() {
+        friendEmailView.setError(getString(R.string.error_add_self_as_friend));
+        focusView = friendEmailView;
+        focusView.requestFocus();
+    }
+
+    @Override
+    public void notProceed() {
+        focusView.requestFocus();
     }
 }

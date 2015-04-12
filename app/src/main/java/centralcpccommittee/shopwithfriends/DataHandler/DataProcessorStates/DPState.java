@@ -31,10 +31,10 @@ public abstract class DPState {
     public boolean process() {
         return false;
     }
-    public String point2Dot(String email) {
+    public static String point2Dot(String email) {
         return email.replaceAll("\\.", "<dot>");
     }
-    public String dot2PPoint(String email) {
+    public static String dot2PPoint(String email) {
         return email.replaceAll("<dot>", ".");
     }
     public boolean FBKeyCheck(String key) {

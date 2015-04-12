@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import centralcpccommittee.shopwithfriends.UserProfile;
 
@@ -13,7 +14,6 @@ import centralcpccommittee.shopwithfriends.UserProfile;
  * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
  * <p/>
- * TODO: Replace all uses of this class before publishing your app.
  */
 public class FriendsContent {
 
@@ -36,6 +36,15 @@ public class FriendsContent {
         ITEM_MAP.put(item.id, item);
     }
 
+    public static void update1(Set<String> friendList) {
+        clear();
+        for (String thisUser: friendList) {
+            if (thisUser != null) {
+                String id = thisUser;
+                String info;
+            }
+        }
+    }
 
     /**
      * Update the items according to the friend list

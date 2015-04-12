@@ -9,8 +9,11 @@ import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
+import centralcpccommittee.shopwithfriends.Presenter.UserFriendListPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.UserFriendListPresenterImpl;
 
 
 /**
@@ -30,7 +33,7 @@ import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
  * to listen for item selections.
  */
 public class UserFriendListActivity extends ActionBarActivity
-        implements UserFriendListFragment.Callbacks {
+        implements UserFriendListFragment.Callbacks, UserFriendListView{
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -40,16 +43,24 @@ public class UserFriendListActivity extends ActionBarActivity
 
     private String userEmail;
     private UserProfile user;
-    private ArrayList<UserProfile> friendList;
+    private ArrayList<UserProfile> friendList1;
+    private Set<String> friendList;
     private String friendEmail;
+    private UserFriendListPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
-        user = new UserProfile(userEmail);
-        friendList = user.getFriendList();
+        //user = new UserProfile(userEmail);
+        //friendList1 = user.getFriendList();
+        presenter = new UserFriendListPresenterImpl(userEmail, this);
+        friendList = presenter.getFriendList();
         FriendsContent.update(friendList);
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userfriend_list);
 
@@ -107,7 +118,9 @@ public class UserFriendListActivity extends ActionBarActivity
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+
                                 deleteFriend();
+
                             }
                         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -120,7 +133,8 @@ public class UserFriendListActivity extends ActionBarActivity
     }
 
     void deleteFriend() {
-        user.deleteFriend(friendEmail);
+        presenter.deleteFriend(friendEmail);
+        //user.deleteFriend(friendEmail);
         Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", userEmail);
         navigateUpTo(move);
