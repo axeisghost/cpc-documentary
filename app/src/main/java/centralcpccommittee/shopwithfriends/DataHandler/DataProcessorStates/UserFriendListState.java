@@ -19,24 +19,21 @@ import centralcpccommittee.shopwithfriends.Presenter.UserFriendListPresenter;
 public class UserFriendListState extends DPState {
     private UserFriendListPresenter presenter;
     private String email;
-    private Set<String> friendList;
 
     public UserFriendListState(String email, UserFriendListPresenter presenter) {
         this.email = email;
         this.presenter = presenter;
     }
-    public Set<String> getFriendList() {
+    @Override
+    public boolean process () {
+
         cd(point2Dot(email));
         cd("friend");
         curFBRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Map dummy = (HashMap)snapshot.getValue();
-                if (dummy == null) {
-
-                } else {
-                    friendList = dummy.keySet();
-                }
+                Map<String, Object> friendList = (HashMap<String, Object>)snapshot.getValue();
+                presenter.updateFriendList(friendList);
             }
 
             @Override
@@ -44,7 +41,7 @@ public class UserFriendListState extends DPState {
                 Log.d("firebase Error: ", firebaseError.getMessage());
             }
         });
-        return friendList;
+        return true;
     }
     public void deleteFriend(String friendEmail) {
         resetFBRef2Home();

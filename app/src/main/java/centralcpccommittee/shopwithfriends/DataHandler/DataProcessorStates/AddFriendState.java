@@ -10,6 +10,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
 import centralcpccommittee.shopwithfriends.Presenter.AddFriendPresenter;
 
 /**
@@ -53,7 +54,7 @@ public class AddFriendState extends DPState {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
                                 String message;
-                                Map dummy = (HashMap)snapshot.getValue();
+                                Map<String, Object> dummy = (HashMap<String,Object>)(snapshot.getValue());
                                 if (dummy == null) {
                                     curFBRef.child(point2Dot(friendEmail)).setValue(1);
                                     message = friendName +
@@ -70,7 +71,18 @@ public class AddFriendState extends DPState {
 
                             @Override
                             public void onCancelled(FirebaseError firebaseError) {
+                                Log.d("firebase Error: ", firebaseError.getMessage());
+                            }
+                        });
+                        curFBRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                FriendsContent.update((HashMap<String,Object>)(snapshot.getValue()));
+                            }
 
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                                Log.d("firebase Error: ", firebaseError.getMessage());
                             }
                         });
                     }

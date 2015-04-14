@@ -63,28 +63,6 @@ public class MainActivity extends ActionBarActivity {
         finish();
     }
 
-//    private void test2User() {
-//        UserProfile mainuser = new UserProfile(userEmail);
-//        mainuser.addFriend("@cpc", "cpc");
-//        Log.d("mutual friend1", ""+mainuser.checkFriend("@cpc"));
-//        Log.d("mutual friend2", "" + new UserProfile("@cpc").checkFriend(userEmail));
-//    }
-//
-//    private void testUser() {
-//        UserProfile mainuser = new UserProfile(userEmail);
-//        Log.d("friendaddcondition1",""+ mainuser.addFriend("@xxx", "fuck"));
-//        Log.d("friendaddcondition2",""+ mainuser.addFriend("@test", "fuck"));
-//        mainuser.addFriend("@test", "tester");
-//        Log.d("friendaddcondition4",""+ mainuser.addFriend("@test", "tester"));
-//        mainuser.addFriend("@wjx", "wjx");
-//        mainuser.rateByOther("@test", 4.5);
-//        mainuser.rateByOther("@wjx", 3.1);
-//        for (int ii = 0; ii < mainuser.getFriendList().size(); ii++) {
-//            Log.d("listOutput" + ii, mainuser.getFriendList().get(ii).getUserEmail());
-//        }
-//        Log.d("listOutput", "" + mainuser.getRate());
-//    }
-
     public void logoutPressed(@SuppressWarnings("UnusedParameters") View view) {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).

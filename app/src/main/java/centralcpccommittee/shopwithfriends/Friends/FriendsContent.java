@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import centralcpccommittee.shopwithfriends.DataHandler.DataProcessor;
+import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.FriendsContentState;
 import centralcpccommittee.shopwithfriends.UserProfile;
 
 /**
@@ -27,62 +29,26 @@ public class FriendsContent {
      */
     public static Map<String, FriendItem> ITEM_MAP = new HashMap<String, FriendItem>();
 
-    static {
-        // Add 3 sample items.
-    }
+    private static DataProcessor dataProcessor = new DataProcessor();
 
-    private static void addItem(FriendItem item) {
+
+    public static void addItem(FriendItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    public static void update1(Set<String> friendList) {
+    public static void update(Map<String, Object> friendMap) {
         clear();
-        for (String thisUser: friendList) {
-            if (thisUser != null) {
-                String id = thisUser;
-                String info;
-            }
-        }
-    }
-
-    /**
-     * Update the items according to the friend list
-     * @param friendList friend list of the user
-     */
-    public static void update(ArrayList<UserProfile> friendList) {
-        clear();
-        for (UserProfile thisUser: friendList) {
-            if (thisUser != null) {
-                String id = thisUser.getUserEmail();
-                // The info contains the username, rate and the no. of reports.
-                // Need to be fixed later
-                String info;
-                if (thisUser.getRate() == -1) {
-                    info = "Email:" + id + "\n"
-                            + "Username: " + thisUser.getUserName() + "\n"
-                            + "User's Rate: " + "Not Applicable" + "\n"
-                            + "Reports to me: 0" + "\n"
-                            + "Posted items:" + "\n";
-                    Map<String, JSONArray> items = thisUser.getItemList();
-                    for (Map.Entry<String, JSONArray> element: items.entrySet()) {
-                        String output = element.getKey().toString() + " : " + element.getValue().toString();
-                        info = info + output + "\n";
-                    }
-                } else {
-                    info =  "Email:" + id + "\n"
-                            +"Username: " + thisUser.getUserName() + "\n"
-                            + "User's Rate: " + thisUser.getRate() + "\n"
-                            + "Posted items:" + "\n";
-                    Map<String, JSONArray> items = thisUser.getItemList();
-                    for (Map.Entry<String, JSONArray> element: items.entrySet()) {
-                        String output = element.getKey().toString() + " : " + element.getValue().toString();
-                        info = info + output + "\n";
-                    }
+        if (friendMap != null) {
+            Set<String> friendList = friendMap.keySet();
+            for (String thisUser: friendList) {
+                if (thisUser != null) {
+                    dataProcessor.setState(new FriendsContentState(thisUser));
+                    dataProcessor.process();
                 }
-                addItem(new FriendItem(id, info));
             }
         }
+
     }
 
     private static void clear() {

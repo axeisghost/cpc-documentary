@@ -42,9 +42,6 @@ public class UserFriendListActivity extends ActionBarActivity
     private boolean mTwoPane;
 
     private String userEmail;
-    private UserProfile user;
-    private ArrayList<UserProfile> friendList1;
-    private Set<String> friendList;
     private String friendEmail;
     private UserFriendListPresenter presenter;
 
@@ -53,11 +50,8 @@ public class UserFriendListActivity extends ActionBarActivity
 
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
-        //user = new UserProfile(userEmail);
-        //friendList1 = user.getFriendList();
         presenter = new UserFriendListPresenterImpl(userEmail, this);
-        friendList = presenter.getFriendList();
-        FriendsContent.update(friendList);
+        presenter.processFriendList();
 
 
 

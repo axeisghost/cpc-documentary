@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.DPState;
+import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
 import centralcpccommittee.shopwithfriends.Presenter.AddFriendPresenter;
 import centralcpccommittee.shopwithfriends.Presenter.AddFriendPresenterImpl;
 
