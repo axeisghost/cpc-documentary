@@ -1,7 +1,4 @@
 package centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates;
-
-import android.app.Activity;
-
 import com.firebase.client.Firebase;
 
 /**

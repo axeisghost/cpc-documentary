@@ -25,7 +25,6 @@ public class LoginPresenterImpl implements LoginPresenter{
     public boolean loginUser() {
         boolean proceed = false;
         loginView.initializeError();
-
         if (TextUtils.isEmpty(mEmail)) {
             loginView.emailRequired();
         } else if (! isEmailValid(mEmail)) {
