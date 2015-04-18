@@ -1,5 +1,14 @@
 package centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates;
 
+import android.util.Log;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import centralcpccommittee.shopwithfriends.Presenter.UserFriendListPresenter;
 
 /**
@@ -7,15 +16,45 @@ import centralcpccommittee.shopwithfriends.Presenter.UserFriendListPresenter;
  */
 public class DeleteFriendState extends DPState{
     private String email;
+    private String friendName;
     private String friendEmail;
     private UserFriendListPresenter presenter;
-    public DeleteFriendState (String email, String friendEmail, UserFriendListPresenter presenter) {
+    public DeleteFriendState (String email, String friendName, UserFriendListPresenter presenter) {
         this.email = email;
-        this.friendEmail = friendEmail;
+        this.friendName = friendName;
         this.presenter = presenter;
     }
 
     public boolean process() {
+        curFBRef.child("userList").child(point2Dot(friendName)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                friendEmail = (String) snapshot.getValue();
+                curFBRef.child(point2Dot(email)).child("friend").child(point2Dot(friendEmail)).removeValue();
+
+                cd(point2Dot(email));
+                cd("friend");
+                curFBRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        Map<String, Object> friendList = (HashMap<String, Object>)snapshot.getValue();
+                        presenter.updateFriendList(friendList);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                        Log.d("firebase Error: ", firebaseError.getMessage());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("firebase Error: ", firebaseError.getMessage());
+            }
+        });
+
+
         return true;
     }
 }

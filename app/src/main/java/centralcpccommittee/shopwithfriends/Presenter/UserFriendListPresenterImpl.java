@@ -1,5 +1,6 @@
 package centralcpccommittee.shopwithfriends.Presenter;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,8 +32,8 @@ public class UserFriendListPresenterImpl implements UserFriendListPresenter {
     }
 
     @Override
-    public void deleteFriend(String friendEmail) {
-       dataProcessor.setState(new DeleteFriendState(email, friendEmail, this));
+    public void deleteFriend(String friendName) {
+       dataProcessor.setState(new DeleteFriendState(email, friendName, this));
         dataProcessor.process();
     }
 

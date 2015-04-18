@@ -37,6 +37,8 @@ public class RegisterState extends DPState {
                 if (dummy == null) {
                     User newUser = new User(email, username, password);
                     curFBRef.setValue(newUser);
+                    resetFBRef2Home();
+                    curFBRef.child("userList").child(username).setValue(email);
                     presenter.backToWelcome();
                 } else {
                     presenter.existedEmail();

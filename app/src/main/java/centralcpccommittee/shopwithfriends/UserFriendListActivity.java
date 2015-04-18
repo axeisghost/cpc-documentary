@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
@@ -42,7 +44,7 @@ public class UserFriendListActivity extends ActionBarActivity
     private boolean mTwoPane;
 
     private String userEmail;
-    private String friendEmail;
+    private String friendName;
     private UserFriendListPresenter presenter;
 
     @Override
@@ -93,7 +95,7 @@ public class UserFriendListActivity extends ActionBarActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.userfriend_detail_container, fragment)
                     .commit();
-            friendEmail = id;
+            friendName = id;
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
@@ -127,7 +129,7 @@ public class UserFriendListActivity extends ActionBarActivity
     }
 
     void deleteFriend() {
-        presenter.deleteFriend(friendEmail);
+        presenter.deleteFriend(friendName);
         //user.deleteFriend(friendEmail);
         Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", userEmail);

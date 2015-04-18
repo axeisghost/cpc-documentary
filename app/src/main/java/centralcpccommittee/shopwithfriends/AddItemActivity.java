@@ -13,8 +13,11 @@ import android.widget.EditText;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import centralcpccommittee.shopwithfriends.Presenter.AddItemPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.AddItemPresenterImpl;
 
-public class AddItemActivity extends ActionBarActivity {
+
+public class AddItemActivity extends ActionBarActivity implements AddItemView{
 
     private EditText itemNameView, itemPriceView;
     private String mEmail;
@@ -22,6 +25,8 @@ public class AddItemActivity extends ActionBarActivity {
     // --Commented out by Inspection (3/29/2015 12:52 AM):private LatLng location;
     private static double longtitude;
     private static double latitude;
+
+    private AddItemPresenter presenter;
     /**
      * default onCreate method for activity, take in the account passed
      * from last activity
@@ -33,6 +38,8 @@ public class AddItemActivity extends ActionBarActivity {
         setContentView(R.layout.activity_add_item);
         Bundle extras = getIntent().getExtras();
         mEmail = extras.getString("userEmail");
+
+
 
         user = new UserProfile(mEmail);
         Log.d("bug", mEmail);
@@ -144,6 +151,13 @@ public class AddItemActivity extends ActionBarActivity {
         latitude = loc.latitude;
     }
     public void addItemPressed(@SuppressWarnings("UnusedParameters") View view) {
-        attemptAddItem();
+        presenter = new AddItemPresenterImpl(mEmail, itemNameView.getText().toString(), Double.parseDouble(itemPriceView.getText().toString()), latitude,longtitude, this);
+        presenter.addItem();
+    }
+
+    @Override
+    public void initializeError() {
+        itemNameView.setError(null);
+        itemPriceView.setError(null);
     }
 }

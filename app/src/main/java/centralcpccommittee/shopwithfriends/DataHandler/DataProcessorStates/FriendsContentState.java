@@ -42,7 +42,7 @@ public class FriendsContentState extends DPState {
                 String info = null;
                 Map<String, Object> userProfile = (HashMap<String, Object>)snapshot.getValue();
                 String name = (String)(userProfile.get("name"));
-                if (userProfile.get("Rating") == null) {
+                if ((double)userProfile.get("rating") == -1.0) {
                     info = "Email: " + dot2PPoint(thisUser) + "\n"
                             + "Username: " + name + "\n"
                             + "User's Rating: " + "Not Applicable" + "\n"

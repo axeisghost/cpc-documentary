@@ -62,7 +62,8 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-
+                    presenter = new LoginPresenterImpl(mEmailView.getText().toString()
+                            , mPasswordView.getText().toString(), LoginActivity.this);
                     attemptLogin();
                     return true;
                 }
@@ -122,8 +123,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         showProgress(true);
     }
 
-
-    //TODO fix from here
     void attemptLogin() {
         InputMethodManager imm = (InputMethodManager)getSystemService(
                 Context.INPUT_METHOD_SERVICE);
@@ -258,8 +257,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private String mEmail;
-        private String mPassword;
         private LoginPresenter presenter;
 
         UserLoginTask(LoginPresenter presenter) {
