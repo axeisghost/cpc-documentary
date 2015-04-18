@@ -5,4 +5,6 @@ package centralcpccommittee.shopwithfriends;
  */
 public interface AddItemView {
     public void initializeError();
+    public void addNotExistItem(String itemName);
+    public void updateExistItem(String itemName, double price);
 }

@@ -23,13 +23,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-
-
-
-
         setUpMapIfNeeded();
-
         mMap.setOnMarkerDragListener(this);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMapClickListener(this);
@@ -117,7 +111,6 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
         move.putExtra("longtitude", returnLoc.longitude);
         move.putExtra("latitude", returnLoc.latitude);
         AddItemActivity.updateLatLng(returnLoc);
-
         move.putExtra("userEmail",userEmail);
         startActivity(move);
     }

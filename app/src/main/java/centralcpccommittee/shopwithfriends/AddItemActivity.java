@@ -21,7 +21,6 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
 
     private EditText itemNameView, itemPriceView;
     private String mEmail;
-    private UserProfile user;
     // --Commented out by Inspection (3/29/2015 12:52 AM):private LatLng location;
     private static double longtitude;
     private static double latitude;
@@ -38,11 +37,6 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
         setContentView(R.layout.activity_add_item);
         Bundle extras = getIntent().getExtras();
         mEmail = extras.getString("userEmail");
-
-
-
-        user = new UserProfile(mEmail);
-        Log.d("bug", mEmail);
     }
 
 
@@ -72,45 +66,9 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
     }
 
     /**
-     * attempt to add an item on map
-     */
-    void attemptAddItem() {
-        itemNameView.setError(null);
-        itemPriceView.setError(null);
-        String itemName = itemNameView.getText().toString();
-        double itemPrice = Double.parseDouble(itemPriceView.getText().toString());
-      //  int type = user.addItem(itemName, itemPrice);
-        Bundle extras = getIntent().getExtras();
-      /*  if(extras.getString("longtitude")!=null && extras.getString("latitude")!=null  ) {
-            longtitude = Double.parseDouble(extras.getString("longtitude"));
-            latitude = Double.parseDouble(extras.getString("latitude"));
-        } else {
-            longtitude = 38;
-            latitude = 38;
-        }*/
-        int type = user.addMapItem(itemName, itemPrice, latitude,longtitude);
-        String message = "";
-        if (type == 0) {
-            message = itemName + " already exists and the price has been changed to " + itemPrice  + " " + latitude + " " + longtitude;
-        } else {
-            message = itemName + "has been added";
-        }
-        backToMain(message);
-    }
-    public void mapButtonPressed(@SuppressWarnings("UnusedParameters") View view) {
-        Intent move = new Intent(this, MapsActivity.class);
-        move.putExtra("userEmail", mEmail);
-        startActivity(move);
-        finish();
-    }
-    /**
      * return method after added friend
      * @param message message that will be shown to user
      */
-
-
-
-
     private void backToMain(String message) {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).
@@ -135,17 +93,6 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
         finish();
     }
 
-// --Commented out by Inspection START (3/29/2015 12:52 AM):
-//    /**
-//     * check the validity if the email typed in
-//     * @param email
-//     * @return true if the email is valid
-//     */
-//    private boolean isEmailValid(String email) {
-//        return email.contains("@");
-//    }
-// --Commented out by Inspection STOP (3/29/2015 12:52 AM)
-
     public static void updateLatLng(LatLng loc){
         longtitude = loc.longitude;
         latitude = loc.latitude;
@@ -159,5 +106,19 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
     public void initializeError() {
         itemNameView.setError(null);
         itemPriceView.setError(null);
+    }
+
+    public void addNotExistItem(String itemName) {
+        backToMain(itemName + "has been added");
+    }
+
+    public void updateExistItem(String itemName, double price) {
+        backToMain(itemName + " already exists and the price has been changed to " + price);
+    }
+    public void mapButtonPressed(@SuppressWarnings("UnusedParameters") View view) {
+        Intent move = new Intent(this, MapsActivity.class);
+        move.putExtra("userEmail", mEmail);
+        startActivity(move);
+        finish();
     }
 }

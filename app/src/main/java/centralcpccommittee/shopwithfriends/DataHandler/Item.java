@@ -4,14 +4,14 @@ package centralcpccommittee.shopwithfriends.DataHandler;
  * Created by Yuhui on 4/18/2015.
  */
 public class Item {
-    private String userName;
+    private String userEmail;
     private String itemName;
-    private String price;
+    private double price;
     private double latitude;
     private double longitude;
 
-    public Item(String userName, String itemName, String price, double latitude, double longitude) {
-        this.userName = userName;
+    public Item(String userName, String itemName, double price, double latitude, double longitude) {
+        this.userEmail = userName;
         this.itemName = itemName;
         this.price = price;
         this.latitude = latitude;
@@ -19,11 +19,11 @@ public class Item {
     }
 
     public String getUserName() {
-        return userName;
+        return userEmail;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.userEmail = userName;
     }
 
     public String getItemName() {
@@ -34,11 +34,11 @@ public class Item {
         this.itemName = itemName;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

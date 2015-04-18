@@ -5,4 +5,6 @@ package centralcpccommittee.shopwithfriends.Presenter;
  */
 public interface AddItemPresenter {
     public void addItem();
+    public void updateExistItem(String itemName, double price);
+    public void addNotExistItem(String temName);
 }
