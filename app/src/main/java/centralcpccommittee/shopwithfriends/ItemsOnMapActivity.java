@@ -17,7 +17,7 @@ import org.json.JSONArray;
 
 import java.util.Map;
 
-public class ItemsOnMapActivity extends FragmentActivity {
+public class ItemsOnMapActivity extends FragmentActivity implements ItemsOnMapView{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private String userEmail;
