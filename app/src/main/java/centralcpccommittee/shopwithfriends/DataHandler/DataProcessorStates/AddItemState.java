@@ -1,5 +1,7 @@
 package centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates;
 
+import android.util.Log;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
@@ -54,7 +56,7 @@ public class AddItemState extends DPState {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                Log.d("firebase Error: ", firebaseError.getMessage());
             }
 
             private void addItem() {
