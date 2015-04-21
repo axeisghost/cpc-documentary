@@ -13,13 +13,19 @@ import android.widget.EditText;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import centralcpccommittee.shopwithfriends.Presenter.AddSalePresenter;
+import centralcpccommittee.shopwithfriends.Presenter.AddSalePresenterImpl;
 
-public class AddSaleActivity extends ActionBarActivity {
+
+public class AddSaleActivity extends ActionBarActivity implements AddSaleView {
 
     private EditText saleName, salePrice;// --Commented out by Inspection (3/29/2015 12:52 AM):saleLoc;
     private String mEmail;
+
     private UserProfile user;
+
     private static double latitude,longtitude;
+    private AddSalePresenter presenter;
     // --Commented out by Inspection (3/29/2015 12:59 AM):private boolean locationChosen;
     /**
      * default onCreate method for activity, take in the account passed
@@ -32,9 +38,7 @@ public class AddSaleActivity extends ActionBarActivity {
         setContentView(R.layout.activity_add_sale);
         Bundle extras = getIntent().getExtras();
         mEmail = extras.getString("userEmail");
-        user = new UserProfile(mEmail);
-        Log.d("bug", mEmail);
-//        locationChosen = false;
+        //user = new UserProfile(mEmail);
     }
 
 
@@ -47,6 +51,10 @@ public class AddSaleActivity extends ActionBarActivity {
         return true;
     }
 
+    public static void updateLatLng(LatLng loc){
+        longtitude = loc.longitude;
+        latitude = loc.latitude;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -66,6 +74,11 @@ public class AddSaleActivity extends ActionBarActivity {
     /**
      * attempt to add an item
      */
+
+    public void initializeError() {
+        saleName.setError(null);
+        salePrice.setError(null);
+    }
     void attemptAddSale() {
         saleName.setError(null);
         salePrice.setError(null);
@@ -83,7 +96,7 @@ public class AddSaleActivity extends ActionBarActivity {
      * @param message message that will be shown to user
      */
 
-    private void backToMain(String message) {
+    public void backToMain(String message) {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).
                         setMessage(message).
@@ -108,19 +121,6 @@ public class AddSaleActivity extends ActionBarActivity {
     }
 
     /**
-     * check the validity if the email typed in
-     * @param email the email that will be checked
-     * @return true if the email is valid
-     */
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-    public static void updateLatLng(LatLng loc){
-        longtitude = loc.longitude;
-        latitude = loc.latitude;
-    }
-
-    /**
      * go to Google map to select a valid location
      * @param view view form the UI
      */
@@ -131,6 +131,7 @@ public class AddSaleActivity extends ActionBarActivity {
         finish();
     }
     public void addSalePressed(@SuppressWarnings("UnusedParameters") View view) {
-        attemptAddSale();
+        presenter = new AddSalePresenterImpl(mEmail, Double.parseDouble(salePrice.getText().toString()), saleName.getText().toString(), latitude, longtitude, this);
+        presenter.attemptAddSale();
     }
 }

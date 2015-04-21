@@ -59,7 +59,7 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
-            android:name=".saleListActivity"
+            android:name=".SaleListActivity"
             android:label="@string/title_sale_list"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>

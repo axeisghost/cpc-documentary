@@ -12,7 +12,7 @@ import org.json.JSONException;
 
 import java.util.Map;
 
-public class saleListActivity extends ActionBarActivity {
+public class SaleListActivity extends ActionBarActivity {
 
 //    private dataExchanger mData = dataExchanger.getInstance();
     private String userEmail;

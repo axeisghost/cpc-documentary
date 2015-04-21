@@ -10,19 +10,19 @@ public class Item {
     private double latitude;
     private double longitude;
 
-    public Item(String userName, String itemName, double price, double latitude, double longitude) {
-        this.userEmail = userName;
+    public Item(String userEmail, String itemName, double price, double latitude, double longitude) {
+        this.userEmail = userEmail;
         this.itemName = itemName;
         this.price = price;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public String getUserName() {
+    public String getUserEmail() {
         return userEmail;
     }
 
-    public void setUserName(String userName) {
+    public void setUserEmail(String userName) {
         this.userEmail = userName;
     }
 

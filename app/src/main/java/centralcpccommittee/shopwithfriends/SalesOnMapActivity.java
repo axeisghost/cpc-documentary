@@ -31,7 +31,7 @@ public class SalesOnMapActivity extends FragmentActivity {
 
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
-        user = new UserProfile(userEmail);
+        // user = new UserProfile(userEmail);
         SalesMap = user.getSaleList();
 
 
@@ -137,7 +137,7 @@ public class SalesOnMapActivity extends FragmentActivity {
      * @param view view that connect to UI
      */
     public void backToItemListActivityPressed(@SuppressWarnings("UnusedParameters") View view) {
-        Intent move = new Intent(this, saleListActivity.class);
+        Intent move = new Intent(this, SaleListActivity.class);
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
         move.putExtra("userEmail",userEmail);

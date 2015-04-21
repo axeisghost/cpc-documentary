@@ -141,7 +141,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void saleListPage(@SuppressWarnings("UnusedParameters") View view) {
-        Intent move = new Intent(this, saleListActivity.class);
+        Intent move = new Intent(this, SaleListActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
     }
