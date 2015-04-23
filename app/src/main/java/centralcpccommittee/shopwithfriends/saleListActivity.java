@@ -16,12 +16,7 @@ import centralcpccommittee.shopwithfriends.Presenter.SaleListPresenter;
 import centralcpccommittee.shopwithfriends.Presenter.SaleListPresenterImpl;
 
 public class SaleListActivity extends ActionBarActivity implements SaleListView{
-
-//    private dataExchanger mData = dataExchanger.getInstance();
     private String userEmail;
-    private UserProfile user;
-    private Map<String, JSONArray> itemMap;
-
     private SaleListPresenter presenter;
 
     @Override
@@ -30,42 +25,7 @@ public class SaleListActivity extends ActionBarActivity implements SaleListView{
         setContentView(R.layout.activity_sale_list);
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
-        presenter = new SaleListPresenterImpl(userEmail, this);
-        //user = new UserProfile(userEmail);
-        //itemMap = user.getSaleList();
         presenter.populateListView();
-    }
-
-
-    public void populateListView() {
-        String[] items;
-        if (!itemMap.isEmpty()) {
-            int size = itemMap.size();
-            items = new String[size];
-            int i = 0;
-            for (Map.Entry<String, JSONArray> element: itemMap.entrySet()) {
-                JSONArray arr = element.getValue();
-                double p = 0;
-                //String l = "";
-                try {
-                    p = arr.getDouble(0);
-                } catch(JSONException e) {
-                    Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
-                }
-              /*  try {
-                    l = arr.getString(1);
-                } catch(JSONException e) {
-                    Log.d("JSONException", "Unexcepted JSON Exception. name should be existed");
-                }*/
-                items[i] = "Name: " + element.getKey().toString()
-                            + "  Price: " + Double.toString(p);
-                i = i + 1;
-            }
-        } else {
-            items = new String[1];
-            items[0] = "";
-        }
-
     }
 
     public void MainActivityPage(@SuppressWarnings("UnusedParameters") View view) {

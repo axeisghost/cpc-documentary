@@ -10,7 +10,6 @@ import java.util.Set;
 
 import centralcpccommittee.shopwithfriends.DataHandler.DataProcessor;
 import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.FriendsContentState;
-import centralcpccommittee.shopwithfriends.UserProfile;
 
 /**
  * Helper class for providing sample content for user interfaces created by
