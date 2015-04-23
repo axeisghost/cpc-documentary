@@ -3,6 +3,7 @@ package centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates;
 import android.util.Log;
 
 import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
@@ -35,22 +36,25 @@ public class AddItemState extends DPState {
 
     @Override
     public boolean process() {
-        itemBuffer = new Item(email, itemName, price, latitude, longitude);
-        cd(point2Dot(email));
-        cd("items");
+        itemBuffer = new Item(email,itemName, price, latitude, longitude);
+        //cd(point2Dot(email));
+        cd("itemList");
         curFBRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Map itemList = (HashMap)snapshot.getValue();
+                Map itemList = (HashMap<String, HashMap>)snapshot.getValue();
                 if (itemList == null) {
                     addItem();
                     presenter.addNotExistItem(itemName);
-                } else if (itemList.get(itemName) == null) {
-                    addItem();
-                    presenter.addNotExistItem(itemName);
                 } else {
-                    addItem();
-                    presenter.updateExistItem(itemName, price);
+                    try {
+                        ((HashMap<String, HashMap>)itemList.get(itemName)).get("wantedUsers").get(point2Dot(email));
+                        addItem();
+                        presenter.updateExistItem(itemName, price);
+                    } catch (Exception e) {
+                        addItem();
+                        presenter.addNotExistItem(itemName);
+                    }
                 }
             }
 
@@ -60,7 +64,10 @@ public class AddItemState extends DPState {
             }
 
             private void addItem() {
-                curFBRef.child(itemName).setValue(itemBuffer);
+                Firebase link = curFBRef.child(itemName).child("wantedUsers").child(point2Dot(email));
+                link.setValue(itemBuffer);
+                resetFBRef2Home();
+                curFBRef.child(point2Dot(email)).child("items").child(itemName).setValue(itemBuffer);
             }
         });
     return true;

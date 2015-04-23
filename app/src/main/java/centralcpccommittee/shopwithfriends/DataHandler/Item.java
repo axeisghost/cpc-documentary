@@ -10,7 +10,7 @@ public class Item {
     private double latitude;
     private double longitude;
 
-    public Item(String userEmail, String itemName, double price, double latitude, double longitude) {
+    public Item(String userEmail,String itemName, double price, double latitude, double longitude) {
         this.userEmail = userEmail;
         this.itemName = itemName;
         this.price = price;
@@ -33,6 +33,7 @@ public class Item {
     public void setItemName(String itemName) {
         this.itemName = itemName;
     }
+
 
     public double getPrice() {
         return price;

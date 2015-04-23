@@ -108,6 +108,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMarker
         Intent move = new Intent(this, AddItemActivity.class);
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
+        move.putExtra("itemName", extras.getString("itemName"));
+        move.putExtra("price", extras.getString("price"));
         move.putExtra("longtitude", returnLoc.longitude);
         move.putExtra("latitude", returnLoc.latitude);
         AddItemActivity.updateLatLng(returnLoc);

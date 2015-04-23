@@ -16,12 +16,15 @@ import org.json.JSONArray;
 
 import java.util.Map;
 
-public class SalesOnMapActivity extends FragmentActivity {
+import centralcpccommittee.shopwithfriends.Presenter.SalesOnMapPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.SalesOnMapPresenterImpl;
+
+public class SalesOnMapActivity extends FragmentActivity implements SalesOnMapView {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private String userEmail;
-    private UserProfile user;
-    private Map<String, JSONArray> SalesMap;
+    private SalesOnMapPresenter presenter;
+    //private Map<String, JSONArray> SalesMap;
     // --Commented out by Inspection (3/29/2015 12:55 AM):private LatLng focusLocation;
 
     @Override
@@ -31,17 +34,15 @@ public class SalesOnMapActivity extends FragmentActivity {
 
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
-        // user = new UserProfile(userEmail);
-        SalesMap = user.getSaleList();
-
-
-
+        presenter = new SalesOnMapPresenterImpl(userEmail, this);
+        presenter.setUpMapIfNeeded();
         setUpMapIfNeeded();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        presenter.setUpMapIfNeeded();
         setUpMapIfNeeded();
     }
 
@@ -60,7 +61,7 @@ public class SalesOnMapActivity extends FragmentActivity {
      * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
      * method in {@link #onResume()} to guarantee that it will be called.
      */
-    private void setUpMapIfNeeded() {
+    public void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
@@ -68,6 +69,7 @@ public class SalesOnMapActivity extends FragmentActivity {
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
+                presenter.setUpMap();
                 setUpMap();
             }
         }
@@ -79,57 +81,28 @@ public class SalesOnMapActivity extends FragmentActivity {
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
-    private void setUpMap() {
+    public void setUpMap() {
         try {
-            focusLocation();
+            presenter.focusLocation();
         } catch (Exception e) {
             System.out.println("Fail to locate");
         }
 
     }
-
-    /**
-     * Show sale items on map and locate at the Geometric center of the markers
-     */
-    private void focusLocation(){
-        LatLng curLocation;
-        String name;
-        Double curLat = 33.777361,curLont = -84.397326;
-        Double maxLat=-999.0,minLat=999.0,maxLont=-999.0,minLont=999.0;
-        curLocation = new LatLng(curLat,curLont);
-        if (!SalesMap.isEmpty()) {
-            int size = SalesMap.size();
-            for (Map.Entry<String,JSONArray> element: SalesMap.entrySet()) {
-                name = element.getKey().toString();
-                name = name + " : ";
-                JSONArray jData = element.getValue();
-                try {
-                    name = name + jData.getDouble(0);
-                    name = name + " : ";
-                    curLat = jData.getDouble(1);
-                    name = name + curLont;
-                    curLont = jData.getDouble(2);
-                    name = name + " : ";
-                    name = name + curLat;
-                } catch (Exception e) {
-                    System.out.println("JSON must be kidding !!!");
-                }
-                curLocation = new LatLng(curLat,curLont);
-                mMap.addMarker(new MarkerOptions().position(curLocation).title(name));
-                if(curLat>maxLat) maxLat = curLat;
-                if(curLat<minLat) minLat = curLat;
-                if(curLont > maxLont) maxLont = curLont;
-                if(curLont < minLont) minLont = curLont;
-            }
-            LatLngBounds curBound = new LatLngBounds(new LatLng(minLat,minLont), new LatLng(maxLat,maxLont));
-        //    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(curBound, 0));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
-        } else {
-            mMap.addMarker(new MarkerOptions().position(curLocation).title("Duang!!!!!"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
-        }
+    public void setMyLocationEnabled() {
+        mMap.setMyLocationEnabled(true);
+    }
+    public void itemOnMap(LatLng curLocation) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+    }
+    public void addMarker(LatLng curLocation,String name) {
+        mMap.addMarker(new MarkerOptions().position(curLocation).title(name));
+    }
+    public void noItem(LatLng curLocation) {
+        mMap.addMarker(new MarkerOptions().position(curLocation).title("Duang!!!!!"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(curLocation));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
     }
 
     /**

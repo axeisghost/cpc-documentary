@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -22,8 +23,10 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
     private EditText itemNameView, itemPriceView;
     private String mEmail;
     // --Commented out by Inspection (3/29/2015 12:52 AM):private LatLng location;
-    private static double longtitude;
-    private static double latitude;
+    private static double longtitude = -84.397326;
+    private static double latitude = 33.777361;
+    private Bundle extras;
+
 
     private AddItemPresenter presenter;
     /**
@@ -35,10 +38,9 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
-        Bundle extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
         mEmail = extras.getString("userEmail");
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -46,6 +48,14 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
         getMenuInflater().inflate(R.menu.menu_add_item, menu);
         itemNameView = (EditText) findViewById(R.id.add_item_name);
         itemPriceView = (EditText) findViewById(R.id.add_item_price);
+        try {
+            String name = extras.getString("itemName");
+            String iPrice = extras.getString("price");
+            itemNameView.setText(name);
+            itemPriceView.setText(iPrice);
+        } catch (Exception e) {
+            return true;
+        }
         return true;
     }
 
@@ -89,6 +99,7 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
     void exitTheAct() {
         Intent move = new Intent(this, MainActivity.class);
         move.putExtra("userEmail", mEmail);
+
         startActivity(move);
         finish();
     }
@@ -117,6 +128,8 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
     }
     public void mapButtonPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, MapsActivity.class);
+        move.putExtra("itemName", itemNameView.getText().toString());
+        move.putExtra("price", itemPriceView.getText().toString());
         move.putExtra("userEmail", mEmail);
         startActivity(move);
         finish();

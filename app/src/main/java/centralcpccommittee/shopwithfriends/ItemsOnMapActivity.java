@@ -24,8 +24,6 @@ public class ItemsOnMapActivity extends FragmentActivity implements ItemsOnMapVi
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private String userEmail;
-    private UserProfile user;
-    private Map<String, JSONArray> itemMap;
 
     private ItemsOnMapPresenter presenter;
     // --Commented out by Inspection (3/29/2015 12:54 AM):private LatLng focusLocation;
@@ -38,11 +36,6 @@ public class ItemsOnMapActivity extends FragmentActivity implements ItemsOnMapVi
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
         presenter = new ItemsOnMapPresenterImpl(userEmail, this);
-
-//        user = new UserProfile(userEmail);
- //       itemMap = user.getItemList();
-
-
         presenter.setUpMapIfNeeded();
         setUpMapIfNeeded();
     }
@@ -50,9 +43,6 @@ public class ItemsOnMapActivity extends FragmentActivity implements ItemsOnMapVi
     @Override
     protected void onResume() {
         super.onResume();
-
-
-
         presenter.setUpMapIfNeeded();
         setUpMapIfNeeded();
     }
@@ -95,7 +85,6 @@ public class ItemsOnMapActivity extends FragmentActivity implements ItemsOnMapVi
     public void setUpMap() {
         try {
             presenter.focusLocation();
-            //focusLocation();
         } catch (Exception e) {
             System.out.println("Fail to locate");
         }

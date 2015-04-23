@@ -17,7 +17,6 @@ import centralcpccommittee.shopwithfriends.Presenter.ItemListPresenterImpl;
 public class ItemListActivity extends ActionBarActivity implements ItemListView {
 
     private String userEmail;
-    private Map<String, JSONArray> itemMap;
     private ItemListPresenter presenter;
 
     @Override

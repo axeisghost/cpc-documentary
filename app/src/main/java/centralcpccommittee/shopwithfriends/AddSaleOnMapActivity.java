@@ -115,6 +115,8 @@ public class AddSaleOnMapActivity extends FragmentActivity implements GoogleMap.
         userEmail = extras.getString("userEmail");
         AddSaleActivity.updateLatLng(returnLoc);
         move.putExtra("userEmail",userEmail);
+        move.putExtra("saleName", extras.getString("saleName"));
+        move.putExtra("price", extras.getString("price"));
         startActivity(move);
     }
 }

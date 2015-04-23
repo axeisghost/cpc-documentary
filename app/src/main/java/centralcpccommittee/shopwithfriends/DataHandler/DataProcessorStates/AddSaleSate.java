@@ -22,7 +22,6 @@ public class AddSaleSate extends DPState {
     private String saleName;
     private AddSalePresenter presenter;
     private Item itemBuffer;
-    private Firebase itemUrl;
     private String nameBuffer;
 
     public AddSaleSate(String userEmail, double price, double latitude, double longitude, String saleName, AddSalePresenter presenter) {
@@ -35,19 +34,55 @@ public class AddSaleSate extends DPState {
     }
 
     public boolean process() {
-        cd("saleList");
+        cd("itemList");
         cd(saleName);
+        //cd("saleList");
         itemBuffer = new Item(userEmail, saleName, price, latitude, longitude);
         curFBRef.addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Map<String, HashMap> sales = (Map<String, HashMap>) snapshot.getValue();
-                if (sales == null) {
-                    itemUrl = curFBRef.child(":1");
+                Map<String, HashMap> itemData = (Map<String, HashMap>) snapshot.getValue();
+                Firebase itemUrl;
+                if (itemData == null) {
+                    itemUrl = curFBRef.child("saleList").child(":1");
                 } else {
-                    itemUrl =(curFBRef.child(":" + (new Integer(sales.size() + 1)).toString()));
+                    Map<String, HashMap> sales = itemData.get("saleList");
+                    if (sales == null){
+                        itemUrl = curFBRef.child("saleList").child(":1");
+                    } else {
+                        itemUrl = curFBRef.child("saleList").child(":" + (new Integer(sales.size() + 1)).toString());
+                    }
                 }
                 itemUrl.setValue(itemBuffer);
+                Map<String, HashMap> wantedUsers = (Map<String, HashMap>) itemData.get("wantedUsers");
+                if (wantedUsers == null) {
+                    return;
+                } else {
+                    for (Map.Entry<String, HashMap> element: wantedUsers.entrySet()) {
+                        String userEmail = element.getKey();
+                        resetFBRef2Home();
+                        cd(point2Dot(userEmail));
+                        cd("sales");
+                        curFBRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                Map sales = (Map<String, HashMap>) snapshot.getValue();
+                                Firebase itemUrl = curFBRef;
+                                if (sales == null) {
+                                    itemUrl = curFBRef.child(":1").child(saleName);
+                                } else {
+                                    itemUrl = curFBRef.child(":" + (new Integer(sales.size() + 1)).toString()).child(saleName);
+                                }
+                                itemUrl.setValue(itemBuffer);
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+
+                            }
+                        });
+                    }
+                }
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {

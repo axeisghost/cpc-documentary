@@ -21,9 +21,7 @@ public class AddSaleActivity extends ActionBarActivity implements AddSaleView {
 
     private EditText saleName, salePrice;// --Commented out by Inspection (3/29/2015 12:52 AM):saleLoc;
     private String mEmail;
-
-    private UserProfile user;
-
+    private Bundle extras;
     private static double latitude,longtitude;
     private AddSalePresenter presenter;
     // --Commented out by Inspection (3/29/2015 12:59 AM):private boolean locationChosen;
@@ -36,11 +34,9 @@ public class AddSaleActivity extends ActionBarActivity implements AddSaleView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_sale);
-        Bundle extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
         mEmail = extras.getString("userEmail");
-        //user = new UserProfile(mEmail);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,6 +44,14 @@ public class AddSaleActivity extends ActionBarActivity implements AddSaleView {
         getMenuInflater().inflate(R.menu.menu_add_sale, menu);
         saleName = (EditText) findViewById(R.id.add_item_price);
         salePrice = (EditText) findViewById(R.id.add_sale_price);
+        try {
+            String name = extras.getString("saleName");
+            String iPrice = extras.getString("price");
+            saleName.setText(name);
+            salePrice.setText(iPrice);
+        } catch (Exception e) {
+            return true;
+        }
         return true;
     }
 
@@ -67,7 +71,6 @@ public class AddSaleActivity extends ActionBarActivity implements AddSaleView {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -78,17 +81,6 @@ public class AddSaleActivity extends ActionBarActivity implements AddSaleView {
     public void initializeError() {
         saleName.setError(null);
         salePrice.setError(null);
-    }
-    void attemptAddSale() {
-        saleName.setError(null);
-        salePrice.setError(null);
-        String name = saleName.getText().toString();
-        double price = Double.parseDouble(salePrice.getText().toString());
-    //    String loc = saleLoc.getText().toString();
-
-        int type = user.addSaleOnMap(name, price, latitude, longtitude);
-        String message = "Your sale has been successfully reported";
-        backToMain(message);
     }
 
     /**
@@ -126,6 +118,8 @@ public class AddSaleActivity extends ActionBarActivity implements AddSaleView {
      */
     public void reportOnMapPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, AddSaleOnMapActivity.class);
+        move.putExtra("saleName", saleName.getText().toString());
+        move.putExtra("price", salePrice.getText().toString());
         move.putExtra("userEmail", mEmail);
         startActivity(move);
         finish();

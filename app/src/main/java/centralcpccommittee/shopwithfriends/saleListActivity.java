@@ -12,12 +12,17 @@ import org.json.JSONException;
 
 import java.util.Map;
 
-public class SaleListActivity extends ActionBarActivity {
+import centralcpccommittee.shopwithfriends.Presenter.SaleListPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.SaleListPresenterImpl;
+
+public class SaleListActivity extends ActionBarActivity implements SaleListView{
 
 //    private dataExchanger mData = dataExchanger.getInstance();
     private String userEmail;
     private UserProfile user;
     private Map<String, JSONArray> itemMap;
+
+    private SaleListPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +30,14 @@ public class SaleListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_sale_list);
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
-        user = new UserProfile(userEmail);
-        itemMap = user.getSaleList();
-        populateListView();
+        presenter = new SaleListPresenterImpl(userEmail, this);
+        //user = new UserProfile(userEmail);
+        //itemMap = user.getSaleList();
+        presenter.populateListView();
     }
 
 
-    private void populateListView() {
+    public void populateListView() {
         String[] items;
         if (!itemMap.isEmpty()) {
             int size = itemMap.size();
@@ -59,10 +65,7 @@ public class SaleListActivity extends ActionBarActivity {
             items = new String[1];
             items[0] = "";
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.items_font,
-                    items);
-        ListView list = (ListView) findViewById(R.id.sale_list_view);
-        list.setAdapter(adapter);
+
     }
 
     public void MainActivityPage(@SuppressWarnings("UnusedParameters") View view) {
@@ -76,5 +79,11 @@ public class SaleListActivity extends ActionBarActivity {
         move.putExtra("userEmail", userEmail);
         startActivity(move);
         finish();
+    }
+    public void displayList(String[] items) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.items_font,
+                items);
+        ListView list = (ListView) findViewById(R.id.sale_list_view);
+        list.setAdapter(adapter);
     }
 }
