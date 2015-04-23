@@ -25,6 +25,7 @@ public class SaleListActivity extends ActionBarActivity implements SaleListView{
         setContentView(R.layout.activity_sale_list);
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
+        presenter = new SaleListPresenterImpl(userEmail, this);
         presenter.populateListView();
     }
 

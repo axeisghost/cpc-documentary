@@ -54,7 +54,13 @@ public class AddSaleSate extends DPState {
                     }
                 }
                 itemUrl.setValue(itemBuffer);
-                Map<String, HashMap> wantedUsers = (Map<String, HashMap>) itemData.get("wantedUsers");
+                Map<String, HashMap> wantedUsers = null;
+                try {
+                    wantedUsers = (Map<String, HashMap>) itemData.get("wantedUsers");
+                } catch (Exception e){
+                    return;
+                }
+
                 if (wantedUsers == null) {
                     return;
                 } else {
