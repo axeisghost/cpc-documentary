@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,13 +31,14 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-        presenter = new NotificationPresenterImpl(userEmail, this);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             userEmail = extras.getString("userEmail");
             TextView view = (TextView) findViewById(R.id.main_userEmail);
             view.setText("Welcome!\nUser: " + userEmail);
         }
+        Log.d("ugly", userEmail);
+        presenter = new NotificationPresenterImpl(userEmail, this);
     }
 
 

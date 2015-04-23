@@ -20,6 +20,7 @@ public class NotificationPresenterImpl implements  NotificationPresenter {
     private NotificationManager NM;
     private Activity mainact;
     public NotificationPresenterImpl(String email, Activity mainact) {
+        this.mEmail = email;
         dataProcessor = new DataProcessor(new NotificationState(this, mEmail));
         this.mainact = mainact;
     }

@@ -1,5 +1,7 @@
 package centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates;
 
+import android.util.Log;
+
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
@@ -12,9 +14,10 @@ import centralcpccommittee.shopwithfriends.Presenter.NotificationPresenter;
 public class NotificationState extends DPState {
     private NotificationPresenter presenter;
     private String mEmail;
-    public NotificationState(final NotificationPresenter presenter, final String mEmail) {
-        this.mEmail = mEmail;
-        this.presenter = presenter;
+    public NotificationState(NotificationPresenter inpresenter, String inmEmail) {
+        this.mEmail = inmEmail;
+        this.presenter = inpresenter;
+        Log.d("why", mEmail);
         cd(point2Dot(mEmail));
         cd("sales");
         curFBRef.addChildEventListener(new ChildEventListener() {
