@@ -4,6 +4,9 @@ https://www.fluidui.com/
 ngc0316zyh@hotmail.com
 Password:Team12
 
+firebase account:yhzhao343@gmail.com
+password:Team12isthebest
+
 
 package diagram相当于把整个系统分为若干个文件夹，每个文件夹中存储一种类，文件夹之间互相有访问限制和联系
 
