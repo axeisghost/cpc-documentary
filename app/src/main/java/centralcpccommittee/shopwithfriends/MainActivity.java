@@ -13,9 +13,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.app.Fragment;
 
+import centralcpccommittee.shopwithfriends.Presenter.NotificationPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.NotificationPresenterImpl;
+
 
 public class MainActivity extends ActionBarActivity {
     private String userEmail;
+    private NotificationPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,7 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+        presenter = new NotificationPresenterImpl(userEmail, this);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             userEmail = extras.getString("userEmail");
