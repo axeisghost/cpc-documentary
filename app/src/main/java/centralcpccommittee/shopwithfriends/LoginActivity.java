@@ -221,6 +221,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         Intent move = new Intent(this, WelcomeActivity.class);
         startActivity(move);
         finish();
+        overridePendingTransition(R.animator.fadein, R.animator.fadeout);
     }
 
     public void retrievePressed(View view) {
@@ -245,6 +246,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         move.putExtra("userEmail", mEmailView.getText().toString());
         startActivity(move);
         finish();
+        overridePendingTransition(R.animator.shrink_and_rotate_in, R.animator.shrink_and_rotate_out);
     }
 
     private interface ProfileQuery {

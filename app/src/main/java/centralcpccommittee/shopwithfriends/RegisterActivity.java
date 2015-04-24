@@ -9,11 +9,9 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -130,6 +128,7 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         Intent move = new Intent(this, WelcomeActivity.class);
         startActivity(move);
         finish();
+        overridePendingTransition(R.animator.fadein, R.animator.fadeout);
     }
 
 

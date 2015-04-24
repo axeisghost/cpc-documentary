@@ -69,6 +69,7 @@ public class MainActivity extends ActionBarActivity {
         startActivity(move);
         presenter.logoutProcess();
         finish();
+        overridePendingTransition(R.animator.fadein, R.animator.fadeout);
     }
 
     public void logoutPressed(@SuppressWarnings("UnusedParameters") View view) {
@@ -114,6 +115,7 @@ public class MainActivity extends ActionBarActivity {
         Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
+        overridePendingTransition(R.animator.push_left_in, R.animator.push_left_out);
     }
 
     /**
@@ -124,6 +126,7 @@ public class MainActivity extends ActionBarActivity {
         Intent move = new Intent(this, AddFriendActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
+        overridePendingTransition(R.animator.fadein, R.animator.push_left_out);
     }
 
     /**
@@ -134,23 +137,27 @@ public class MainActivity extends ActionBarActivity {
         Intent move = new Intent(this, AddItemActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
+        overridePendingTransition(R.animator.fadein, R.animator.shrink_and_rotate_out);
     }
 
     public void itemListPage(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, ItemListActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
+        overridePendingTransition(R.animator.fadein, R.animator.push_left_out);
     }
 
     public void addSalePage(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, AddSaleActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
+        overridePendingTransition(R.animator.fadein, R.animator.push_up_out);
     }
 
     public void saleListPage(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, SaleListActivity.class);
         move.putExtra("userEmail", userEmail);
         startActivity(move);
+        overridePendingTransition(R.animator.fadein, R.animator.push_up_out);
     }
 }

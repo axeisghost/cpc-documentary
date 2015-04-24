@@ -5,15 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.DPState;
-import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
 import centralcpccommittee.shopwithfriends.Presenter.AddFriendPresenter;
 import centralcpccommittee.shopwithfriends.Presenter.AddFriendPresenterImpl;
 
@@ -94,6 +91,7 @@ public class AddFriendActivity extends ActionBarActivity implements AddFriendVie
         move.putExtra("userEmail", mEmail);
         startActivity(move);
         finish();
+        overridePendingTransition(R.animator.push_right_in, R.animator.fadeout);
     }
 
     /**

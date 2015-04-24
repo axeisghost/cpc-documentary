@@ -5,12 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -102,6 +100,7 @@ public class AddItemActivity extends ActionBarActivity implements AddItemView{
 
         startActivity(move);
         finish();
+        overridePendingTransition(R.animator.shrink_and_rotate_in, R.animator.fadeout);
     }
 
     public static void updateLatLng(LatLng loc){

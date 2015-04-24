@@ -7,10 +7,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import org.json.JSONArray;
-
-import java.util.Map;
-
 import centralcpccommittee.shopwithfriends.Presenter.ItemListPresenter;
 import centralcpccommittee.shopwithfriends.Presenter.ItemListPresenterImpl;
 
@@ -40,6 +36,7 @@ public class ItemListActivity extends ActionBarActivity implements ItemListView 
         move.putExtra("userEmail", userEmail);
         startActivity(move);
         finish();
+        overridePendingTransition(R.animator.push_right_in, R.animator.fadeout);
     }
     public void itemOnMapPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, ItemsOnMapActivity.class);

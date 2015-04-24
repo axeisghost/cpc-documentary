@@ -30,13 +30,15 @@ public class WelcomeActivity extends ActionBarActivity {
     public void loginPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, LoginActivity.class);
         startActivity(move);
-        finish();
+        overridePendingTransition(R.animator.shrink_and_rotate_in, R.animator.shrink_and_rotate_out);
+        //finish();
     }
 
     public void registerPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, RegisterActivity.class);
         startActivity(move);
-        finish();
+        overridePendingTransition(R.animator.shrink_and_rotate_in, R.animator.shrink_and_rotate_out);
+        //finish();
     }
 
     @Override
