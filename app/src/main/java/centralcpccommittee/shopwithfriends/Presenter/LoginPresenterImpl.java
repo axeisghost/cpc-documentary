@@ -1,9 +1,11 @@
 package centralcpccommittee.shopwithfriends.Presenter;
 
+import android.app.Activity;
 import android.text.TextUtils;
 
 import centralcpccommittee.shopwithfriends.DataHandler.DataProcessor;
 import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.LoginState;
+import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.RetrieveState;
 import centralcpccommittee.shopwithfriends.LoginView;
 
 /**
@@ -43,6 +45,11 @@ public class LoginPresenterImpl implements LoginPresenter{
         return proceed;
     }
 
+    public void retrievePassword() {
+        dataProcessor.setState(new RetrieveState(mEmail, (Activity)loginView, this));
+        dataProcessor.process();
+    }
+
     public void login() {
         dataProcessor.process();
     }
@@ -60,6 +67,10 @@ public class LoginPresenterImpl implements LoginPresenter{
     @Override
     public void incorrectPassword() {
         loginView.incorrectPassword();
+    }
+
+    public void sentEmail() {
+        loginView.retrieved();
     }
 
     private boolean isEmailValid(String email) {

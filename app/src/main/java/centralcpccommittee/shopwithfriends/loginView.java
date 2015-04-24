@@ -13,4 +13,5 @@ public interface LoginView {
     public void incorrectPassword();
     public void emailNotExist();
     public void loginSuccessfully();
+    public void retrieved();
 }

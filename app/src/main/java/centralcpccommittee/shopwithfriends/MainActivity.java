@@ -67,6 +67,7 @@ public class MainActivity extends ActionBarActivity {
     void logOut() {
         Intent move = new Intent(this,WelcomeActivity.class);
         startActivity(move);
+        presenter.logoutProcess();
         finish();
     }
 

@@ -51,9 +51,18 @@
                 android:id="@+id/button2"
                 android:layout_gravity="center_horizontal"
                 android:onClick="cancelPressed" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password?"
+                android:id="@+id/forget"
+                android:layout_gravity="center_horizontal"
+                android:onClick="retrievePressed"/>
 
         </LinearLayout>
     </ScrollView>
+
 
 </LinearLayout>
 

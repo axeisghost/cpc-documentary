@@ -7,5 +7,6 @@ import android.view.View;
  * Created by Axeisghost on 4/23/2015.
  */
 public interface NotificationPresenter {
-    public void salesUpdateNotify();
+    public void salesUpdateNotify(String itemname);
+    public boolean logoutProcess();
 }

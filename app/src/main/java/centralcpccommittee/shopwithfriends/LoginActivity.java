@@ -3,9 +3,11 @@ package centralcpccommittee.shopwithfriends;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -219,6 +221,23 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         Intent move = new Intent(this, WelcomeActivity.class);
         startActivity(move);
         finish();
+    }
+
+    public void retrievePressed(View view) {
+        presenter.retrievePassword();
+    }
+
+    public void retrieved() {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this).
+                        setMessage("Your Password has been sent to you.").
+                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+        builder.create().show();
     }
 
     public void loginSuccessfully() {

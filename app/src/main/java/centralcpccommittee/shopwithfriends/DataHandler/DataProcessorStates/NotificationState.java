@@ -6,6 +6,8 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 
+import java.util.HashMap;
+
 import centralcpccommittee.shopwithfriends.Presenter.NotificationPresenter;
 
 /**
@@ -14,16 +16,27 @@ import centralcpccommittee.shopwithfriends.Presenter.NotificationPresenter;
 public class NotificationState extends DPState {
     private NotificationPresenter presenter;
     private String mEmail;
+    private ChildEventListener myListener;
+    private boolean firstcheck;
     public NotificationState(NotificationPresenter inpresenter, String inmEmail) {
         this.mEmail = inmEmail;
         this.presenter = inpresenter;
+        this.firstcheck = false;
         Log.d("why", mEmail);
         cd(point2Dot(mEmail));
         cd("sales");
-        curFBRef.addChildEventListener(new ChildEventListener() {
+        myListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                presenter.salesUpdateNotify();
+                if (firstcheck) {
+                    String itemname = null;
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        itemname = (String)((HashMap)(child.getValue())).get("itemName");
+                    }
+                    presenter.salesUpdateNotify(itemname);
+                } else {
+                    firstcheck = true;
+                }
             }
 
             @Override
@@ -45,6 +58,11 @@ public class NotificationState extends DPState {
             public void onCancelled(FirebaseError firebaseError) {
 
             }
-        });
+        };
+        curFBRef.addChildEventListener(myListener);
+    }
+    public boolean process() {
+        curFBRef.removeEventListener(myListener);
+        return true;
     }
 }

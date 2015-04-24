@@ -9,4 +9,6 @@ public interface LoginPresenter {
     public void emailNotExist();
     public void loginSuccessfully();
     public void incorrectPassword();
+    public void retrievePassword();
+    public void sentEmail();
 }
