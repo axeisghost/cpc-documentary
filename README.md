@@ -1,22 +1,21 @@
-www.json.org
-# cpc-documentary
-https://www.fluidui.com/
-ngc0316zyh@hotmail.com
-Password:Team12
+Shop with Friends
+=================
 
-firebase account:yhzhao343@gmail.com
-password:Team12isthebest
+An online mobile application in which registered users can share sales information with 
+their friends.
 
+The application uses Firebase as backend database.
 
-package diagram相当于把整个系统分为若干个文件夹，每个文件夹中存储一种类，文件夹之间互相有访问限制和联系
+The application is under developed and not published formally, but ones can clone the repository and compile with Android Development Kit.
 
-User Show Layer --- User Interface   接受客户请求，返回相关数据，提供访问程序的渠道
-Data Access Layer  访问和操作原始数据，只针对数据文件
-Entity 存储数据？数据类型？
-Business Logic Layer --- Domain	对具体问题的操作和逻辑处理，操作数据层，把数据层中的小操作进行组合
+##Features
+* User Service: registered users can add other users as friend though email and username
+				registered users can post their interested goods.
+				registered users can share sales with their friends.
+* Sales sharing: users can share sales with their friend with the good on sale, the price
+				 of good and the location of the sale
+* Notification: user can receive notification when user's friend send user's a sale that
+				user is interested in.
 
-UI->BLL->DAL DAL只被BLL访问 BLL只能被UI访问
-UI/BLL/DAL -> Entity
-
-如果增加一个IDAL，可以用工厂模式，即UI->BLL BLL->Factory/IDAL DAL->IDAL Factory->IDAL
-Factory负责提取IDAL的产品，决定BLL需要哪一个，BLL直接从Factory中获得对象，DAL保持独立，更改的是IDAL中的内容
+##License
+This project is released under the MIT License. http://www.opensource.org/licenses/mit-license
