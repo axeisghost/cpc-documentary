@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 
 import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
+import centralcpccommittee.shopwithfriends.Presenter.UserFriendListPresenter;
 
 /**
  * A fragment representing a single UserFriend detail screen.

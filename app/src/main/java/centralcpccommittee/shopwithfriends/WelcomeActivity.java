@@ -1,7 +1,5 @@
 package centralcpccommittee.shopwithfriends;
 
-import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.Button;
+
+import com.firebase.client.Firebase;
 
 
 public class WelcomeActivity extends ActionBarActivity {
@@ -20,27 +18,28 @@ public class WelcomeActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_welcome);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-        dataExchanger.initialize("pDatabase", getApplicationContext());
     }
 
-    public void loginPressed(View view) {
+    public void loginPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, LoginActivity.class);
         startActivity(move);
-        finish();
+        overridePendingTransition(R.animator.shrink_and_rotate_in, R.animator.shrink_and_rotate_out);
+        //finish();
     }
 
-    public void registerPressed(View view) {
+    public void registerPressed(@SuppressWarnings("UnusedParameters") View view) {
         Intent move = new Intent(this, RegisterActivity.class);
         startActivity(move);
-        finish();
+        overridePendingTransition(R.animator.shrink_and_rotate_in, R.animator.shrink_and_rotate_out);
+        //finish();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

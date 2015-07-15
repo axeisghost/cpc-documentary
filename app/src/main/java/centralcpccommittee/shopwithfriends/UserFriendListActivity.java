@@ -1,18 +1,21 @@
 package centralcpccommittee.shopwithfriends;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
+import centralcpccommittee.shopwithfriends.Presenter.UserFriendListPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.UserFriendListPresenterImpl;
 
 
 /**
@@ -32,7 +35,7 @@ import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
  * to listen for item selections.
  */
 public class UserFriendListActivity extends ActionBarActivity
-        implements UserFriendListFragment.Callbacks {
+        implements UserFriendListFragment.Callbacks, UserFriendListView{
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -41,17 +44,19 @@ public class UserFriendListActivity extends ActionBarActivity
     private boolean mTwoPane;
 
     private String userEmail;
-    private UserProfile user;
-    private ArrayList<UserProfile> friendList;
-    private String friendEmail;
+    private String friendName;
+    private UserFriendListPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
-        user = new UserProfile(userEmail);
-        friendList = user.getFriendList();
-        FriendsContent.update(friendList);
+        presenter = new UserFriendListPresenterImpl(userEmail, this);
+        presenter.processFriendList();
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userfriend_list);
 
@@ -90,7 +95,7 @@ public class UserFriendListActivity extends ActionBarActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.userfriend_detail_container, fragment)
                     .commit();
-            friendEmail = id;
+            friendName = id;
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
@@ -101,7 +106,7 @@ public class UserFriendListActivity extends ActionBarActivity
         }
     }
 
-    public void deleteFriendPressed(View view) {
+    public void deleteFriendPressed(@SuppressWarnings("UnusedParameters") View view) {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).
                         setMessage(getString(R.string.Hint_delete_friend)).
@@ -109,7 +114,9 @@ public class UserFriendListActivity extends ActionBarActivity
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+
                                 deleteFriend();
+
                             }
                         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -121,8 +128,9 @@ public class UserFriendListActivity extends ActionBarActivity
         //onCreate(new Bundle());
     }
 
-    public void deleteFriend() {
-        user.deleteFriend(friendEmail);
+    void deleteFriend() {
+        presenter.deleteFriend(friendName);
+        //user.deleteFriend(friendEmail);
         Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", userEmail);
         navigateUpTo(move);

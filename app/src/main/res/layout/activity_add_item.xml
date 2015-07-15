@@ -44,11 +44,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add this item"
-        android:id="@+id/add_item_button"
-        android:layout_below="@+id/add_item_price"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="73dp"
+        android:id="@+id/open_map"
+        android:layout_marginTop="60dp"
         android:onClick="addItemPressed"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentStart="false" />
+        android:layout_below="@+id/mapButton"
+        android:layout_alignEnd="@+id/add_item_text" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Location"
+        android:id="@+id/mapButton"
+        android:onClick="mapButtonPressed"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

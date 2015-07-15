@@ -1,47 +1,36 @@
 package centralcpccommittee.shopwithfriends;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
+import centralcpccommittee.shopwithfriends.Presenter.RegisterPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.RegisterPresenterImpl;
 
-    private EditText mPasswordView, mConfirmedView, mUsernameView;
+public class RegisterActivity extends ActionBarActivity implements LoaderCallbacks<Cursor>, RegisterView {
+
+    private EditText mPasswordView;
+    private EditText mConfirmedView;
+    private EditText mUsernameView;
     private AutoCompleteTextView mEmailView;
-    private Button registerButton;
+    private RegisterPresenter presenter;
+    private View focusView;
 
 
 
@@ -50,21 +39,20 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         setContentView(R.layout.activity_register);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.register_email);
         populateAutoComplete();
-
         mPasswordView = (EditText) findViewById(R.id.register_password);
         mConfirmedView = (EditText) findViewById(R.id.register_confirm);
         mUsernameView = (EditText) findViewById(R.id.register_username);
-
-        registerButton = (Button) findViewById(R.id.register_button);
-
+        focusView = null;
     }
 
     private void populateAutoComplete() {
         getLoaderManager().initLoader(0, null, this);
     }
 
-    public void registerPressed(View view) {
-
+    public void registerPressed(@SuppressWarnings("UnusedParameters") View view) {
+        presenter = new RegisterPresenterImpl(mPasswordView.getText().toString(),
+                mConfirmedView.getText().toString(), mUsernameView.getText().toString(),
+                mEmailView.getText().toString(), this);
         attemptRegister();
     }
 
@@ -81,90 +69,70 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
                         });
         builder.create().show();
     }
-
-    public void attemptRegister() {
-
-        // Reset errors.
+    @Override
+    public void initializeError() {
         mEmailView.setError(null);
         mPasswordView.setError(null);
         mConfirmedView.setError(null);
         mUsernameView.setError(null);
-
-
-
-        // Store values at the time of the login attempt.
-        String mEmail = mEmailView.getText().toString();
-        String mPassword = mPasswordView.getText().toString();
-        String mConfirm = mConfirmedView.getText().toString();
-        String mUsername = mUsernameView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-        dataExchanger recorder = dataExchanger.getInstance();
-
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(mEmail)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(mEmail)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (TextUtils.isEmpty(mUsername)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
-            cancel = true;
-        } else if (!TextUtils.isEmpty(mPassword) && !isPasswordValid(mPassword)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        } else if (!TextUtils.isEmpty(mConfirm) && !isPasswordValid(mConfirm)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mConfirmedView;
-            cancel = true;
-        } else if (!(mConfirm.equals(mPassword))) {
-            mPasswordView.setError(getString(R.string.error_unmatched_passwords));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-            //focusView1.requestFocus();
-        } else {
-            if (recorder.registerUser(mEmail, mPassword, mUsername)) {
-                recorder.readerClose();
-                backToWelcome();
-            } else {
-                mEmailView.setError(getString(R.string.error_existed_email));
-                mEmailView.requestFocus();
-            }
-        }
     }
 
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
+    @Override
+    public void invalidPassword() {
+        mPasswordView.setError(getString(R.string.error_invalid_password));
+        focusView = mPasswordView;
     }
 
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+    public void emailRequired() {
+        mEmailView.setError(getString(R.string.error_field_required));
+        focusView = mEmailView;
+    }
+
+    @Override
+    public void invalidEmail() {
+        mEmailView.setError(getString(R.string.error_invalid_email));
+        focusView = mEmailView;
+    }
+
+    @Override
+    public void userNameRequired() {
+        mUsernameView.setError(getString(R.string.error_field_required));
+        focusView = mUsernameView;
+    }
+
+    @Override
+    public void loginCanceled() {
+        focusView.requestFocus();
+    }
+
+    @Override
+    public void unmatchedPassword() {
+        mPasswordView.setError(getString(R.string.error_unmatched_passwords));
+        focusView = mPasswordView;
+    }
+
+    @Override
+    public void existedEmail() {
+        mEmailView.setError(getString(R.string.error_existed_email));
+        mEmailView.requestFocus();
+    }
+
+
+
+    void attemptRegister() {
+        presenter.initializeError();
+        presenter.attemptRegister();
     }
 
     public void exitTheAct() {
         Intent move = new Intent(this, WelcomeActivity.class);
         startActivity(move);
         finish();
+        overridePendingTransition(R.animator.fadein, R.animator.fadeout);
     }
 
 
-    public void cancelPressed(View view) {
+    public void cancelPressed(@SuppressWarnings("UnusedParameters") View view) {
         exitTheAct();
     }
 
@@ -202,7 +170,6 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(RegisterActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
         mEmailView.setAdapter(adapter);
     }
 
@@ -210,6 +177,8 @@ public class RegisterActivity extends ActionBarActivity implements LoaderCallbac
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
+
 
     private interface ProfileQuery {
         String[] PROJECTION = {

@@ -1,17 +1,20 @@
 package centralcpccommittee.shopwithfriends.Friends;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import centralcpccommittee.shopwithfriends.UserProfile;
+import centralcpccommittee.shopwithfriends.DataHandler.DataProcessor;
+import centralcpccommittee.shopwithfriends.DataHandler.DataProcessorStates.FriendsContentState;
 
 /**
  * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
  * <p/>
- * TODO: Replace all uses of this class before publishing your app.
  */
 public class FriendsContent {
 
@@ -25,53 +28,26 @@ public class FriendsContent {
      */
     public static Map<String, FriendItem> ITEM_MAP = new HashMap<String, FriendItem>();
 
-    static {
-        // Add 3 sample items.
-    }
+    private static DataProcessor dataProcessor = new DataProcessor();
 
-    private static void addItem(FriendItem item) {
+
+    public static void addItem(FriendItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-
-    /**
-     * Update the items according to the friend list
-     * @param friendList
-     */
-    public static void update(ArrayList<UserProfile> friendList) {
+    public static void update(Map<String, Object> friendMap) {
         clear();
-        for (UserProfile thisUser: friendList) {
-            if (thisUser != null) {
-                String id = thisUser.getUserEmail();
-                // The info contains the username, rate and the no. of reports.
-                // Need to be fixed later
-                String info;
-                if (thisUser.getRate() == -1) {
-                    info = "Email:" + id + "\n"
-                            + "Username: " + thisUser.getUserName() + "\n"
-                            + "User's Rate: " + "Not Applicable" + "\n"
-                            + "Reports to me: 0" + "\n"
-                            + "Posted items:" + "\n";
-                    Map<String, Double> items = thisUser.getItemList();
-                    for (Map.Entry<String, Double> element: items.entrySet()) {
-                        String output = element.getKey().toString() + " : " + element.getValue().toString();
-                        info = info + output + "\n";
-                    }
-                } else {
-                    info =  "Email:" + id + "\n"
-                            +"Username: " + thisUser.getUserName() + "\n"
-                            + "User's Rate: " + thisUser.getRate() + "\n"
-                            + "Posted items:" + "\n";
-                    Map<String, Double> items = thisUser.getItemList();
-                    for (Map.Entry<String, Double> element: items.entrySet()) {
-                        String output = element.getKey().toString() + " : " + element.getValue().toString();
-                        info = info + output + "\n";
-                    }
+        if (friendMap != null) {
+            Set<String> friendList = friendMap.keySet();
+            for (String thisUser: friendList) {
+                if (thisUser != null) {
+                    dataProcessor.setState(new FriendsContentState(thisUser));
+                    dataProcessor.process();
                 }
-                addItem(new FriendItem(id, info));
             }
         }
+
     }
 
     private static void clear() {
@@ -83,8 +59,8 @@ public class FriendsContent {
      * A dummy item representing a piece of content.
      */
     public static class FriendItem {
-        public String id;
-        public String content;
+        public final String id;
+        public final String content;
 
         public FriendItem(String id, String content) {
             this.id = id;

@@ -7,6 +7,23 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.gm.permission.AUTO_SEND" />
+
+    <!-- Permissions for Google Maps -->
+    <permission
+        android:name="com.vogella.android.locationapi.maps.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <uses-permission android:name="com.vogella.android.locationapi.maps.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <application
         android:allowBackup="true"
@@ -43,6 +60,11 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
+            android:name=".SaleListActivity"
+            android:label="@string/title_sale_list"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
             android:name=".AddFriendActivity"
             android:label="@string/title_activity_add_friend"
             android:windowSoftInputMode="adjustResize|stateVisible" >
@@ -50,6 +72,11 @@
         <activity
             android:name=".AddItemActivity"
             android:label="@string/title_activity_add_item"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name=".AddSaleActivity"
+            android:label="@string/title_activity_add_sale"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
@@ -63,6 +90,30 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="centralcpccommittee.shopwithfriends.UserFriendListActivity" />
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" >
+        </activity>
+        <activity
+            android:name=".ItemsOnMapActivity"
+            android:label="@string/title_activity_items_on_map" >
+        </activity>
+        <activity
+            android:name=".AddSaleOnMapActivity"
+            android:label="@string/title_activity_add_sale_on_map" >
+        </activity>
+        <activity
+            android:name=".SalesOnMapActivity"
+            android:label="@string/title_activity_sales_on_map" >
         </activity>
     </application>
 

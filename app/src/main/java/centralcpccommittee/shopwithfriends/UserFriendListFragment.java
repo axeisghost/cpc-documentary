@@ -19,6 +19,7 @@ import centralcpccommittee.shopwithfriends.Friends.FriendsContent;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
+@SuppressWarnings("ALL")
 public class UserFriendListFragment extends ListFragment {
 
     /**

@@ -8,6 +8,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import centralcpccommittee.shopwithfriends.Presenter.UserFriendDetailPresenter;
+import centralcpccommittee.shopwithfriends.Presenter.UserFriendDetailPresenterImpl;
+
 
 /**
  * An activity representing a single UserFriend detail screen. This
@@ -18,19 +21,18 @@ import android.view.View;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link UserFriendDetailFragment}.
  */
-public class UserFriendDetailActivity extends ActionBarActivity {
+public class UserFriendDetailActivity extends ActionBarActivity implements UserFriendDetailView{
 
     private String userEmail;
-    private UserProfile thisUser;
     private String friendEmail;
+    private UserFriendDetailPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Bundle extras = getIntent().getExtras();
         userEmail = extras.getString("userEmail");
-        thisUser = new UserProfile(userEmail);
         friendEmail = extras.getString(UserFriendDetailFragment.ARG_ITEM_ID);
-
+        presenter = new UserFriendDetailPresenterImpl(userEmail, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userfriend_detail);
 
@@ -78,7 +80,7 @@ public class UserFriendDetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void deleteFriendPressed(View view) {
+    public void deleteFriendPressed(@SuppressWarnings("UnusedParameters") View view) {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this).
                         setMessage(getString(R.string.Hint_delete_friend)).
@@ -97,8 +99,8 @@ public class UserFriendDetailActivity extends ActionBarActivity {
         builder.create().show();
     }
 
-    public void deleteFriend() {
-        thisUser.deleteFriend(friendEmail);
+    void deleteFriend() {
+        presenter.deleteFriend(friendEmail);
         Intent move = new Intent(this, UserFriendListActivity.class);
         move.putExtra("userEmail", userEmail);
         navigateUpTo(move);
